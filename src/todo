@@ -1,0 +1,14 @@
+29/03/2025
+consertar o createVertexBuffer e createIndexBuffer que não inicia um buffer, e sim só um vector
+
+31/03/2025
+tudo funciona como eu queria, menos a parte de mostrar na tela. O loader carrega todo o modelo no buffer, mas o commandBuffers que envia para o vulkan para mostrar na tela, 
+faz uma substituição do objeto anterior e, fazendo assim, só um objeto aparece na tela, sendo que era pra ser uma personagem por inteiro
+
+2/4/2025
+alias, salve essa merda da versão teste, pois, eu não vou salvar. quando coloca maisd e 2 personagens, ele da erro falando que não conseugiu limpas a memoria dos vkdevice vkbuffer.
+
+2/4/2025
+já consertei o erro que eu estava tendo na limpeza de memoria do dia 2/4/2025. quero que cada objeto tenha um proprio UBO que está no 
+VKconfiguration/kroPipe_buffer e que armazena isso em objetos para que eu consiga mover eles facilmente. fazer seletor
+só de olhar com objetos AABB. se futuramente conseguir, adiciona interface com ImGuiDear

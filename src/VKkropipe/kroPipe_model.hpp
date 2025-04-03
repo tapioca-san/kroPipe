@@ -1,0 +1,253 @@
+#ifndef MODEL_H
+#define MODEL_H
+
+#include "../VKconfiguration/kroPipe_vertex.hpp"
+#include "../kroPipe_include.hpp"
+#include "kroPipe_Log.hpp"
+#include "kroPipe_mesh.hpp"
+#include "kroPipe_struct.hpp"
+#include <ostream>
+
+
+#define MAX_BONE_INFLUENCE 4
+
+class Model{
+ 
+public:
+    std::string modelPath;
+    std::string directory;
+
+    KP::UniformBufferObject ubo{};
+    KP::VAO vao;
+    
+//void renderModel(Vertex &InfoModel, VertexVulkan handle)
+
+
+void loadModel() {
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+        std::cerr << "failed to load model: " << modelPath << "\nErro Assimp: " << importer.GetErrorString() << std::endl;
+        return;
+    }
+
+    directory = modelPath.substr(0, modelPath.find_last_of('/'));
+
+    processNode(scene->mRootNode, scene);
+    
+    renderToBuffer();
+    
+}
+
+void renderToBuffer(){
+    for(uint16_t i = 0; i < vao.meshes.size(); i++){
+        createVertexBuffer(vao.meshes[i].vertices, vao);
+        createIndexBuffer(vao.meshes[i].indices, vao);
+    }
+
+}
+
+void Draw(VkCommandBuffer commandBuffer){
+        
+    VkDeviceSize offsets[] = {0};
+    for(uint16_t i = 0; i < vao.meshes.size(); i++){
+    VkBuffer vertexBuffers[] = {vao.vertexBuffers[i]};
+
+        vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+        vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0, VK_INDEX_TYPE_UINT16);
+        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
+        vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(vao.meshes[i].indices.size()), 1, 0, 0, 0);
+    }
+    
+    updateUniformBuffer(currentFrame);
+}
+
+void cleanupVao(){
+    /*
+    vkDestroyBuffer(device, vao.indexBuffer, nullptr);
+    vkFreeMemory(device, vao.indexBufferMemory, nullptr);
+    vkDestroyBuffer(device, vao.vertexBuffer, nullptr);
+    vkFreeMemory(device, vao.vertexBufferMemory, nullptr);
+    */
+    
+    for(VkBuffer indexBuffer : vao.indexBuffers){
+        vkDestroyBuffer(device,indexBuffer, nullptr);
+    }
+    for(VkBuffer vertexBuffer : vao.vertexBuffers){
+        vkDestroyBuffer(device, vertexBuffer, nullptr);
+    }
+    for(VkDeviceMemory indexBufferMemory : vao.indexBufferMemorys){
+        vkFreeMemory(device, indexBufferMemory, nullptr);
+    }
+    for(VkDeviceMemory vertexBufferMemory : vao.vertexBufferMemorys){
+        vkFreeMemory(device, vertexBufferMemory, nullptr);
+    }
+}
+
+Model(std::string modelPath){
+    this->modelPath = modelPath;
+}
+
+private:
+
+    void updateUniformBuffer(uint32_t currentImage) {
+        ubo.model = glm::rotate(glm::mat4(1.0f),  glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        ubo.view = glm::lookAt(glm::vec3(allObjects[sortedID[0]].Position.x, allObjects[sortedID[0]].Position.y, allObjects[sortedID[0]].Position.z), glm::vec3(allObjects[sortedID[0]].Position.x, allObjects[sortedID[0]].Position.y, allObjects[sortedID[0]].Position.z) + cameraPlayer.Front, cameraPlayer.Up);
+        ubo.proj = glm::perspective(glm::radians(cameraPlayer.Zoom), (float)swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 100.0f);
+        ubo.proj[1][1] *= -1;
+
+        memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
+    }
+
+    void createVertexBuffer(const std::vector<KP::VertexVulkan> &vertices, KP::VAO &vao) {
+        VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
+    
+        VkBuffer stagingBuffer;
+        VkDeviceMemory stagingBufferMemory;
+        createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
+                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
+                     stagingBuffer, stagingBufferMemory);
+    
+        void* data;
+        vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
+        memcpy(data, vertices.data(), (size_t) bufferSize);
+        vkUnmapMemory(device, stagingBufferMemory);
+    
+        VkBuffer vertexBuffer;
+        VkDeviceMemory vertexBufferMemory;
+        createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 
+                     VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
+                     vertexBuffer, vertexBufferMemory);
+    
+        copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
+    
+        vao.vertexBuffers.push_back(vertexBuffer);
+        vao.vertexBufferMemorys.push_back(vertexBufferMemory);
+    
+        vkDestroyBuffer(device, stagingBuffer, nullptr);
+        vkFreeMemory(device, stagingBufferMemory, nullptr);
+    }
+    
+    void createIndexBuffer(const std::vector<uint16_t> &indices, KP::VAO &vao) {
+        VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
+    
+        VkBuffer stagingBuffer;
+        VkDeviceMemory stagingBufferMemory;
+        createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
+                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
+                     stagingBuffer, stagingBufferMemory);
+    
+        void* data;
+        vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
+        memcpy(data, indices.data(), (size_t) bufferSize);
+        vkUnmapMemory(device, stagingBufferMemory);
+    
+        VkBuffer indexBuffer;
+        VkDeviceMemory indexBufferMemory;
+        createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, 
+                     VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
+                     indexBuffer, indexBufferMemory);
+    
+        copyBuffer(stagingBuffer, indexBuffer, bufferSize);
+    
+        vao.indexBuffers.push_back(indexBuffer);
+        vao.indexBufferMemorys.push_back(indexBufferMemory);
+    
+        vkDestroyBuffer(device, stagingBuffer, nullptr);
+        vkFreeMemory(device, stagingBufferMemory, nullptr);
+    }
+
+    KP::Mesh processMesh(aiMesh* mesh, const aiScene* scene) {
+        std::vector<KP::VertexVulkan> vertices;
+        std::vector<uint16_t> indices;
+    
+        KP::VertexVulkan vertex{};
+        for(unsigned int i = 0; i < mesh->mNumVertices; i++)
+            {
+                glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
+                // positions
+                vector.x = mesh->mVertices[i].x;
+                vector.y = mesh->mVertices[i].y;
+                vector.z = mesh->mVertices[i].z;
+                vertex.Position = vector;
+                // normals
+                if (mesh->HasNormals())
+                {
+                    vector.x = mesh->mNormals[i].x;
+                    vector.y = mesh->mNormals[i].y;
+                    vector.z = mesh->mNormals[i].z;
+                    vertex.Normal = vector;
+                }
+                // texture coordinates
+                if(mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+                {
+                    glm::vec2 vec;
+                    // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
+                    // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
+                    vec.x = mesh->mTextureCoords[0][i].x; 
+                    vec.y = mesh->mTextureCoords[0][i].y;
+                    vertex.TexCoords = vec;
+                    //tangent
+                    vector.x = mesh->mTangents[i].x;
+                    vector.y = mesh->mTangents[i].y;
+                    vector.z = mesh->mTangents[i].z;
+                    vertex.Tangent = vector;
+                    // bitangent
+                    vector.x = mesh->mBitangents[i].x;
+                    vector.y = mesh->mBitangents[i].y;
+                    vector.z = mesh->mBitangents[i].z;
+                    vertex.Bitangent = vector;
+                }
+                else
+                    vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+    
+                vertices.push_back(vertex);
+            }
+            // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+            for(unsigned int i = 0; i < mesh->mNumFaces; i++)
+            {
+                aiFace face = mesh->mFaces[i];
+                // retrieve all indices of the face and store them in the indices vector
+                for(unsigned int j = 0; j < face.mNumIndices; j++)
+                    indices.push_back(face.mIndices[j]);        
+            }
+    
+        return KP::Mesh(vertices, indices);
+    }
+    
+    void processNode(aiNode* node, const aiScene* scene) {
+        for (uint16_t i = 0; i < node->mNumMeshes; i++) {
+            aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+            vao.meshes.push_back(processMesh(mesh, scene));
+        }
+    
+        for (uint16_t i = 0; i < node->mNumChildren; i++) {
+            processNode(node->mChildren[i], scene);
+        }
+    }
+};
+
+// VARIABLES ------------------------------------------------------
+    std::vector<Model*> allModel; // memoria apagada na Vkconfiguration/kroPipe_instance.hpp, função ~instance em cleanPointers
+//
+
+
+
+Model createModel(std::string modelPath){ 
+Model model(modelPath);
+    allModel.push_back(&model);
+    return model;
+}
+
+void loadAllModels(){
+    for(auto model : allModel){
+        model->loadModel();
+    }
+}
+
+Model modelo3dDa2b = createModel("/home/pipebomb/dev/cpp/opengl/2.2/source/48.glb");
+Model necoArc = createModel("/home/pipebomb/Downloads/model3D/neco-arc.glb");
+
+
+#endif // MODEL_H

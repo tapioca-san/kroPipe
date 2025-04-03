@@ -1,0 +1,3 @@
+/home/pipebomb/dev/cpp/vulkan/teste/build/CMakeFiles/nial.dir
+/home/pipebomb/dev/cpp/vulkan/teste/build/CMakeFiles/edit_cache.dir
+/home/pipebomb/dev/cpp/vulkan/teste/build/CMakeFiles/rebuild_cache.dir

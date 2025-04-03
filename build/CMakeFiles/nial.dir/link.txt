@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/nial.dir/src/main.cpp.o -o nial  -Wl,-rpath,/home/pipebomb/Downloads/1.4.304.1/x86_64/lib /home/pipebomb/Downloads/1.4.304.1/x86_64/lib/libvulkan.so /usr/lib/x86_64-linux-gnu/libglfw.so.3.3 -lassimp 
