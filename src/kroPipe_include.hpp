@@ -12,6 +12,18 @@
     #else
     const bool debug = true;
     #endif
+
+    #ifdef NVSYNC
+    const bool vsync = false;
+    #else
+    const bool vsync = true;
+    #endif
+
+    #ifdef NFRAMEPERSECOND
+    const bool framePerSecond = false;
+    #else
+    const bool framePerSecond = true;
+    #endif
 // 
 
 

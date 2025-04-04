@@ -4,7 +4,6 @@
 #include "../VKkropipe/kroPipe_model.hpp"
 #include "../VKkropipe/kroPipe_Log.hpp"
 #include "../kroPipe_include.hpp"
-#include "kroPipe_command.hpp"
 #include "kroPipe_swapchain.hpp"
 #include "kroPipe_buffer.hpp"
 

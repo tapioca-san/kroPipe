@@ -1,12 +1,16 @@
+
 //#define NDEBUG
-#include <glm/ext/vector_float3.hpp>
+#define NVSYNC
+#define NFRAMEPERSECOND
+
 #define STB_IMAGE_IMPLEMENTATION
+#include "VKconfiguration/kroPipe_window.hpp"
 #include "VKkropipe/kroPipe_gravity.hpp"
 #include "VKInitConfig/kroPipe_init.hpp"
-#include "VKconfiguration/kroPipe_window.hpp"
-#include "kroPipe_engine.hpp"
-#include "kroPipe_include.hpp"
 #include "VKkropipe/kroPipe_entity.hpp"
+#include "VKkropipe/kroPipe_info.hpp"
+#include "kroPipe_include.hpp"
+#include "kroPipe_engine.hpp"
 
 // Variable
     const char* nameWindow = "triangle";
@@ -17,6 +21,8 @@
     float lastX = swapChainExtent.width / 2.0f;
     float lastY = swapChainExtent.height / 2.0f;
     bool firstMouse = true;
+
+    FPSCounter info;
 //
 
 
@@ -45,6 +51,10 @@ int main(){
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
 
+        if(framePerSecond){
+            info.update();
+        }
+        
         glfwPollEvents();
         processInput(mWindow, allObjects[sortedID[0]], deltaTime);
         drawFrame();

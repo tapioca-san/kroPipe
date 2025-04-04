@@ -1,11 +1,16 @@
 CMakeFiles/nial.dir/src/main.cpp.o: \
  /home/pipebomb/dev/cpp/vulkan/teste/src/main.cpp \
- /usr/include/stdc-predef.h /usr/include/glm/ext/vector_float3.hpp \
- /usr/include/glm/detail/type_vec3.hpp \
- /usr/include/glm/detail/qualifier.hpp /usr/include/glm/detail/setup.hpp \
- /usr/include/c++/12/cassert \
- /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
- /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h \
+ /usr/include/stdc-predef.h \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/kroPipe_window.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/kroPipe_Log.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../kroPipe_include.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../VKkropipe/kroPipe_object.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../VKkropipe/../kroPipe_depedence.hpp \
+ /home/pipebomb/Downloads/1.4.304.1/x86_64/include/vulkan/vulkan_core.h \
+ /home/pipebomb/Downloads/1.4.304.1/x86_64/include/vulkan/vk_platform.h \
+ /usr/lib/gcc/x86_64-linux-gnu/12/include/stddef.h \
+ /usr/lib/gcc/x86_64-linux-gnu/12/include/stdint.h /usr/include/stdint.h \
+ /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
  /usr/include/x86_64-linux-gnu/bits/timesize.h \
@@ -13,28 +18,12 @@ CMakeFiles/nial.dir/src/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/long-double.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
- /usr/include/x86_64-linux-gnu/c++/12/bits/cpu_defines.h \
- /usr/include/c++/12/pstl/pstl_config.h /usr/include/assert.h \
- /usr/include/c++/12/cstddef \
- /usr/lib/gcc/x86_64-linux-gnu/12/include/stddef.h \
- /usr/include/glm/simd/platform.h /usr/include/c++/12/cstdint \
- /usr/lib/gcc/x86_64-linux-gnu/12/include/stdint.h /usr/include/stdint.h \
- /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
  /usr/include/x86_64-linux-gnu/bits/time64.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
- /usr/include/c++/12/type_traits /usr/include/glm/detail/type_vec3.inl \
- /usr/include/glm/detail/compute_vector_relational.hpp \
- /usr/include/c++/12/limits \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/kroPipe_gravity.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/../kroPipe_include.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/../VKkropipe/kroPipe_object.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/../VKkropipe/../kroPipe_depedence.hpp \
- /home/pipebomb/Downloads/1.4.304.1/x86_64/include/vulkan/vulkan_core.h \
- /home/pipebomb/Downloads/1.4.304.1/x86_64/include/vulkan/vk_platform.h \
  /home/pipebomb/Downloads/1.4.304.1/x86_64/include/vk_video/vulkan_video_codec_h264std.h \
  /home/pipebomb/Downloads/1.4.304.1/x86_64/include/vk_video/vulkan_video_codecs_common.h \
  /home/pipebomb/Downloads/1.4.304.1/x86_64/include/vk_video/vulkan_video_codec_h264std_encode.h \
@@ -53,6 +42,10 @@ CMakeFiles/nial.dir/src/main.cpp.o: \
  /usr/include/GLFW/glfw3.h /usr/include/GL/gl.h /usr/include/GL/glext.h \
  /usr/include/KHR/khrplatform.h /usr/include/glm/glm.hpp \
  /usr/include/glm/detail/_fixes.hpp /usr/include/c++/12/cmath \
+ /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
+ /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h \
+ /usr/include/x86_64-linux-gnu/c++/12/bits/cpu_defines.h \
+ /usr/include/c++/12/pstl/pstl_config.h \
  /usr/include/c++/12/bits/cpp_type_traits.h \
  /usr/include/c++/12/ext/type_traits.h /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
@@ -98,15 +91,15 @@ CMakeFiles/nial.dir/src/main.cpp.o: \
  /usr/include/c++/12/bits/functexcept.h \
  /usr/include/c++/12/bits/exception_defines.h \
  /usr/include/c++/12/ext/numeric_traits.h \
- /usr/include/c++/12/bits/stl_pair.h /usr/include/c++/12/bits/move.h \
- /usr/include/c++/12/bits/utility.h \
+ /usr/include/c++/12/bits/stl_pair.h /usr/include/c++/12/type_traits \
+ /usr/include/c++/12/bits/move.h /usr/include/c++/12/bits/utility.h \
  /usr/include/c++/12/bits/stl_iterator_base_types.h \
  /usr/include/c++/12/bits/stl_iterator_base_funcs.h \
  /usr/include/c++/12/bits/concept_check.h \
  /usr/include/c++/12/debug/assertions.h \
  /usr/include/c++/12/bits/stl_iterator.h \
  /usr/include/c++/12/bits/ptr_traits.h /usr/include/c++/12/debug/debug.h \
- /usr/include/c++/12/bits/predefined_ops.h \
+ /usr/include/c++/12/bits/predefined_ops.h /usr/include/c++/12/limits \
  /usr/include/c++/12/tr1/gamma.tcc \
  /usr/include/c++/12/tr1/special_function_util.h \
  /usr/include/c++/12/tr1/bessel_function.tcc \
@@ -119,7 +112,10 @@ CMakeFiles/nial.dir/src/main.cpp.o: \
  /usr/include/c++/12/tr1/poly_hermite.tcc \
  /usr/include/c++/12/tr1/poly_laguerre.tcc \
  /usr/include/c++/12/tr1/riemann_zeta.tcc \
- /usr/include/glm/detail/setup.hpp /usr/include/c++/12/climits \
+ /usr/include/glm/detail/setup.hpp /usr/include/c++/12/cassert \
+ /usr/include/assert.h /usr/include/c++/12/cstddef \
+ /usr/include/glm/simd/platform.h /usr/include/c++/12/cstdint \
+ /usr/include/c++/12/climits \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/limits.h \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/syslimits.h \
  /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
@@ -130,10 +126,12 @@ CMakeFiles/nial.dir/src/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
  /usr/include/x86_64-linux-gnu/bits/uio_lim.h /usr/include/c++/12/cfloat \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/float.h \
- /usr/include/glm/fwd.hpp /usr/include/glm/vec2.hpp \
+ /usr/include/glm/fwd.hpp /usr/include/glm/detail/qualifier.hpp \
+ /usr/include/glm/detail/setup.hpp /usr/include/glm/vec2.hpp \
  /usr/include/glm/ext/vector_bool2.hpp \
  /usr/include/glm/detail/type_vec2.hpp \
  /usr/include/glm/detail/type_vec2.inl \
+ /usr/include/glm/detail/compute_vector_relational.hpp \
  /usr/include/glm/ext/vector_bool2_precision.hpp \
  /usr/include/glm/ext/vector_float2.hpp \
  /usr/include/glm/ext/vector_float2_precision.hpp \
@@ -146,7 +144,10 @@ CMakeFiles/nial.dir/src/main.cpp.o: \
  /usr/include/glm/ext/vector_uint2_sized.hpp \
  /usr/include/glm/ext/scalar_uint_sized.hpp /usr/include/glm/vec3.hpp \
  /usr/include/glm/ext/vector_bool3.hpp \
+ /usr/include/glm/detail/type_vec3.hpp \
+ /usr/include/glm/detail/type_vec3.inl \
  /usr/include/glm/ext/vector_bool3_precision.hpp \
+ /usr/include/glm/ext/vector_float3.hpp \
  /usr/include/glm/ext/vector_float3_precision.hpp \
  /usr/include/glm/ext/vector_double3.hpp \
  /usr/include/glm/ext/vector_double3_precision.hpp \
@@ -248,7 +249,7 @@ CMakeFiles/nial.dir/src/main.cpp.o: \
  /usr/include/glm/ext/matrix_transform.hpp \
  /usr/include/glm/ext/matrix_transform.inl \
  /usr/include/glm/gtc/matrix_transform.inl \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/../VKkropipe/../include/imageSupport/stb_image.h \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../VKkropipe/../include/imageSupport/stb_image.h \
  /usr/include/stdio.h /usr/lib/gcc/x86_64-linux-gnu/12/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
@@ -404,19 +405,23 @@ CMakeFiles/nial.dir/src/main.cpp.o: \
  /usr/include/c++/12/bits/atomic_lockfree_defines.h \
  /usr/include/c++/12/backward/auto_ptr.h \
  /usr/include/c++/12/pstl/glue_memory_defs.h \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/../kroPipe_depedence.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/../VKkropipe/kroPipe_camera.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../kroPipe_depedence.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../VKkropipe/kroPipe_camera.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../kroPipe_include.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/kroPipe_gravity.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/../kroPipe_include.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/kroPipe_object.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKInitConfig/kroPipe_init.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKInitConfig/../kroPipe_depedence.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKInitConfig/kroPipe_script.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKInitConfig/../kroPipe_include.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/kroPipe_window.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/kroPipe_Log.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../kroPipe_include.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../kroPipe_include.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/kroPipe_engine.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/kroPipe_entity.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/../kroPipe_depedence.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/kroPipe_gravity.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/kroPipe_AABB.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/kroPipe_info.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/kroPipe_include.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/kroPipe_engine.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/kroPipe_instance.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/kroPipe_texture.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../kroPipe_depedence.hpp \
@@ -427,7 +432,8 @@ CMakeFiles/nial.dir/src/main.cpp.o: \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../VKconfiguration/../kroPipe_include.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/kroPipe_Log.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/kroPipe_model.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/kroPipe_mesh.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../VKconfiguration/kroPipe_buffer.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../VKconfiguration/kroPipe_vertex.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/kroPipe_struct.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/kroPipe_windowSurface.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/kroPipe_frameBuffer.hpp \
@@ -447,8 +453,4 @@ CMakeFiles/nial.dir/src/main.cpp.o: \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/kroPipe_debug.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/kroPipe_input.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/../VKconfiguration/kroPipe_buffer.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/../kroPipe_depedence.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/kroPipe_model.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/kroPipe_entity.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/kroPipe_gravity.hpp \
- /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/kroPipe_AABB.hpp
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKkropipe/kroPipe_model.hpp

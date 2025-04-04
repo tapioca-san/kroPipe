@@ -2,11 +2,10 @@
 #define MODEL_H
 
 #include "../VKconfiguration/kroPipe_vertex.hpp"
+#include "../VKconfiguration/kroPipe_buffer.hpp"
 #include "../kroPipe_include.hpp"
-#include "kroPipe_Log.hpp"
-#include "kroPipe_mesh.hpp"
 #include "kroPipe_struct.hpp"
-#include <ostream>
+#include "kroPipe_Log.hpp"
 
 
 #define MAX_BONE_INFLUENCE 4
@@ -16,9 +15,8 @@ class Model{
 public:
     std::string modelPath;
     std::string directory;
-
-    KP::UniformBufferObject ubo{};
     KP::VAO vao;
+    std::vector<VkDeviceMemory> uniformBufferMemory;
     
 //void renderModel(Vertex &InfoModel, VertexVulkan handle)
 
@@ -53,14 +51,14 @@ void Draw(VkCommandBuffer commandBuffer){
     VkDeviceSize offsets[] = {0};
     for(uint16_t i = 0; i < vao.meshes.size(); i++){
     VkBuffer vertexBuffers[] = {vao.vertexBuffers[i]};
+        
+    //UboShader(currentFrame);
 
-        vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
-        vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0, VK_INDEX_TYPE_UINT16);
-        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
-        vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(vao.meshes[i].indices.size()), 1, 0, 0, 0);
+    vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+    vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0, VK_INDEX_TYPE_UINT16);
+    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
+    vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(vao.meshes[i].indices.size()), 1, 0, 0, 0);
     }
-    
-    updateUniformBuffer(currentFrame);
 }
 
 void cleanupVao(){
@@ -87,17 +85,22 @@ void cleanupVao(){
 
 Model(std::string modelPath){
     this->modelPath = modelPath;
+
+    this->vao.UBO.model = ubo.model;
+    this->vao.UBO.proj = ubo.proj;
+    this->vao.UBO.view = ubo.view;
 }
 
 private:
+    
+    void UboShader(uint32_t currentImage) {
+        static auto startTime = std::chrono::high_resolution_clock::now();
 
-    void updateUniformBuffer(uint32_t currentImage) {
-        ubo.model = glm::rotate(glm::mat4(1.0f),  glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-        ubo.view = glm::lookAt(glm::vec3(allObjects[sortedID[0]].Position.x, allObjects[sortedID[0]].Position.y, allObjects[sortedID[0]].Position.z), glm::vec3(allObjects[sortedID[0]].Position.x, allObjects[sortedID[0]].Position.y, allObjects[sortedID[0]].Position.z) + cameraPlayer.Front, cameraPlayer.Up);
-        ubo.proj = glm::perspective(glm::radians(cameraPlayer.Zoom), (float)swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 100.0f);
-        ubo.proj[1][1] *= -1;
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
-        memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
+            
+        memcpy(uniformBuffersMapped[currentImage], &vao.UBO, sizeof(vao.UBO));
     }
 
     void createVertexBuffer(const std::vector<KP::VertexVulkan> &vertices, KP::VAO &vao) {
@@ -231,12 +234,10 @@ private:
 // VARIABLES ------------------------------------------------------
     std::vector<Model*> allModel; // memoria apagada na Vkconfiguration/kroPipe_instance.hpp, função ~instance em cleanPointers
 //
-
-
-
-Model createModel(std::string modelPath){ 
-Model model(modelPath);
-    allModel.push_back(&model);
+    
+Model* createModel(std::string modelPath){ 
+    Model* model = new Model(modelPath);
+    allModel.push_back(model);
     return model;
 }
 
@@ -245,9 +246,7 @@ void loadAllModels(){
         model->loadModel();
     }
 }
-
-Model modelo3dDa2b = createModel("/home/pipebomb/dev/cpp/opengl/2.2/source/48.glb");
-Model necoArc = createModel("/home/pipebomb/Downloads/model3D/neco-arc.glb");
-
+    
+    Model* glock = createModel("/home/pipebomb/Downloads/model3D/apple_iphone_12_pro_max.glb");
 
 #endif // MODEL_H

@@ -54,6 +54,12 @@ struct Mesh {
     : vertices(std::move(v)), indices(std::move(i)) {}
 };
 
+struct UniformBufferObject {
+    glm::mat4 model;
+    glm::mat4 view;
+    glm::mat4 proj;
+};
+
 struct VAO {
 
     std::vector<VkBuffer> vertexBuffers;
@@ -63,7 +69,8 @@ struct VAO {
     std::vector<VkDeviceMemory> indexBufferMemorys;
     
     std::vector<Mesh> meshes;
-    
+
+    KP::UniformBufferObject UBO;
     
 };
 
@@ -71,12 +78,6 @@ struct shaderModule {
     VkPipelineShaderStageCreateInfo shaderStages[2];
     VkShaderModule vertShaderModule;
     VkShaderModule fragShaderModule;
-};
-
-struct UniformBufferObject {
-    glm::mat4 model;
-    glm::mat4 view;
-    glm::mat4 proj;
 };
 
 

@@ -42,6 +42,9 @@ class Instance{
     
     void cleanPointers(){   //anti memory leak
 
+        for(Model* model : allModel){
+            delete model;
+        }
         allModel.clear();
         infoMensage("Pointers has been cleaned");
     }
@@ -141,13 +144,10 @@ class Instance{
             
             // active basic extension from GLFW
                 auto extensions = getRequiredExtensions();
-
-
+                
                 createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
                 createInfo.ppEnabledExtensionNames = extensions.data();
                 //
-                
-                
                 
                 // validation layers
                 VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};

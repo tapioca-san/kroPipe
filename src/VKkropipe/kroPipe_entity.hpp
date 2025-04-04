@@ -68,9 +68,6 @@ void loadObjects(){
             kroPipe::gravityForce(allObjects[sortedID[i]], deltaTime);
         }
     }
-
-
-    
 }
 
 #endif

@@ -6,8 +6,7 @@
 #include "../kroPipe_include.hpp"
 #include "kroPipe_vertex.hpp"
 
-
-
+KP::UniformBufferObject ubo{};
 
 void createDescriptorSetLayout() {
     VkDescriptorSetLayoutBinding uboLayoutBinding{};
@@ -52,13 +51,16 @@ void createUniformBuffers() {
 }
 
 void updateUniformBuffer(uint32_t currentImage) {
-    
-    KP::UniformBufferObject ubo{};
+    static auto startTime = std::chrono::high_resolution_clock::now();
+
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
     ubo.model = glm::rotate(glm::mat4(1.0f),  glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     ubo.view = glm::lookAt(glm::vec3(allObjects[sortedID[0]].Position.x, allObjects[sortedID[0]].Position.y, allObjects[sortedID[0]].Position.z), glm::vec3(allObjects[sortedID[0]].Position.x, allObjects[sortedID[0]].Position.y, allObjects[sortedID[0]].Position.z) + cameraPlayer.Front, cameraPlayer.Up);
     ubo.proj = glm::perspective(glm::radians(cameraPlayer.Zoom), (float)swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 100.0f);
     ubo.proj[1][1] *= -1;
-
+        
     memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 }
 

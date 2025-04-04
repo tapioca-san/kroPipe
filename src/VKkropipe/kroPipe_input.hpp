@@ -96,9 +96,7 @@ void processInput(GLFWwindow *window, kroPipe::Object& obj, float deltaTime, flo
     //    isWireframe = false;
     //}
 
-    if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS){
-        allModel[0]->ubo.model = glm::translate(allModel[0]->ubo.model, glm::vec3(0.0f, 0.0f, 1.0f));
-    }
+  
 
 }
 
