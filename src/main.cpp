@@ -1,6 +1,6 @@
 
 //#define NDEBUG
-//#define NVSYNC
+#define NVSYNC
 //#define NFRAMEPERSECOND
 
 #define STB_IMAGE_IMPLEMENTATION

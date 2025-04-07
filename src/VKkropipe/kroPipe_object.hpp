@@ -32,13 +32,11 @@ namespace OBJECT {
                 );
                 raio = std::max(raio, distancia);
             }
-
             return raio;
         }
 
         public:
         glm::vec3 Position;
-        glm::vec3 actualPositionForUseForLastPosition; 
         glm::vec3 lastPosition;     
         glm::vec3 velocity;
         float raio;     

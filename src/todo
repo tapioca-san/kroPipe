@@ -19,3 +19,6 @@ só de olhar com objetos AABB. se futuramente conseguir, adiciona interface com 
 
 07/04/2025
 algumas vezes tá dando corte de tela com o vsync ligado. mudei o buffer e tá dando nisso.
+
+07/04/2025
+eu acho que o travamento vem pelo uso excessivo de um nucleo só. preciso gerenciar o aplicativo para rodar ele em todos os nucleos do computador
