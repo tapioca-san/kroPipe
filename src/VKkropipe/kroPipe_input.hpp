@@ -6,7 +6,7 @@
 #include "../kroPipe_include.hpp"
 #include "kroPipe_model.hpp"
 
-void processInput(GLFWwindow *window, kroPipe::Object& obj, float deltaTime, float baseSpeed = 0.60f, float sprintSpeed = 1.70f, float walkSpeed = 0.4f, float limitWalk =  0.03f, float slide = 1.0f) {
+void processInput(GLFWwindow *window, KP::OBJECT::Object& obj, float deltaTime, float baseSpeed = 0.60f, float sprintSpeed = 1.70f, float walkSpeed = 0.4f, float limitWalk =  0.03f, float slide = 1.0f) {
     float cameraSpeed = baseSpeed;
     limitWalk *= cameraSpeed;
 

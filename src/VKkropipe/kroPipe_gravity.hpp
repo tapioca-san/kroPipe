@@ -13,7 +13,7 @@ const float GRAVIDADE = 12.8;
 
 //gravidade ksksk. o que tu esperaria? gravidade com realmente os calculos de gravidade que aprendi em física
 
-void gravityForce(kroPipe::Object& object, float deltaTime){
+void gravityForce(KP::OBJECT::Object& object, float deltaTime){
         object.velocity.y -= GRAVIDADE * deltaTime;
         object.Position += object.velocity * deltaTime;
         
@@ -33,9 +33,9 @@ void gravityForce(kroPipe::Object& object, float deltaTime){
     }
 }
 
-void useGravity(std::vector<kroPipe::Object>& objects, float deltaTime){
+void useGravity(std::vector<KP::OBJECT::Object>& objects, float deltaTime){
 
-    for(kroPipe::Object& object : objects){
+    for(KP::OBJECT::Object& object : objects){
         gravityForce(object, deltaTime);
     }
 }

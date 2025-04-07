@@ -9,7 +9,6 @@
 #include "kroPipe_depth.hpp"
 
 
-
 namespace KP {
 
 namespace Pipeline {
@@ -145,7 +144,7 @@ void createPipeline(shaderModule shader){
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.setLayoutCount = 1;
-    pipelineLayoutInfo.pSetLayouts = &adsa.uniformBuffers.descriptorSetLayout;
+    pipelineLayoutInfo.pSetLayouts = setLayout.data();
 
     if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
         fatalMensage("failed to create pipeline layout!");

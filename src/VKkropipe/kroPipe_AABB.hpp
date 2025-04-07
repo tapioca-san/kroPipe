@@ -5,8 +5,8 @@
 #include "kroPipe_object.hpp"
 
 
-namespace kroPipe {
-
+namespace KP {
+namespace OBJECT {
 
 bool detectCollision3D(const Object& obj1, const Object& obj2) {
     return (obj1.Position.x < obj2.Position.x + obj2.width  &&
@@ -45,7 +45,8 @@ void checkCollisions3D(Object& mySelf, Object& obj, float step = 0.01f) {
 }
 
 
-}
+}//OBJECT
+}//KP
 
 
 

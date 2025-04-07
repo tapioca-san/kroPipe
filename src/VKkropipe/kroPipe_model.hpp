@@ -4,18 +4,30 @@
 #include "../VKconfiguration/kroPipe_vertex.hpp"
 #include "../VKconfiguration/kroPipe_buffer.hpp"
 #include "../kroPipe_include.hpp"
+#include "kroPipe_object.hpp"
 #include "kroPipe_struct.hpp"
 #include "kroPipe_Log.hpp"
 
 
 #define MAX_BONE_INFLUENCE 4
+namespace KP {
+namespace OBJECT {
+struct InfoModel{
+    
 
-class Model{
+};
+
+
+class Model {
  
 public:
     std::string modelPath;
     std::string directory;
+    
     KP::VAO vao;
+    KP::BUFFER::UboStorage UBO;
+
+
     std::vector<VkDeviceMemory> uniformBufferMemory;
     
 //void renderModel(Vertex &InfoModel, VertexVulkan handle)
@@ -56,7 +68,7 @@ void Draw(VkCommandBuffer commandBuffer){
 
     vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
     vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0, VK_INDEX_TYPE_UINT16);
-    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &adsa.uniformBuffers.descriptorSets[currentFrame], 0, nullptr);
+    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &UBO.uniformBuffers.descriptorSets[currentFrame], 0, nullptr);
     vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(vao.meshes[i].indices.size()), 1, 0, 0, 0);
     }
 }
@@ -83,7 +95,9 @@ void cleanupVao(){
     }
 }
 
-Model(std::string modelPath){
+Model(std::string modelPath)
+{
+    
     this->modelPath = modelPath;
 
 }
@@ -97,7 +111,7 @@ private:
         float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
             
-        memcpy(adsa.uniformBuffers.uniformBuffersMapped[currentImage], &vao.UBO, sizeof(vao.UBO));
+        memcpy(UBO.uniformBuffers.uniformBuffersMapped[currentImage], &vao.UBO, sizeof(vao.UBO));
     }
 
     void createVertexBuffer(const std::vector<KP::VertexVulkan> &vertices, KP::VAO &vao) {
@@ -243,7 +257,10 @@ void loadAllModels(){
         model->loadModel();
     }
 }
-    
-    Model* glock = createModel("/home/pipebomb/Downloads/model3D/neco-arc.glb");
+}
+}    
+KP::OBJECT::Model* glock = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/neco-arc.glb");
+//KP::OBJECT::Model* minhasCabeca = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/project_-_cirno_fumo_3d_scan.glb");
+
 
 #endif // MODEL_H

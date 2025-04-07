@@ -433,7 +433,9 @@ CMakeFiles/nial.dir/src/main.cpp.o: \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/kroPipe_Log.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/kroPipe_model.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../VKconfiguration/kroPipe_buffer.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../VKconfiguration/../VKkropipe/kroPipe_object.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/../VKconfiguration/kroPipe_vertex.hpp \
+ /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/kroPipe_object.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/../VKkropipe/kroPipe_struct.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/kroPipe_windowSurface.hpp \
  /home/pipebomb/dev/cpp/vulkan/teste/src/VKconfiguration/kroPipe_frameBuffer.hpp \

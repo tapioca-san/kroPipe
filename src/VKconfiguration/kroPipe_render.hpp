@@ -60,7 +60,7 @@ void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
 
     vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-    for(auto model : allModel){
+    for(KP::OBJECT::Model* model : KP::OBJECT::allModel){
         model->Draw(commandBuffer);
     }
 
@@ -88,7 +88,9 @@ void drawFrame() {
 
     VkResult result = acquireNextImage();
 
-    adsa.update();
+    for(KP::OBJECT::Model* model : KP::OBJECT::allModel){
+        model->UBO.update();    
+    }  
 
     vkResetFences(device, 1, &inFlightFences[currentFrame]);
 

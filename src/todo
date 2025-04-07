@@ -11,7 +11,11 @@ faz uma substituição do objeto anterior e, fazendo assim, só um objeto aparec
 2/4/2025
 alias, salve essa merda da versão teste, pois, eu não vou salvar. quando coloca maisd e 2 personagens, ele da erro falando que não conseugiu limpas a memoria dos vkdevice vkbuffer.
 
-2/4/2025
+2/04/2025
 já consertei o erro que eu estava tendo na limpeza de memoria do dia 2/4/2025. quero que cada objeto tenha um proprio UBO que está no 
 VKconfiguration/kroPipe_buffer e que armazena isso em objetos para que eu consiga mover eles facilmente. fazer seletor
 só de olhar com objetos AABB. se futuramente conseguir, adiciona interface com ImGuiDear
+
+
+07/04/2025
+algumas vezes tá dando corte de tela com o vsync ligado. mudei o buffer e tá dando nisso.

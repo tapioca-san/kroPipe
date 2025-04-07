@@ -42,10 +42,10 @@ class Instance{
     
     void cleanPointers(){   //anti memory leak
 
-        for(Model* model : allModel){
+        for(KP::OBJECT::Model* model : KP::OBJECT::allModel){
             delete model;
         }
-        allModel.clear();
+        KP::OBJECT::allModel.clear();
         infoMensage("Pointers has been cleaned");
     }
 
@@ -74,19 +74,23 @@ class Instance{
             createLogicalDevice();
             createSwapChain();
             createImageViews();
-            KP::Pipeline::createRenderPass();      
-            adsa.createDescriptorLayout();    
+            KP::Pipeline::createRenderPass();    
+            for(KP::OBJECT::Model* model : KP::OBJECT::allModel){
+                model->UBO.createDescriptorLayout();    
+            }  
             KP::Pipeline::createGraphicsPipeline();  
             createCommandPool();
             createDepthResources();
-            loadAllModels();
+            KP::OBJECT::loadAllModels();
             createFrameBuffers();
             createTextureImage();
             createTextureImageView();
             createTextureSampler();
             //createVertexBuffer();
             //createIndexBuffer();
-            adsa.create();
+            for(KP::OBJECT::Model* model : KP::OBJECT::allModel){
+                model->UBO.create();    
+            }  
             createCommandBuffers();
             createSyncObjects();
             //
@@ -101,8 +105,8 @@ class Instance{
             vkDestroyImageView(device, textureImageView, nullptr);
             vkDestroyImage(device, textureImage, nullptr);
             vkFreeMemory(device, textureImageMemory, nullptr);
-            adsa.cleanUp();
-            for (Model *&model: allModel) {
+            for (KP::OBJECT::Model *&model: KP::OBJECT::allModel) {
+                model->UBO.cleanUp();
                 model->cleanupVao();
             }
             destroyRender();

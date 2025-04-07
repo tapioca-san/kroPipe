@@ -67,7 +67,7 @@
 
     int lastID = 0;
     
-    std::vector<kroPipe::Object> allObjects;
+    std::vector<KP::OBJECT::Object> allObjects;
     std::vector<int> sortedID;
     
     uint32_t imageIndex;
@@ -106,12 +106,11 @@
     VkDescriptorPool descriptorPool;
 
     std::vector<VkDescriptorSet> descriptorSets;
+    std::vector<VkDescriptorSetLayout> setLayout;
     
     std::vector<VkSemaphore> imageAvailableSemaphores;
     std::vector<VkSemaphore> renderFinishedSemaphores;
     std::vector<VkFence> inFlightFences;
-    
-    
     
     VkMemoryRequirements memRequirements;
     VkPhysicalDeviceMemoryProperties memProperties;

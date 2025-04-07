@@ -4,7 +4,8 @@
 #include "../kroPipe_depedence.hpp"
 
 
-namespace kroPipe {
+namespace KP {
+namespace OBJECT {
 
     struct Object {
 
@@ -122,7 +123,8 @@ namespace kroPipe {
     }
    
     
-}
+}//OBJECT
+}//KP
 
 
 
