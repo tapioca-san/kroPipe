@@ -5,9 +5,6 @@
 #include "../kroPipe_depedence.hpp"
 #include "../kroPipe_include.hpp"
 #include "kroPipe_model.hpp"
-#include <GLFW/glfw3.h>
-#include <glm/ext/matrix_transform.hpp>
-#include <glm/ext/vector_float3.hpp>
 
 void processInput(GLFWwindow *window, kroPipe::Object& obj, float deltaTime, float baseSpeed = 0.60f, float sprintSpeed = 1.70f, float walkSpeed = 0.4f, float limitWalk =  0.03f, float slide = 1.0f) {
     float cameraSpeed = baseSpeed;
@@ -48,7 +45,7 @@ void processInput(GLFWwindow *window, kroPipe::Object& obj, float deltaTime, flo
     // as funções de aumentar a velocidade com o longo do tempo. esse sistema é uma inspiração do cs2 ksks
         
         
-    if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && !obj.is_OnAir){
+    if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && !obj.is_OnAir || glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && !obj.is_OnAir){
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
             obj.velocity.z -= cameraSpeed * deltaTime;
         }
@@ -61,7 +58,7 @@ void processInput(GLFWwindow *window, kroPipe::Object& obj, float deltaTime, flo
         obj.velocity.z = 0.0f;
     }
 
-    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS && !obj.is_OnAir){
+    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS && !obj.is_OnAir || glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS && !obj.is_OnAir){
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
             obj.velocity.x += cameraSpeed * deltaTime;
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)

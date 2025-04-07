@@ -56,7 +56,7 @@ void Draw(VkCommandBuffer commandBuffer){
 
     vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
     vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0, VK_INDEX_TYPE_UINT16);
-    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
+    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &adsa.uniformBuffers.descriptorSets[currentFrame], 0, nullptr);
     vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(vao.meshes[i].indices.size()), 1, 0, 0, 0);
     }
 }
@@ -86,9 +86,6 @@ void cleanupVao(){
 Model(std::string modelPath){
     this->modelPath = modelPath;
 
-    this->vao.UBO.model = ubo.model;
-    this->vao.UBO.proj = ubo.proj;
-    this->vao.UBO.view = ubo.view;
 }
 
 private:
@@ -100,7 +97,7 @@ private:
         float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
             
-        memcpy(uniformBuffersMapped[currentImage], &vao.UBO, sizeof(vao.UBO));
+        memcpy(adsa.uniformBuffers.uniformBuffersMapped[currentImage], &vao.UBO, sizeof(vao.UBO));
     }
 
     void createVertexBuffer(const std::vector<KP::VertexVulkan> &vertices, KP::VAO &vao) {
@@ -247,6 +244,6 @@ void loadAllModels(){
     }
 }
     
-    Model* glock = createModel("/home/pipebomb/Downloads/model3D/apple_iphone_12_pro_max.glb");
+    Model* glock = createModel("/home/pipebomb/Downloads/model3D/neco-arc.glb");
 
 #endif // MODEL_H

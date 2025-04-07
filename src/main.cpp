@@ -1,7 +1,7 @@
 
 //#define NDEBUG
-#define NVSYNC
-#define NFRAMEPERSECOND
+//#define NVSYNC
+//#define NFRAMEPERSECOND
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "VKconfiguration/kroPipe_window.hpp"

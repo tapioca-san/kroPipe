@@ -111,11 +111,7 @@
     std::vector<VkSemaphore> renderFinishedSemaphores;
     std::vector<VkFence> inFlightFences;
     
-    std::vector<VkBuffer> uniformBuffers;
-    std::vector<VkDeviceMemory> uniformBuffersMemory;
-    std::vector<void*> uniformBuffersMapped;
     
-    VkDescriptorSetLayout descriptorSetLayout;
     
     VkMemoryRequirements memRequirements;
     VkPhysicalDeviceMemoryProperties memProperties;

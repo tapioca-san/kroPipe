@@ -61,15 +61,15 @@ struct UniformBufferObject {
 };
 
 struct VAO {
-
+    
     std::vector<VkBuffer> vertexBuffers;
     std::vector<VkDeviceMemory> vertexBufferMemorys;
-
+    
     std::vector<VkBuffer> indexBuffers;
     std::vector<VkDeviceMemory> indexBufferMemorys;
     
     std::vector<Mesh> meshes;
-
+    
     KP::UniformBufferObject UBO;
     
 };
@@ -80,8 +80,31 @@ struct shaderModule {
     VkShaderModule fragShaderModule;
 };
 
+struct QueueFamilyIndices {
+    std::optional<uint32_t> graphicsFamily;
+    std::optional<uint32_t> presentFamily;
+    
+    bool isComplete() {
+        return graphicsFamily.has_value() && presentFamily.has_value();
+    }
+};
 
+
+
+struct uniformBuffers{
+    std::vector<VkBuffer>               uniformBuffers;
+    std::vector<VkDeviceMemory>         uniformBuffersMemory;
+    std::vector<void*>                  uniformBuffersMapped;  
+    
+    std::vector<VkDescriptorSet>        descriptorSets;
+    VkDescriptorPool                    descriptorPool;
+    VkDescriptorSetLayout               descriptorSetLayout;
+
+};
 } // KP
+
+KP::uniformBuffers uniformBuffers2;
+KP::QueueFamilyIndices indices;
 
 #endif//STRUCT_H
 

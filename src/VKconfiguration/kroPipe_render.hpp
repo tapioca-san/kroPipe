@@ -88,7 +88,7 @@ void drawFrame() {
 
     VkResult result = acquireNextImage();
 
-    updateUniformBuffer(currentFrame);
+    adsa.update();
 
     vkResetFences(device, 1, &inFlightFences[currentFrame]);
 

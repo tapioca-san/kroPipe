@@ -1,3 +1,6 @@
+esse projeto é realmente para ser algo profissional. todo o codigo pode não estar documentado, mas tentei fazer com carinho para que pudessem entender. essa parte do código
+é para minha anotação pessoal.
+
 29/03/2025
 consertar o createVertexBuffer e createIndexBuffer que não inicia um buffer, e sim só um vector
 

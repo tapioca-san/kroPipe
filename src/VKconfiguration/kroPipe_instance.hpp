@@ -75,7 +75,7 @@ class Instance{
             createSwapChain();
             createImageViews();
             KP::Pipeline::createRenderPass();      
-            createDescriptorSetLayout();    
+            adsa.createDescriptorLayout();    
             KP::Pipeline::createGraphicsPipeline();  
             createCommandPool();
             createDepthResources();
@@ -86,9 +86,7 @@ class Instance{
             createTextureSampler();
             //createVertexBuffer();
             //createIndexBuffer();
-            createUniformBuffers();
-            createDescriptorPool();
-            createDescriptorSets();
+            adsa.create();
             createCommandBuffers();
             createSyncObjects();
             //
@@ -103,7 +101,7 @@ class Instance{
             vkDestroyImageView(device, textureImageView, nullptr);
             vkDestroyImage(device, textureImage, nullptr);
             vkFreeMemory(device, textureImageMemory, nullptr);
-            cleanupBuffer();
+            adsa.cleanUp();
             for (Model *&model: allModel) {
                 model->cleanupVao();
             }
