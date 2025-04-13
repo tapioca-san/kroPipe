@@ -7,6 +7,10 @@
 #include "kroPipe_extension.hpp"
 #include "kroPipe_swapchain.hpp"
 
+namespace KP {
+namespace DEVICE {
+
+
 // Graphic cards informations
     VkPhysicalDeviceProperties deviceProperties;
     VkPhysicalDeviceFeatures deviceFeatures;
@@ -46,7 +50,7 @@ bool isDeviceSuitable(VkPhysicalDevice device) {
     vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
     bool swapChainAdequate = false;
     if (extensionsSupported) {
-        SwapChainSupportDetails swapChainSupport = querySwapChainSupport(device);
+        SwapChainSupportDetails swapChainSupport = KP::SWAPCHAIN::querySwapChainSupport(device);
         swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
     }
 
@@ -131,5 +135,7 @@ void createLogicalDevice() {
     vkGetDeviceQueue(device, indices.presentFamily.value(), 0, &presentQueue);
 }
 
+}//DEVICE
+}//KP
 
 #endif //DEVICE_H

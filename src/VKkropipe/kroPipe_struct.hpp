@@ -3,8 +3,11 @@
 
 #include "../kroPipe_include.hpp"
 
+
+
 namespace KP {
 
+namespace STRUCT {
 
 struct VertexVulkan {
     glm::vec3 Position;
@@ -60,19 +63,7 @@ struct UniformBufferObject {
     glm::mat4 proj;
 };
 
-struct VAO {
-    
-    std::vector<VkBuffer> vertexBuffers;
-    std::vector<VkDeviceMemory> vertexBufferMemorys;
-    
-    std::vector<VkBuffer> indexBuffers;
-    std::vector<VkDeviceMemory> indexBufferMemorys;
-    
-    std::vector<Mesh> meshes;
-    
-    KP::UniformBufferObject UBO;
-    
-};
+
 
 struct shaderModule {
     VkPipelineShaderStageCreateInfo shaderStages[2];
@@ -101,10 +92,12 @@ struct uniformBuffers{
     VkDescriptorSetLayout               descriptorSetLayout;
 
 };
+
+} // STRUCT
 } // KP
 
-KP::uniformBuffers uniformBuffers2;
-KP::QueueFamilyIndices indices;
+KP::STRUCT::uniformBuffers uniformBuffers2;
+KP::STRUCT::QueueFamilyIndices indices;
 
 
 #endif//STRUCT_H

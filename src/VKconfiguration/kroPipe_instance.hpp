@@ -16,7 +16,6 @@
 #include "kroPipe_window.hpp"
 #include "kroPipe_device.hpp"
 #include "kroPipe_render.hpp"
-#include "kroPipe_vertex.hpp"
 #include "kroPipe_buffer.hpp"
 #include "kroPipe_debug.hpp"
 #include "kroPipe_depth.hpp"
@@ -68,31 +67,31 @@ class Instance{
             
             createInstace();
             //setAllObjectNames();
-            setupDebugMessenger(instance, debugMessenger);
-            createSurface(instance, mWindow);
-            pickPhysicalDevice(instance);
-            createLogicalDevice();
-            createSwapChain();
-            createImageViews();
-            KP::Pipeline::createRenderPass();    
+            KP::DEBUG::setupDebugMessenger(instance, debugMessenger);
+            KP::WINDOWSURFACE::createSurface(instance, mWindow);
+            KP::DEVICE::pickPhysicalDevice(instance);
+            KP::DEVICE::createLogicalDevice();
+            KP::SWAPCHAIN::createSwapChain();
+            KP::IMAGEVIEW::createImageViews();
+            KP::PIPELINE::createRenderPass();    
             for(KP::OBJECT::Model* model : KP::OBJECT::allModel){
                 model->UBO.createDescriptorLayout();    
             }  
-            KP::Pipeline::createGraphicsPipeline();  
-            createCommandPool();
-            createDepthResources();
+            KP::PIPELINE::createGraphicsPipeline();  
+            KP::COMMANDBUFFER::createCommandPool();
+            KP::DEPTH::createDepthResources();
             KP::OBJECT::loadAllModels();
-            createFrameBuffers();
-            createTextureImage();
-            createTextureImageView();
-            createTextureSampler();
+            KP::FRAMEBUFFER::createFrameBuffers();
+            KP::TEXTURE::createTextureImage();
+            KP::TEXTURE::createTextureImageView();
+            KP::TEXTURE::createTextureSampler();
             //createVertexBuffer();
             //createIndexBuffer();
             for(KP::OBJECT::Model* model : KP::OBJECT::allModel){
                 model->UBO.create();    
             }  
-            createCommandBuffers();
-            createSyncObjects();
+            KP::COMMANDBUFFER::createCommandBuffers();
+            KP::RENDER::createSyncObjects();
             //
         }
         
@@ -109,14 +108,14 @@ class Instance{
                 model->UBO.cleanUp();
                 model->cleanupVao();
             }
-            destroyRender();
-            destroyCommandPool();
-            CleanUpFramerBuffer();
-            KP::Pipeline::CleanUpPipeline();
-            DestroyImageview();
+            KP::RENDER::destroyRender();
+            KP::COMMANDBUFFER::destroyCommandPool();
+            KP::FRAMEBUFFER::CleanUpFramerBuffer();
+            KP::PIPELINE::CleanUpPipeline();
+            KP::IMAGEVIEW::DestroyImageview();
             vkDestroySwapchainKHR(device, swapChain, nullptr);
             if(debug){
-                DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
+                KP::DEBUG::DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
             }
             vkDestroySurfaceKHR(instance, surface, nullptr);
             vkDestroyDevice(device, nullptr);
@@ -157,7 +156,7 @@ class Instance{
                     createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
                     createInfo.ppEnabledLayerNames = validationLayers.data();
                     
-                    populateDebugMessengerCreateInfo(debugCreateInfo);
+                    KP::DEBUG::populateDebugMessengerCreateInfo(debugCreateInfo);
                     createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
                     
                 } else {

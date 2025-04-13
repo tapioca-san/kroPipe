@@ -8,6 +8,10 @@
 #include "kroPipe_queuFamilies.hpp"
 #include "kroPipe_vertex.hpp"
 
+namespace KP {
+namespace COMMANDBUFFER {
+
+
 void createCommandPool(){
 
     QueueFamilyIndices queueFamilyIndices = findQueuFamilies(physicalDevice);
@@ -45,4 +49,7 @@ void destroyCommandPool(){
     vkDestroyCommandPool(device, commandPool, nullptr);
 
 }
+}//COMMANDBUFFER
+}//KP
+
 #endif //COMMANDBUFFER_H

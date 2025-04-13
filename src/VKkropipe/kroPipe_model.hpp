@@ -4,19 +4,26 @@
 #include "../VKconfiguration/kroPipe_vertex.hpp"
 #include "../VKconfiguration/kroPipe_buffer.hpp"
 #include "../kroPipe_include.hpp"
-#include "kroPipe_object.hpp"
 #include "kroPipe_struct.hpp"
-#include "kroPipe_Log.hpp"
 
 
 #define MAX_BONE_INFLUENCE 4
 namespace KP {
 namespace OBJECT {
-struct InfoModel{
+
+struct VAO {
+
+    std::vector<VkBuffer> vertexBuffers;
+    std::vector<VkDeviceMemory> vertexBufferMemorys;
     
-
+    std::vector<VkBuffer> indexBuffers;
+    std::vector<VkDeviceMemory> indexBufferMemorys;
+    
+    std::vector<KP::STRUCT::Mesh> meshes;
+    
+    KP::STRUCT::UniformBufferObject UBO;
+    
 };
-
 
 class Model {
  
@@ -24,7 +31,7 @@ public:
     std::string modelPath;
     std::string directory;
     
-    KP::VAO vao;
+    VAO vao;
     KP::BUFFER::UboStorage UBO;
 
 
@@ -114,7 +121,7 @@ private:
         memcpy(UBO.uniformBuffers.uniformBuffersMapped[currentImage], &vao.UBO, sizeof(vao.UBO));
     }
 
-    void createVertexBuffer(const std::vector<KP::VertexVulkan> &vertices, KP::VAO &vao) {
+    void createVertexBuffer(const std::vector<KP::STRUCT::VertexVulkan> &vertices, VAO &vao) {
         VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
     
         VkBuffer stagingBuffer;
@@ -143,7 +150,7 @@ private:
         vkFreeMemory(device, stagingBufferMemory, nullptr);
     }
     
-    void createIndexBuffer(const std::vector<uint16_t> &indices, KP::VAO &vao) {
+    void createIndexBuffer(const std::vector<uint16_t> &indices, VAO &vao) {
         VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
     
         VkBuffer stagingBuffer;
@@ -172,11 +179,11 @@ private:
         vkFreeMemory(device, stagingBufferMemory, nullptr);
     }
 
-    KP::Mesh processMesh(aiMesh* mesh, const aiScene* scene) {
-        std::vector<KP::VertexVulkan> vertices;
+    KP::STRUCT::Mesh processMesh(aiMesh* mesh, const aiScene* scene) {
+        std::vector<KP::STRUCT::VertexVulkan> vertices;
         std::vector<uint16_t> indices;
     
-        KP::VertexVulkan vertex{};
+        KP::STRUCT::VertexVulkan vertex{};
         for(unsigned int i = 0; i < mesh->mNumVertices; i++)
             {
                 glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
@@ -227,7 +234,7 @@ private:
                     indices.push_back(face.mIndices[j]);        
             }
     
-        return KP::Mesh(vertices, indices);
+        return KP::STRUCT::Mesh(vertices, indices);
     }
     
     void processNode(aiNode* node, const aiScene* scene) {
@@ -246,20 +253,20 @@ private:
     std::vector<Model*> allModel; // memoria apagada na Vkconfiguration/kroPipe_instance.hpp, função ~instance em cleanPointers
 //
     
-Model* createModel(std::string modelPath){ 
+inline Model* createModel(std::string modelPath){ 
     Model* model = new Model(modelPath);
     allModel.push_back(model);
     return model;
 }
 
-void loadAllModels(){
+inline void loadAllModels(){
     for(auto model : allModel){
         model->loadModel();
     }
 }
 }
 }    
-KP::OBJECT::Model* glock = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/neco-arc.glb");
+KP::OBJECT::Model* glock = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/m4a1.obj");
 //KP::OBJECT::Model* minhasCabeca = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/project_-_cirno_fumo_3d_scan.glb");
 
 

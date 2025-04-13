@@ -10,13 +10,13 @@
 
 std::vector<std::string> logError;
 
-void defaultErrorNoText(std::string type, std::string mensage){
+inline void defaultErrorNoText(std::string type, std::string mensage){
     if(mensage == ""){
         throw std::runtime_error("failed to" + type + " a mensage without text");
     }
 }
 
-void defaultMensage(std::string type, std::string mensage...){
+inline void defaultMensage(std::string type, std::string mensage...){
     defaultErrorNoText(type, mensage);
     logError.push_back(mensage);
     std::cerr << "[ " << type << " ] : " << mensage << "\n";

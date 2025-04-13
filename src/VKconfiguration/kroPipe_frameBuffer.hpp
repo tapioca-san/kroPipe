@@ -4,7 +4,11 @@
 #include "../VKkropipe/kroPipe_Log.hpp"
 #include "../kroPipe_include.hpp"
 
-void createFrameBuffers() {
+namespace KP {
+namespace FRAMEBUFFER {
+
+
+inline void createFrameBuffers() {
     swapChainFramebuffers.resize(swapChainImageViews.size());
 
     for (size_t i = 0; i < swapChainImageViews.size(); i++) {
@@ -30,11 +34,13 @@ void createFrameBuffers() {
 
 
 
-void CleanUpFramerBuffer(){
+inline void CleanUpFramerBuffer(){
     for (auto framebuffer : swapChainFramebuffers) {
         vkDestroyFramebuffer(device, framebuffer, nullptr);
     }
 }
 
 
+}//FRAMEBUFFER
+}//KP
 #endif //FRAMEBUFFER_H

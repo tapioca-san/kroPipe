@@ -2,10 +2,9 @@
 #define OBJECT_H
 
 #include "../kroPipe_depedence.hpp"
-#include <algorithm>
-#include <stdexcept>
-#include <iostream>
-#include <cmath>
+
+
+int lastID = 0;
 
 namespace KP {
 namespace OBJECT {
@@ -16,6 +15,8 @@ namespace OBJECT {
         glm::vec3 actualPositionForUseForLastPosition{};
         glm::vec3 lastPosition{};
         glm::vec3 velocity{};
+
+        std::string modelPath;
 
         float raio = 0.0f;
         float width = 0.0f, height = 0.0f, depth = 0.0f;
@@ -57,8 +58,8 @@ namespace OBJECT {
                 float dx = vertices[i] - cx;
                 float dy = vertices[i + 1] - cy;
                 float dz = vertices[i + 2] - cz;
-                float distancia = std::sqrt(dx * dx + dy * dy + dz * dz);
-                raio = std::max(raio, distancia);
+                float distance = std::sqrt(dx * dx + dy * dy + dz * dz);
+                raio = std::max(raio, distance);
             }
 
             return raio;
@@ -67,7 +68,7 @@ namespace OBJECT {
     public:
         ObjectData data;
 
-        Object(glm::vec3 position, float floorPos, bool is_myself, int& lastID, float* vertices = nullptr, size_t vertexCount = 0) {
+        Object(glm::vec3 position, float floorPos, bool is_myself, float* vertices = nullptr, size_t vertexCount = 0) {
             data.Position = position;
             data.floorPos = floorPos;
             data.floorPoslowest = floorPos;
@@ -87,10 +88,10 @@ namespace OBJECT {
         }
     };
 
-    void calculateAABB(ObjectData& obj, const float* vertices, size_t numVertices) {
+    inline void calculateAABB(ObjectData& obj, const float* vertices, size_t numVertices) {
         try {
             if (!vertices || numVertices == 0) {
-                throw std::invalid_argument("Os dados de vértices são inválidos.");
+                throw std::invalid_argument("Invalid Vertices: ");
             }
 
             float minX = FLT_MAX, maxX = -FLT_MAX;
@@ -114,11 +115,14 @@ namespace OBJECT {
             obj.height = maxY - minY;
             obj.depth = maxZ - minZ;
         } catch (const std::exception& e) {
-            std::cerr << "Erro no cálculo do AABB: " << e.what() << std::endl;
+            std::cerr << "Faile to calculate the AABB " << e.what() << std::endl;
         }
     }
 
 }
 } // namespace kroPipe
+
+std::vector<KP::OBJECT::Object> allObjects;
+std::vector<int> sortedID;
 
 #endif // OBJECT_H

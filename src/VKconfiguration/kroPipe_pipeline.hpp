@@ -11,12 +11,12 @@
 
 namespace KP {
 
-namespace Pipeline {
+namespace PIPELINE {
 
 
 
-auto bindingDescription = KP::VertexVulkan::getBindingDescription();
-auto attributeDescriptions = KP::VertexVulkan::getAttributeDescriptions();
+auto bindingDescription = KP::STRUCT::VertexVulkan::getBindingDescription();
+auto attributeDescriptions = KP::STRUCT::VertexVulkan::getAttributeDescriptions();
 
 static std::vector<char> readFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
@@ -56,9 +56,9 @@ VkShaderModule createShaderModule(const std::vector<char>& code) {
     return shaderModule;
 }
 
-shaderModule UseShaders(const std::string& directoryPath, const std::string& vertShaderPath, const std::string& fragShaderPath) {
+STRUCT::shaderModule UseShaders(const std::string& directoryPath, const std::string& vertShaderPath, const std::string& fragShaderPath) {
 
-    shaderModule outShaderModule;
+    STRUCT::shaderModule outShaderModule;
 
     auto vertShaderCode = readFile(directoryPath + vertShaderPath);
     auto fragShaderCode = readFile(directoryPath + fragShaderPath);
@@ -72,9 +72,9 @@ shaderModule UseShaders(const std::string& directoryPath, const std::string& ver
     return outShaderModule;
 }
 
-void createPipeline(shaderModule shader){
-    auto bindingDescription = KP::VertexVulkan::getBindingDescription();
-    auto attributeDescriptions = KP::VertexVulkan::getAttributeDescriptions();
+void createPipeline(STRUCT::shaderModule shader){
+    auto bindingDescription = KP::STRUCT::VertexVulkan::getBindingDescription();
+    auto attributeDescriptions = KP::STRUCT::VertexVulkan::getAttributeDescriptions();
     
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -175,7 +175,7 @@ void createPipeline(shaderModule shader){
 
 void createGraphicsPipeline() {
     
-    shaderModule shader = UseShaders(directoryFileManually, "VKconfiguration/shaders/vert.spv", "VKconfiguration/shaders/frag.spv");
+    STRUCT::shaderModule shader = UseShaders(directoryFileManually, "VKconfiguration/shaders/vert.spv", "VKconfiguration/shaders/frag.spv");
 
     createPipeline(shader);
     
@@ -198,7 +198,7 @@ void createRenderPass() {
     colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     VkAttachmentDescription depthAttachment{};
-    depthAttachment.format = findDepthFormat();
+    depthAttachment.format = KP::DEPTH::findDepthFormat();
     depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;

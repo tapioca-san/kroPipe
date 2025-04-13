@@ -7,7 +7,6 @@
 #include "../VKkropipe/kroPipe_Log.hpp"
 #include "../kroPipe_include.hpp"
 #include "kroPipe_vertex.hpp"
-#include <iostream>
 
 namespace KP {
 namespace BUFFER {
@@ -16,11 +15,11 @@ struct UboStorage{
 
     public: ////////////////////////////////////////////////////////////////
         
-        KP::uniformBuffers uniformBuffers;
-        KP::UniformBufferObject UBO;
+        KP::STRUCT::uniformBuffers uniformBuffers;
+        KP::STRUCT::UniformBufferObject UBO;
         int objectId;    
 
-        size_t bufferSize = sizeof(KP::UniformBufferObject);
+        size_t bufferSize = sizeof(KP::STRUCT::UniformBufferObject);
         
         /*
         */
@@ -51,7 +50,7 @@ struct UboStorage{
     private: ////////////////////////////////////////////////////////////////
 
 
-        void createDescriptorSetLayout(KP::uniformBuffers &uniformBuffers) {
+        void createDescriptorSetLayout(KP::STRUCT::uniformBuffers &uniformBuffers) {
             VkDescriptorSetLayoutBinding uboLayoutBinding{};
             uboLayoutBinding.binding = 0;
             uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -79,8 +78,8 @@ struct UboStorage{
             setLayout.push_back(uniformBuffers.descriptorSetLayout);
         }
 
-        void createUniformBuffers(KP::uniformBuffers &uniformBuffers) {
-            VkDeviceSize bufferSize = sizeof(KP::UniformBufferObject);
+        void createUniformBuffers(KP::STRUCT::uniformBuffers &uniformBuffers) {
+            VkDeviceSize bufferSize = sizeof(KP::STRUCT::UniformBufferObject);
 
             uniformBuffers.uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
             uniformBuffers.uniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
@@ -93,18 +92,22 @@ struct UboStorage{
             }
         }
 
-        void updateUniformBuffer(KP::uniformBuffers &uniformBuffers, KP::UniformBufferObject &ubo, const uint32_t &currentImage) {
+        void updateUniformBuffer(KP::STRUCT::uniformBuffers &uniformBuffers, KP::STRUCT::UniformBufferObject &ubo, const uint32_t &currentImage) {
             static auto startTime = std::chrono::high_resolution_clock::now();
 
             auto currentTime = std::chrono::high_resolution_clock::now();
             float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
             ubo.model = glm::mat4(1.0f);
             ubo.model = glm::translate(ubo.model, glm::vec3(allObjects[sortedID[objectId]].data.Position.x, allObjects[sortedID[objectId]].data.Position.y, allObjects[sortedID[objectId]].data.Position.z));
-            ubo.view = glm::lookAt(glm::vec3(allObjects[sortedID[0]].data.Position.x, allObjects[sortedID[0]].data.Position.y, allObjects[sortedID[0]].data.Position.z), glm::vec3(allObjects[sortedID[0]].data.Position.x, allObjects[sortedID[0]].data.Position.y, allObjects[sortedID[0]].data.Position.z) + cameraPlayer.Front, cameraPlayer.Up);
+            if (flyMode) {
+                ubo.view = cameraPlayer.GetViewMatrix();
+            }
+            else{
+                ubo.view = glm::lookAt(glm::vec3(allObjects[sortedID[0]].data.Position.x, allObjects[sortedID[0]].data.Position.y, allObjects[sortedID[0]].data.Position.z), glm::vec3(allObjects[sortedID[0]].data.Position.x, allObjects[sortedID[0]].data.Position.y, allObjects[sortedID[0]].data.Position.z) + cameraPlayer.Front, cameraPlayer.Up);
+            }
             ubo.proj = glm::perspective(glm::radians(cameraPlayer.Zoom), (float)swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 100.0f);
             ubo.proj[1][1] *= -1;
             
-            std::cerr << allObjects[sortedID[objectId]].data.Position.x << allObjects[sortedID[objectId]].data.Position.y << allObjects[sortedID[objectId]].data.Position.z << std::endl;
             memcpy(uniformBuffers.uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
         }
 
@@ -126,7 +129,7 @@ struct UboStorage{
             }
         }
 
-        void createDescriptorSets(KP::uniformBuffers &uniformBuffers) {
+        void createDescriptorSets(KP::STRUCT::uniformBuffers &uniformBuffers) {
 
             std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, uniformBuffers.descriptorSetLayout);
             VkDescriptorSetAllocateInfo allocInfo{};
@@ -144,7 +147,7 @@ struct UboStorage{
                 VkDescriptorBufferInfo bufferInfo{};
                 bufferInfo.buffer = uniformBuffers.uniformBuffers[i];
                 bufferInfo.offset = 0;
-                bufferInfo.range = sizeof(KP::UniformBufferObject);
+                bufferInfo.range = sizeof(KP::STRUCT::UniformBufferObject);
                 
                 VkDescriptorImageInfo imageInfo{};
                 imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -172,7 +175,7 @@ struct UboStorage{
             }
         }
 
-        void cleanupBuffer(KP::uniformBuffers &uniformBuffers){
+        void cleanupBuffer(KP::STRUCT::uniformBuffers &uniformBuffers){
             for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
                 vkDestroyBuffer(device, uniformBuffers.uniformBuffers[i], nullptr);
                 vkFreeMemory(device, uniformBuffers.uniformBuffersMemory[i], nullptr);

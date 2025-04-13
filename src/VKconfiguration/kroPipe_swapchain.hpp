@@ -19,6 +19,8 @@ parei na parte "Criando a corrente de troca"
 #include "kroPipe_depth.hpp"
 
 
+namespace KP {
+namespace SWAPCHAIN {
 
 // VARIABLE
     uint32_t formatCount;
@@ -183,12 +185,15 @@ void recreateSwapChain(){
     cleanupSwapChain();
 
     createSwapChain();
-    createImageViews();
-    createDepthResources();
-    createFrameBuffers();
+    KP::IMAGEVIEW::createImageViews();
+    KP::DEPTH::createDepthResources();
+    KP::FRAMEBUFFER::createFrameBuffers();
 
 }    
 
+
+}//SWAPCHAIN
+}//KP
 
 
 

@@ -7,8 +7,10 @@
 #include "kroPipe_swapchain.hpp"
 #include "kroPipe_buffer.hpp"
 
+namespace KP {
+namespace RENDER {
 
-void destroyRender(){
+inline void destroyRender(){
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
@@ -18,7 +20,7 @@ void destroyRender(){
 
 }
 
-void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
+inline void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
 
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -71,19 +73,19 @@ void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
     }
 }
 
-VkResult acquireNextImage(){
+inline VkResult acquireNextImage(){
     
     VkResult result = vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR) {
-        recreateSwapChain();
+        KP::SWAPCHAIN::recreateSwapChain();
     } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
         throw std::runtime_error(fatalMensage("failed to acquire swap chain image!"));
     }
     return result;
 }
 
-void drawFrame() {
+inline void drawFrame() {
     vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
     VkResult result = acquireNextImage();
@@ -136,7 +138,7 @@ void drawFrame() {
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
         framebufferResized = false;
-        recreateSwapChain();
+        KP::SWAPCHAIN::recreateSwapChain();
     } else if (result != VK_SUCCESS) {
         throw std::runtime_error(fatalMensage("failed to present swap chain image!"));
     }
@@ -145,7 +147,7 @@ void drawFrame() {
 }
 
 
-void createSyncObjects() {
+inline void createSyncObjects() {
     imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
     renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
     inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
@@ -166,5 +168,7 @@ void createSyncObjects() {
     }
 }
 
+}//RENDER
+}//KP
 
 #endif//RENDER_H

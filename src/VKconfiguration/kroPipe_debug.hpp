@@ -4,6 +4,9 @@
 #include "../VKkropipe/kroPipe_Log.hpp"
 #include "../kroPipe_include.hpp"
 
+namespace KP {
+namespace DEBUG {
+
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
     VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
@@ -60,4 +63,6 @@ void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT
     }
 }
 
+}//DEBUG
+}//KP
 #endif // DEBUG_H

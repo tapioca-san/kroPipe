@@ -1,7 +1,9 @@
 
 //#define NDEBUG
-//#define NVSYNC
-#define NFRAMEPERSECOND
+#define NVSYNC
+//#define NFRAMEPERSECOND
+//#define NFLYMODE
+
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "VKconfiguration/kroPipe_window.hpp"
@@ -38,7 +40,7 @@ int main(){
     Instance myinstance;
     createEntity(cameraPlayer.Position + glm::vec3(1.0f,1.0f,1.0f), 0.0f,true);
     //create
-    loadObjects();
+    loadObjects(sortedID);
     
 
     //glfwSetFramebufferSizeCallback(mWindow, framebuffer_size_callback);
@@ -46,7 +48,9 @@ int main(){
     glfwSetScrollCallback(mWindow, scroll_callback);
 
     while(!glfwWindowShouldClose(mWindow)) {
-        kroPipe::gravityForce(allObjects[sortedID[0]], deltaTime);
+        for(uint16_t i = 0; i < allObjects.size(); i++){
+            kroPipe::gravityForce(allObjects[sortedID[i]], deltaTime);
+        }
         float currentTime = glfwGetTime();
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
@@ -57,7 +61,7 @@ int main(){
         
         glfwPollEvents();
         processInput(mWindow, allObjects[sortedID[0]], deltaTime);
-        drawFrame();
+        KP::RENDER::drawFrame();
     }
 
     vkDeviceWaitIdle(device);

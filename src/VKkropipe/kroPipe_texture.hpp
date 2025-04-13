@@ -6,6 +6,8 @@
 #include "../kroPipe_include.hpp"
 #include "kroPipe_Log.hpp"
 
+namespace KP {
+namespace TEXTURE {
 
 
 void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory) {
@@ -122,7 +124,7 @@ void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t 
 
 void createTextureImage() {
     int texWidth, texHeight, texChannels;
-    stbi_uc* pixels = stbi_load("/home/pipebomb/Pictures/image9.png", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+    stbi_uc* pixels = stbi_load("/home/pipebomb/Downloads/model3D/rif_m4a1.tga", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
     VkDeviceSize imageSize = texWidth * texHeight * 4;
 
     if (!pixels) {
@@ -213,11 +215,8 @@ void createTextureSampler() {
 
 }
 
-// part2
-
-
-
-
+}//TEXTURE
+}//KP
 
 
 #endif//TEXTURE_H

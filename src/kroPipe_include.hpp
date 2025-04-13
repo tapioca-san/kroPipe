@@ -5,7 +5,6 @@
 
 
 // debug mode
-    #include "VKkropipe/kroPipe_object.hpp"
     #ifdef NDEBUG
     const bool debug = false;
     #else
@@ -23,6 +22,13 @@
     #else
     const bool framePerSecond = true;
     #endif
+
+    #ifdef NFLYMODE
+    const bool flyMode = false;
+    #else
+    const bool flyMode = true;
+    #endif
+    
 // 
 
 
@@ -64,12 +70,8 @@
 
     float lastTime = glfwGetTime();
     
-    std::vector<KP::OBJECT::Object> allObjects;
-    std::vector<int> sortedID;
-    
     uint32_t imageIndex;
     
-    int lastID = 0;
 
 //
 
