@@ -45,6 +45,10 @@ class Instance{
             delete model;
         }
         KP::OBJECT::allModel.clear();
+        for (KP::OBJECT::Object *obj : allObjects) {
+            delete obj;
+        }
+        allObjects.clear();
         infoMensage("Pointers has been cleaned");
     }
 

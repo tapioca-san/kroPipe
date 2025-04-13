@@ -122,7 +122,7 @@ namespace OBJECT {
 }
 } // namespace kroPipe
 
-std::vector<KP::OBJECT::Object> allObjects;
+std::vector<KP::OBJECT::Object*> allObjects;
 std::vector<int> sortedID;
 
 #endif // OBJECT_H

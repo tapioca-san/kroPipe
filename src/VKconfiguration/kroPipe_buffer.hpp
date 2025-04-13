@@ -98,12 +98,12 @@ struct UboStorage{
             auto currentTime = std::chrono::high_resolution_clock::now();
             float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
             ubo.model = glm::mat4(1.0f);
-            ubo.model = glm::translate(ubo.model, glm::vec3(allObjects[sortedID[objectId]].data.Position.x, allObjects[sortedID[objectId]].data.Position.y, allObjects[sortedID[objectId]].data.Position.z));
+            ubo.model = glm::translate(ubo.model, glm::vec3(allObjects[sortedID[objectId]]->data.Position.x, allObjects[sortedID[objectId]]->data.Position.y, allObjects[sortedID[objectId]]->data.Position.z));
             if (flyMode) {
                 ubo.view = cameraPlayer.GetViewMatrix();
             }
             else{
-                ubo.view = glm::lookAt(glm::vec3(allObjects[sortedID[0]].data.Position.x, allObjects[sortedID[0]].data.Position.y, allObjects[sortedID[0]].data.Position.z), glm::vec3(allObjects[sortedID[0]].data.Position.x, allObjects[sortedID[0]].data.Position.y, allObjects[sortedID[0]].data.Position.z) + cameraPlayer.Front, cameraPlayer.Up);
+                ubo.view = glm::lookAt(glm::vec3(allObjects[sortedID[0]]->data.Position.x, allObjects[sortedID[0]]->data.Position.y, allObjects[sortedID[0]]->data.Position.z), glm::vec3(allObjects[sortedID[0]]->data.Position.x, allObjects[sortedID[0]]->data.Position.y, allObjects[sortedID[0]]->data.Position.z) + cameraPlayer.Front, cameraPlayer.Up);
             }
             ubo.proj = glm::perspective(glm::radians(cameraPlayer.Zoom), (float)swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 100.0f);
             ubo.proj[1][1] *= -1;
