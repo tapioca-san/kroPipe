@@ -4,7 +4,7 @@
 #include "../kroPipe_depedence.hpp"
 #include "kroPipe_struct.hpp"
 
-int lastID = 0;
+static int lastID = 0;
 
 namespace KP {
 namespace OBJECT {
@@ -54,30 +54,66 @@ namespace OBJECT {
 
     class Object {
     private:
-        float calculateRaio(const float* vertices, size_t numVertices) {
-            if (!vertices || numVertices == 0) return 0.0f;
-
-            float cx = 0.0f, cy = 0.0f, cz = 0.0f;
-
-            for (size_t i = 0; i < numVertices * 3; i += 3) {
-                cx += vertices[i];
-                cy += vertices[i + 1];
-                cz += vertices[i + 2];
-            }
-            cx /= numVertices;
-            cy /= numVertices;
-            cz /= numVertices;
-
+        float calculateRaio(ObjectData& object) {
             float raio = 0.0f;
-            for (size_t i = 0; i < numVertices * 3; i += 3) {
-                float dx = vertices[i] - cx;
-                float dy = vertices[i + 1] - cy;
-                float dz = vertices[i + 2] - cz;
-                float distance = std::sqrt(dx * dx + dy * dy + dz * dz);
-                raio = std::max(raio, distance);
-            }
+            for(uint16_t i = 0; i < object.vao->meshes.size(); i++){
 
+                if (object.vao->meshes[i].vertices.size() == 0) return 0.0f;
+                
+                float cx = 0.0f, cy = 0.0f, cz = 0.0f;
+                
+                for (size_t i = 0; i < object.vao->meshes[i].vertices.size() * 3; i += 3) {
+                    cx += object.vao->meshes[i].vertices[i].Position.x;
+                    cy += object.vao->meshes[i].vertices[i + 1].Position.y;
+                    cz += object.vao->meshes[i].vertices[i + 2].Position.z;
+                }
+                cx /= object.vao->meshes[i].vertices.size();
+                cy /= object.vao->meshes[i].vertices.size();
+                cz /= object.vao->meshes[i].vertices.size();
+                
+                for (size_t i = 0; i < object.vao->meshes[i].vertices.size() * 3; i += 3) {
+                    float dx = object.vao->meshes[i].vertices[i].Position.x - cx;
+                    float dy = object.vao->meshes[i].vertices[i + 1].Position.y - cy;
+                    float dz = object.vao->meshes[i].vertices[i + 2].Position.z - cz;
+                    float distance = std::sqrt(dx * dx + dy * dy + dz * dz);
+                    raio = std::max(raio, distance);
+                }
+            }
             return raio;
+        }
+        
+        inline void calculateAABB(ObjectData& object) {
+            try {
+                for(uint16_t i = 0; i < object.vao->meshes.size(); i++){
+    
+                if (object.vao->meshes[i].vertices.size() == 0) {
+                    throw std::invalid_argument("Invalid Vertices: ");
+                }
+    
+                float minX = FLT_MAX, maxX = -FLT_MAX;
+                float minY = FLT_MAX, maxY = -FLT_MAX;
+                float minZ = FLT_MAX, maxZ = -FLT_MAX;
+    
+                for (size_t i = 0; i < object.vao->meshes[i].vertices.size() * 8; i += 8) {
+                    float x = object.vao->meshes[i].vertices[i].Position.x;
+                    float y = object.vao->meshes[i].vertices[i + 1].Position.y;
+                    float z = object.vao->meshes[i].vertices[i + 2].Position.z;
+    
+                    minX = std::min(minX, x);
+                    maxX = std::max(maxX, x);
+                    minY = std::min(minY, y);
+                    maxY = std::max(maxY, y);
+                    minZ = std::min(minZ, z);
+                    maxZ = std::max(maxZ, z);
+                }
+    
+                object.width = maxX - minX;
+                object.height = maxY - minY;
+                object.depth = maxZ - minZ;
+            }
+            } catch (const std::exception& e) {
+                std::cerr << "Failed to calculate the AABB " << e.what() << std::endl;
+            }
         }
 
     public:
@@ -92,43 +128,17 @@ namespace OBJECT {
             data.ID = lastID++;
             data.vao = vao;
 
-            
+            if(vao){
+                calculateRaio(data);
+                calculateAABB(data);
+            }
         }
 
         ~Object() {
         }
     };
 
-    inline void calculateAABB(ObjectData& obj, const float* vertices, size_t numVertices) {
-        try {
-            if (!vertices || numVertices == 0) {
-                throw std::invalid_argument("Invalid Vertices: ");
-            }
-
-            float minX = FLT_MAX, maxX = -FLT_MAX;
-            float minY = FLT_MAX, maxY = -FLT_MAX;
-            float minZ = FLT_MAX, maxZ = -FLT_MAX;
-
-            for (size_t i = 0; i < numVertices * 8; i += 8) {
-                float x = vertices[i];
-                float y = vertices[i + 1];
-                float z = vertices[i + 2];
-
-                minX = std::min(minX, x);
-                maxX = std::max(maxX, x);
-                minY = std::min(minY, y);
-                maxY = std::max(maxY, y);
-                minZ = std::min(minZ, z);
-                maxZ = std::max(maxZ, z);
-            }
-
-            obj.width = maxX - minX;
-            obj.height = maxY - minY;
-            obj.depth = maxZ - minZ;
-        } catch (const std::exception& e) {
-            std::cerr << "Failed to calculate the AABB " << e.what() << std::endl;
-        }
-    }
+    
 
 }
 } // namespace kroPipe

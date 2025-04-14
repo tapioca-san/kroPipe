@@ -55,7 +55,7 @@ inline void playerWalk(GLFWwindow *window, KP::OBJECT::Object *object, float del
 
 }
 
-inline void playerFly(GLFWwindow *window, KP::OBJECT::Object *object, float deltaTime, float baseSpeed = 0.01f, float sprintSpeed = 0.03f, float walkSpeed = 0.002f){
+inline void playerFly(GLFWwindow *window, KP::OBJECT::Object *object, float deltaTime, float baseSpeed = 3.0f, float sprintSpeed = 5.0f, float walkSpeed = 1.5f){
     
     
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
@@ -63,32 +63,21 @@ inline void playerFly(GLFWwindow *window, KP::OBJECT::Object *object, float delt
     } else if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
         baseSpeed = walkSpeed;
     }
-
-    
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-        baseSpeed = sprintSpeed;
-    } else if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-        baseSpeed = walkSpeed;
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-    baseSpeed = sprintSpeed;
+        baseSpeed = sprintSpeed;
     if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-    baseSpeed = walkSpeed;
+        baseSpeed = walkSpeed;
 
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cameraPlayer.Position += baseSpeed * cameraPlayer.Front;
+        cameraPlayer.Position += baseSpeed * cameraPlayer.Front * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cameraPlayer.Position -= baseSpeed * cameraPlayer.Front;
+        cameraPlayer.Position -= baseSpeed * cameraPlayer.Front * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cameraPlayer.Position -= glm::normalize(glm::cross(cameraPlayer.Front, cameraPlayer.Up)) * baseSpeed;
+        cameraPlayer.Position -= glm::normalize(glm::cross(cameraPlayer.Front, cameraPlayer.Up)) * baseSpeed * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraPlayer.Position += glm::normalize(glm::cross(cameraPlayer.Front, cameraPlayer.Up)) * baseSpeed;
+        cameraPlayer.Position += glm::normalize(glm::cross(cameraPlayer.Front, cameraPlayer.Up)) * baseSpeed * deltaTime;
 }
 
 inline void processInput(GLFWwindow *window, KP::OBJECT::Object *object, float deltaTime, float baseSpeed = 3.0f, float sprintSpeed = 5.0f, float walkSpeed = 1.5f, float acceleration = 10.0f, float friction = 8.0f) {

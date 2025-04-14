@@ -33,7 +33,7 @@ void gravityForce(KP::OBJECT::Object *object, float deltaTime){
     }
 }
 
-void useGravity(std::vector<KP::OBJECT::Object*> objects, float deltaTime){
+inline void useGravity(std::vector<KP::OBJECT::Object*> objects, float deltaTime){
 
     for(KP::OBJECT::Object *object : objects){
         gravityForce(object, deltaTime);

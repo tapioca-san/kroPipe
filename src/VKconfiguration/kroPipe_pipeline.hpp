@@ -13,8 +13,6 @@ namespace KP {
 
 namespace PIPELINE {
 
-
-
 auto bindingDescription = KP::STRUCT::VertexVulkan::getBindingDescription();
 auto attributeDescriptions = KP::STRUCT::VertexVulkan::getAttributeDescriptions();
 
@@ -83,6 +81,15 @@ void createPipeline(STRUCT::shaderModule shader){
     vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
     vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
+    VkPipelineCacheCreateInfo cacheCreateInfo{};
+    cacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+    cacheCreateInfo.initialDataSize = 0;
+    cacheCreateInfo.pInitialData = nullptr;
+    
+    VkPipelineCache pipelineCache;
+    if (vkCreatePipelineCache(device, &cacheCreateInfo, nullptr, &pipelineCache) != VK_SUCCESS) {
+        throw std::runtime_error(fatalMensage("failed to create pipeline cache!"));
+    }
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
     inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -167,7 +174,7 @@ void createPipeline(STRUCT::shaderModule shader){
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-    if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
+    if (vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
         throw std::runtime_error(fatalMensage("failed to create graphics pipeline!"));
     }
 }

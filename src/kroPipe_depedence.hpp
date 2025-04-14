@@ -11,8 +11,12 @@
     #include <glm/glm.hpp>
     #include <glm/gtc/matrix_transform.hpp>
 
+    #include "include/imgui-master/backends/imgui_impl_vulkan.h"
+    #include "include/imgui-master/backends/imgui_impl_glfw.h"
+    #include "include/imgui-master/imgui.h"
+
     #include "include/imageSupport/stb_image.h"
-    
+
     #include "assimp/scene.h"
     #include "assimp/postprocess.h"
     #include "assimp/Importer.hpp"

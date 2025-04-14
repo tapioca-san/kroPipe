@@ -1,5 +1,5 @@
 
-//#define NDEBUG
+#define NDEBUG
 #define NVSYNC
 //#define NFRAMEPERSECOND
 //#define NFLYMODE
@@ -13,7 +13,6 @@
 #include "VKkropipe/kroPipe_info.hpp"
 #include "kroPipe_include.hpp"
 #include "kroPipe_engine.hpp"
-
 // Variable
     const char* nameWindow = "triangle";
 

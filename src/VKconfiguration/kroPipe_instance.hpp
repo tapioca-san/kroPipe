@@ -5,6 +5,7 @@
 
 #include "../VKkropipe/kroPipe_texture.hpp"
 #include "../VKkropipe/kroPipe_model.hpp"
+#include "../VKkropipe/kroPipe_ImGui.hpp"
 #include "../VKkropipe/kroPipe_Log.hpp"
 #include "kroPipe_windowSurface.hpp"
 #include "kroPipe_frameBuffer.hpp"
@@ -96,6 +97,9 @@ class Instance{
             }  
             KP::COMMANDBUFFER::createCommandBuffers();
             KP::RENDER::createSyncObjects();
+
+            KP::IMGUI::Imgui interface(instance, physicalDevice, device, presentQueue, graphicsIndex, pipelineCache, renderPass);
+            interface.setup();
             //
         }
         

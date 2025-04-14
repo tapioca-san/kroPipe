@@ -36,7 +36,6 @@
 
 // Importent API
 
-    #include "kroPipe_depedence.hpp"
     
 //
 
@@ -84,7 +83,9 @@
     
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
     VkDevice device;
+
     VkQueue graphicsQueue;
+    uint32_t graphicsIndex;
     
     VkShaderModule shaderModule;
     
@@ -98,6 +99,7 @@
     VkRenderPass renderPass;
     
     VkPipelineLayout pipelineLayout;
+    VkPipelineCache pipelineCache;
     VkPipeline graphicsPipeline;
 
     VkCommandPool commandPool;

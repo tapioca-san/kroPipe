@@ -20,4 +20,6 @@ echo "📦 Extracting Vulkan SDK..."
 tar -xf ${VULKAN_FILE}
 rm ${VULKAN_FILE}
 
+wget https://github.com/ocornut/imgui/archive/refs/heads/master.zip -O imgui.zip
+
 echo "✅ Everything downloaded into ./external"
