@@ -47,6 +47,7 @@ struct VertexVulkan {
 
         return attributeDescriptions;
     }
+    
 };
 
 struct Mesh {
@@ -91,6 +92,20 @@ struct uniformBuffers{
     VkDescriptorPool                    descriptorPool;
     VkDescriptorSetLayout               descriptorSetLayout;
 
+};
+
+struct VAO {
+
+    std::vector<VkBuffer> vertexBuffers;
+    std::vector<VkDeviceMemory> vertexBufferMemorys;
+    
+    std::vector<VkBuffer> indexBuffers;
+    std::vector<VkDeviceMemory> indexBufferMemorys;
+    
+    std::vector<KP::STRUCT::Mesh> meshes;
+    
+    KP::STRUCT::UniformBufferObject UBO;
+    
 };
 
 } // STRUCT

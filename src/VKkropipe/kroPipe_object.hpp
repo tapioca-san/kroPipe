@@ -2,19 +2,34 @@
 #define OBJECT_H
 
 #include "../kroPipe_depedence.hpp"
-
+#include "kroPipe_struct.hpp"
 
 int lastID = 0;
 
 namespace KP {
 namespace OBJECT {
 
+    struct VAO {
+
+        std::vector<VkBuffer> vertexBuffers;
+        std::vector<VkDeviceMemory> vertexBufferMemorys;
+        
+        std::vector<VkBuffer> indexBuffers;
+        std::vector<VkDeviceMemory> indexBufferMemorys;
+        
+        std::vector<KP::STRUCT::Mesh> meshes;
+        
+        KP::STRUCT::UniformBufferObject UBO;
+        
+    };
 
     struct ObjectData {
         glm::vec3 Position{};
         glm::vec3 actualPositionForUseForLastPosition{};
         glm::vec3 lastPosition{};
         glm::vec3 velocity{};
+        
+        VAO *vao;
 
         std::string modelPath;
 
@@ -68,20 +83,16 @@ namespace OBJECT {
     public:
         ObjectData data;
 
-        Object(glm::vec3 position, float floorPos, bool is_myself, float* vertices = nullptr, size_t vertexCount = 0) {
+        Object(glm::vec3 position, float floorPos, bool is_myself, VAO *vao = nullptr) {
             data.Position = position;
             data.floorPos = floorPos;
             data.floorPoslowest = floorPos;
             data.is_myself = is_myself;
             data.velocity = glm::vec3(0.0f);
             data.ID = lastID++;
-            data.vertices = vertices;
-            data.numVertices = vertexCount;
+            data.vao = vao;
 
-            if (vertices && vertexCount > 0) {
-                data.raio = calculateRaio(vertices, vertexCount);
-                //calculateAABB(data, vertices, vertexCount);
-            }
+            
         }
 
         ~Object() {
@@ -115,7 +126,7 @@ namespace OBJECT {
             obj.height = maxY - minY;
             obj.depth = maxZ - minZ;
         } catch (const std::exception& e) {
-            std::cerr << "Faile to calculate the AABB " << e.what() << std::endl;
+            std::cerr << "Failed to calculate the AABB " << e.what() << std::endl;
         }
     }
 

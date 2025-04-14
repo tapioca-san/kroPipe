@@ -11,19 +11,7 @@
 namespace KP {
 namespace OBJECT {
 
-struct VAO {
 
-    std::vector<VkBuffer> vertexBuffers;
-    std::vector<VkDeviceMemory> vertexBufferMemorys;
-    
-    std::vector<VkBuffer> indexBuffers;
-    std::vector<VkDeviceMemory> indexBufferMemorys;
-    
-    std::vector<KP::STRUCT::Mesh> meshes;
-    
-    KP::STRUCT::UniformBufferObject UBO;
-    
-};
 
 class Model {
  
@@ -69,14 +57,14 @@ void Draw(VkCommandBuffer commandBuffer){
         
     VkDeviceSize offsets[] = {0};
     for(uint16_t i = 0; i < vao.meshes.size(); i++){
-    VkBuffer vertexBuffers[] = {vao.vertexBuffers[i]};
+        VkBuffer vertexBuffers[] = {vao.vertexBuffers[i]};
         
-    //UboShader(currentFrame);
+        //UboShader(currentFrame);
 
-    vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
-    vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0, VK_INDEX_TYPE_UINT16);
-    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &UBO.uniformBuffers.descriptorSets[currentFrame], 0, nullptr);
-    vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(vao.meshes[i].indices.size()), 1, 0, 0, 0);
+        vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+        vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0, VK_INDEX_TYPE_UINT16);
+        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &UBO.uniformBuffers.descriptorSets[currentFrame], 0, nullptr);
+        vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(vao.meshes[i].indices.size()), 1, 0, 0, 0);
     }
 }
 
