@@ -114,7 +114,7 @@ private:
     
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
-        createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
+        KP::BUFFER::createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
                      VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
                      stagingBuffer, stagingBufferMemory);
     
@@ -125,11 +125,11 @@ private:
     
         VkBuffer vertexBuffer;
         VkDeviceMemory vertexBufferMemory;
-        createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 
+        KP::BUFFER::createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 
                      VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
                      vertexBuffer, vertexBufferMemory);
     
-        copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
+        KP::BUFFER::copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
     
         vao.vertexBuffers.push_back(vertexBuffer);
         vao.vertexBufferMemorys.push_back(vertexBufferMemory);
@@ -143,7 +143,7 @@ private:
     
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
-        createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
+        KP::BUFFER::createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
                      VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
                      stagingBuffer, stagingBufferMemory);
     
@@ -154,11 +154,11 @@ private:
     
         VkBuffer indexBuffer;
         VkDeviceMemory indexBufferMemory;
-        createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, 
+        KP::BUFFER::createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, 
                      VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
                      indexBuffer, indexBufferMemory);
     
-        copyBuffer(stagingBuffer, indexBuffer, bufferSize);
+        KP::BUFFER::copyBuffer(stagingBuffer, indexBuffer, bufferSize);
     
         vao.indexBuffers.push_back(indexBuffer);
         vao.indexBufferMemorys.push_back(indexBufferMemory);

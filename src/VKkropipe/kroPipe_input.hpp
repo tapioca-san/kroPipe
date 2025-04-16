@@ -5,6 +5,7 @@
 #include "../kroPipe_include.hpp"
 #include "kroPipe_model.hpp"
 #include <GLFW/glfw3.h>
+#include <glm/ext/vector_float3.hpp>
 
 inline void playerWalk(GLFWwindow *window, KP::OBJECT::Object *object, float deltaTime, float baseSpeed = 3.0f, float sprintSpeed = 5.0f, float walkSpeed = 1.5f, float acceleration = 10.0f, float friction = 8.0f){
 
@@ -92,8 +93,12 @@ inline void processInput(GLFWwindow *window, KP::OBJECT::Object *object, float d
     }
 
     if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS){
-        allObjects[sortedID[glock->UBO.objectId]]->data.Position = allObjects[sortedID[0]]->data.Position;
+        allObjects[sortedID[glock->UBO.objectId]]->data.Scale -= glm::vec3(1.1f,11.1f, 11.1f) * deltaTime;
     }
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS){
+        allObjects[sortedID[glock->UBO.objectId]]->data.Scale += glm::vec3(1.1f,11.1f, 11.1f) * deltaTime;
+    }
+
     if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS){
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }

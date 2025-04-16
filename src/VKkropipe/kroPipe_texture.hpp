@@ -3,6 +3,7 @@
 
 #include "../kroPipe_depedence.hpp"
 #include "../VKconfiguration/kroPipe_vertex.hpp"
+#include "../VKconfiguration/kroPipe_buffer.hpp"
 #include "../kroPipe_include.hpp"
 #include "kroPipe_Log.hpp"
 
@@ -36,7 +37,7 @@ void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling
     VkMemoryAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocInfo.allocationSize = memRequirements.size;
-    allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
+    allocInfo.memoryTypeIndex = KP::VERTEX::findMemoryType(memRequirements.memoryTypeBits, properties);
 
     if (vkAllocateMemory(device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
         throw std::runtime_error("failed to allocate image memory!");
@@ -46,7 +47,7 @@ void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling
 }
 
 void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) {
-    VkCommandBuffer commandBuffer = beginSingleTimeCommands();
+    VkCommandBuffer commandBuffer = KP::VERTEX::beginSingleTimeCommands();
 
     VkImageMemoryBarrier barrier{};
     barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -89,12 +90,12 @@ void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayo
         1, &barrier
     );
 
-    endSingleTimeCommands(commandBuffer);
+    KP::VERTEX::endSingleTimeCommands(commandBuffer);
 }
 
 
 void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height) {
-    VkCommandBuffer commandBuffer = beginSingleTimeCommands();
+    VkCommandBuffer commandBuffer = KP::VERTEX::beginSingleTimeCommands();
     VkBufferImageCopy region{};
     region.bufferOffset = 0;
     region.bufferRowLength = 0;
@@ -119,7 +120,7 @@ void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t 
         1,
         &region
     );
-    endSingleTimeCommands(commandBuffer);
+    KP::VERTEX::endSingleTimeCommands(commandBuffer);
 }
 
 void createTextureImage() {
@@ -133,7 +134,7 @@ void createTextureImage() {
 
     VkBuffer stagingBuffer;
     VkDeviceMemory stagingBufferMemory;
-    createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+    KP::BUFFER::createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
     void* data;
     vkMapMemory(device, stagingBufferMemory, 0, imageSize, 0, &data);

@@ -19,12 +19,15 @@ namespace OBJECT {
         
         std::vector<KP::STRUCT::Mesh> meshes;
         
+        
         KP::STRUCT::UniformBufferObject UBO;
         
     };
 
     struct ObjectData {
         glm::vec3 Position{};
+        glm::vec3 Rotation{};
+        glm::vec3 Scale{};
         glm::vec3 actualPositionForUseForLastPosition{};
         glm::vec3 lastPosition{};
         glm::vec3 velocity{};
@@ -127,6 +130,7 @@ namespace OBJECT {
             data.velocity = glm::vec3(0.0f);
             data.ID = lastID++;
             data.vao = vao;
+            data.Scale = glm::vec3(1);
 
             if(vao){
                 calculateRaio(data);

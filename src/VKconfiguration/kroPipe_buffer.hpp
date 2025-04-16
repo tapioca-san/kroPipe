@@ -8,9 +8,45 @@
 #include "../kroPipe_include.hpp"
 #include "kroPipe_command.hpp"
 #include "kroPipe_vertex.hpp"
+#include <glm/ext/matrix_transform.hpp>
 
 namespace KP {
 namespace BUFFER {
+    void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory) {
+        VkBufferCreateInfo bufferInfo{};
+        bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        bufferInfo.size = size;
+        bufferInfo.usage = usage;
+        bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    
+        if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
+            throw std::runtime_error("failed to create buffer!");
+        }
+    
+        VkMemoryRequirements memRequirements;
+        vkGetBufferMemoryRequirements(device, buffer, &memRequirements);
+    
+        VkMemoryAllocateInfo allocInfo{};
+        allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocInfo.allocationSize = memRequirements.size;
+        allocInfo.memoryTypeIndex = KP::VERTEX::findMemoryType(memRequirements.memoryTypeBits, properties);
+    
+        if (vkAllocateMemory(device, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
+            throw std::runtime_error("failed to allocate buffer memory!");
+        }
+    
+        vkBindBufferMemory(device, buffer, bufferMemory, 0);
+    }
+    
+    void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size) {
+        VkCommandBuffer commandBuffer = KP::VERTEX::beginSingleTimeCommands();
+    
+        VkBufferCopy copyRegion{};
+        copyRegion.size = size;
+        vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
+    
+        KP::VERTEX::endSingleTimeCommands(commandBuffer);
+    }
 
 struct UboStorage{
 
@@ -100,6 +136,12 @@ struct UboStorage{
             float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
             ubo.model = glm::mat4(1.0f);
             ubo.model = glm::translate(ubo.model, glm::vec3(allObjects[sortedID[objectId]]->data.Position.x, allObjects[sortedID[objectId]]->data.Position.y, allObjects[sortedID[objectId]]->data.Position.z));
+            ubo.model = glm::rotate(ubo.model, glm::radians(allObjects[sortedID[objectId]]->data.Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)); // rotation for X
+            ubo.model = glm::rotate(ubo.model, glm::radians(allObjects[sortedID[objectId]]->data.Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f)); // rotation for Y
+            ubo.model = glm::rotate(ubo.model, glm::radians(allObjects[sortedID[objectId]]->data.Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f)); // rotation for Z
+            ubo.model = glm::scale(ubo.model, glm::vec3(allObjects[sortedID[objectId]]->data.Scale));
+            
+            
             if (flyMode) {
                 ubo.view = cameraPlayer.GetViewMatrix();
             }
