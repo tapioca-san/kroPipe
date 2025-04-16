@@ -2,5 +2,5 @@ it's a normal graphical engine that you could find on internet. it's just a pers
 "https://vulkan-tutorial.com/"
 
 
-maybe that will be more easy to noob uses, meanwhile for now, it's hardly even to modify a simply part of it. 
+maybe my engine will be more easy to noob uses, meanwhile for now, it's hardly even to modify a simply part of it. 
 Im supposed to make a documentation of it, btw.
