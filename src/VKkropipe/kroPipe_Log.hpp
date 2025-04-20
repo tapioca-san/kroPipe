@@ -66,6 +66,15 @@ void modelMensage(t mensage...){
         defaultMensage("MODEL", mensage);
 }
 
+static void check_vk_result(VkResult err, std::string informationError = ""){ // this is for checking if creating 
+    if (err == VK_SUCCESS)
+        return;
+    fprintf(stderr, "[vulkan] Error: VkResult = %d\n", err);
+    if(informationError != "")
+        std::cerr << informationError;
+    if (err < 0)
+        abort();
+}
 
 
 #endif//LOG_H

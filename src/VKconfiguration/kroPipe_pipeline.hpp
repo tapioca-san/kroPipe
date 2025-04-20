@@ -36,8 +36,8 @@ static std::vector<char> readFile(const std::string& filename) {
 
 void destroyGraphicsPipeline(VkShaderModule vertShaderModule, VkShaderModule fragShaderModule){
     
-    vkDestroyShaderModule(device, fragShaderModule, nullptr);
-    vkDestroyShaderModule(device, vertShaderModule, nullptr);
+    vkDestroyShaderModule(device, fragShaderModule, Allocator);
+    vkDestroyShaderModule(device, vertShaderModule, Allocator);
 }
 
 VkShaderModule createShaderModule(const std::vector<char>& code) {
@@ -47,9 +47,9 @@ VkShaderModule createShaderModule(const std::vector<char>& code) {
     createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
     VkShaderModule shaderModule;
-    if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-        throw std::runtime_error(fatalMensage("failed to create shader module!"));
-    }
+    err = vkCreateShaderModule(device, &createInfo, Allocator, &shaderModule);
+    check_vk_result(err);
+    
 
     return shaderModule;
 }
@@ -87,9 +87,8 @@ void createPipeline(STRUCT::shaderModule shader){
     cacheCreateInfo.pInitialData = nullptr;
     
     VkPipelineCache pipelineCache;
-    if (vkCreatePipelineCache(device, &cacheCreateInfo, nullptr, &pipelineCache) != VK_SUCCESS) {
-        throw std::runtime_error(fatalMensage("failed to create pipeline cache!"));
-    }
+    err = vkCreatePipelineCache(device, &cacheCreateInfo, Allocator, &pipelineCache);
+    check_vk_result(err, "failed to create pipeline cache!");
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
     inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -153,9 +152,8 @@ void createPipeline(STRUCT::shaderModule shader){
     pipelineLayoutInfo.setLayoutCount = 1;
     pipelineLayoutInfo.pSetLayouts = setLayout.data();
 
-    if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
-        fatalMensage("failed to create pipeline layout!");
-    }
+    vkCreatePipelineLayout(device, &pipelineLayoutInfo, Allocator, &pipelineLayout);
+    check_vk_result(err, "failed to create pipeline layout!");
 
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -174,9 +172,9 @@ void createPipeline(STRUCT::shaderModule shader){
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-    if (vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
-        throw std::runtime_error(fatalMensage("failed to create graphics pipeline!"));
-    }
+    err = vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineInfo, Allocator, &graphicsPipeline);
+    check_vk_result(err, "failed to create graphics pipeline!");
+    
 }
 
 
@@ -189,8 +187,8 @@ void createGraphicsPipeline() {
 
     
 
-    vkDestroyShaderModule(device, shader.fragShaderModule, nullptr);
-    vkDestroyShaderModule(device, shader.vertShaderModule, nullptr);
+    vkDestroyShaderModule(device, shader.fragShaderModule, Allocator);
+    vkDestroyShaderModule(device, shader.vertShaderModule, Allocator);
 }
 
 void createRenderPass() {
@@ -246,15 +244,15 @@ void createRenderPass() {
     renderPassInfo.dependencyCount = 1;
     renderPassInfo.pDependencies = &dependency;
 
-    if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
-        throw std::runtime_error(fatalMensage("failed to create render pass!"));
-    }
+    err = vkCreateRenderPass(device, &renderPassInfo, Allocator, &renderPass);
+    check_vk_result(err, "failed to create render pass!");
+    
 }
 
-void CleanUpPipeline(){
-    vkDestroyPipeline(device, graphicsPipeline, nullptr);
-    vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
-    vkDestroyRenderPass(device, renderPass, nullptr);
+inline void CleanUpPipeline(){
+    vkDestroyPipeline(device, graphicsPipeline, Allocator);
+    vkDestroyPipelineLayout(device, pipelineLayout, Allocator);
+    vkDestroyRenderPass(device, renderPass, Allocator);
 }
 
 } // Pipeline

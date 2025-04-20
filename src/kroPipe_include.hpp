@@ -76,6 +76,8 @@
 
 // VARIABLES to use anywhere
 
+    VkAllocationCallbacks* Allocator = nullptr;
+
     VkInstance instance;
     VkDebugUtilsMessengerEXT debugMessenger;
 
@@ -132,6 +134,8 @@
     //std::vector<Camera> camera;
     Camera cameraPlayer;
     
+
+    VkResult err;
 
     std::string directoryFile = (std::string)std::filesystem::current_path() + "/VKconfiguration"; 
     std::string directoryFileManually = "";

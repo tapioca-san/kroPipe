@@ -29,8 +29,10 @@ class window{
         glfwInit();
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         //glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
+        
         mWindow = glfwCreateWindow(this->width, this->height, name.c_str(), nullptr, nullptr);
+
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         glfwMakeContextCurrent(mWindow);
         glfwSetWindowUserPointer(mWindow, this);
 
@@ -43,6 +45,11 @@ class window{
         glfwTerminate();
     }
 };
+
+static void glfw_error_callback(int error, const char* description)
+{
+    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
+}
 
 
 #endif //WINDOW_H

@@ -21,13 +21,12 @@ void createCommandPool(){
     poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
 
-    if (vkCreateCommandPool(device, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
-        throw std::runtime_error(fatalMensage("failed to create command pool!"));
-    }
+    err = vkCreateCommandPool(device, &poolInfo, Allocator, &commandPool);
+    check_vk_result(err, "failed to create command pool!");
     
 }
 
-void createCommandBuffers() { // já fiz -> fazer uam struct que coloque isso como parametro nessa função e use nvim. faça que o proprio model renderize isso na tela só com o construtor
+void createCommandBuffers() { 
     commandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
 
     VkCommandBufferAllocateInfo allocInfo{};
@@ -36,9 +35,9 @@ void createCommandBuffers() { // já fiz -> fazer uam struct que coloque isso co
     allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     allocInfo.commandBufferCount = (uint32_t) commandBuffers.size();
 
-    if (vkAllocateCommandBuffers(device, &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
-        throw std::runtime_error(fatalMensage("failed to allocate command buffers!"));
-    }
+    err = vkAllocateCommandBuffers(device, &allocInfo, commandBuffers.data());
+    check_vk_result(err, "failed to allocate command buffers!");
+    
 }
 
 void createDescriptorPool(VkDescriptorPool &descriptorPool) {
@@ -54,9 +53,8 @@ void createDescriptorPool(VkDescriptorPool &descriptorPool) {
     poolInfo.pPoolSizes = poolSizes.data();
     poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
 
-    if (vkCreateDescriptorPool(device, &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
-        throw std::runtime_error(fatalMensage("failed to create descriptor pool!"));
-    }
+    err = vkCreateDescriptorPool(device, &poolInfo, Allocator, &descriptorPool);
+    check_vk_result(err, "failed to create descriptor pool!");
 }
 
 void destroyCommandPool(){

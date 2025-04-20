@@ -13,9 +13,9 @@ namespace RENDER {
 inline void destroyRender(){
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
-        vkDestroySemaphore(device, imageAvailableSemaphores[i], nullptr);
-        vkDestroyFence(device, inFlightFences[i], nullptr);
+        vkDestroySemaphore(device, renderFinishedSemaphores[i], Allocator);
+        vkDestroySemaphore(device, imageAvailableSemaphores[i], Allocator);
+        vkDestroyFence(device, inFlightFences[i], Allocator);
     }
 
 }
@@ -73,7 +73,7 @@ inline void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageInd
     }
 }
 
-inline VkResult acquireNextImage(){
+static inline VkResult acquireNextImage(){
     
     VkResult result = vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
 
@@ -88,7 +88,7 @@ inline VkResult acquireNextImage(){
 inline void drawFrame() {
     vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
-    VkResult result = acquireNextImage();
+    err = acquireNextImage();
 
     for(KP::OBJECT::Model* model : KP::OBJECT::allModel){
         model->UBO.update();    
@@ -134,12 +134,12 @@ inline void drawFrame() {
 
     presentInfo.pImageIndices = &imageIndex;
 
-    result = vkQueuePresentKHR(presentQueue, &presentInfo);
+    err = vkQueuePresentKHR(presentQueue, &presentInfo);
 
-    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
+    if (err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR || framebufferResized) {
         framebufferResized = false;
         KP::SWAPCHAIN::recreateSwapChain();
-    } else if (result != VK_SUCCESS) {
+    } else if (err != VK_SUCCESS) {
         throw std::runtime_error(fatalMensage("failed to present swap chain image!"));
     }
 

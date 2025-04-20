@@ -3,7 +3,7 @@
 #define NVSYNC
 //#define NFRAMEPERSECOND
 //#define NFLYMODE
-
+//https://github.com/ocornut/imgui/blob/master/examples/example_glfw_vulkan/main.cpp
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "VKconfiguration/kroPipe_window.hpp"
@@ -33,6 +33,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 int main(){
 
+    glfwSetErrorCallback(glfw_error_callback);
     makeConfiguration(); // init for a best configuratiopn coming from the user.
 
     window window(width, height, nameWindow);
@@ -47,6 +48,12 @@ int main(){
     glfwSetScrollCallback(mWindow, scroll_callback);
 
     while(!glfwWindowShouldClose(mWindow)) {
+        /*
+        ImGui_ImplVulkan_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        */
+
         for(uint16_t i = 0; i < allObjects.size(); i++){
             kroPipe::gravityForce(allObjects[sortedID[i]], deltaTime);
         }

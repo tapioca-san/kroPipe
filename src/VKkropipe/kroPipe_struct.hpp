@@ -64,8 +64,6 @@ struct UniformBufferObject {
     glm::mat4 proj;
 };
 
-
-
 struct shaderModule {
     VkPipelineShaderStageCreateInfo shaderStages[2];
     VkShaderModule vertShaderModule;

@@ -8,20 +8,19 @@
 #include "../kroPipe_include.hpp"
 #include "kroPipe_command.hpp"
 #include "kroPipe_vertex.hpp"
-#include <glm/ext/matrix_transform.hpp>
 
 namespace KP {
 namespace BUFFER {
-    void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory) {
+
+    void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory) { //to send variables to the GPU memory. we use this with VKBUFFER to send our information.
         VkBufferCreateInfo bufferInfo{};
         bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         bufferInfo.size = size;
         bufferInfo.usage = usage;
         bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
     
-        if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create buffer!");
-        }
+        err = vkCreateBuffer(device, &bufferInfo, nullptr, &buffer);
+        check_vk_result(err, "failed to create buffer!");
     
         VkMemoryRequirements memRequirements;
         vkGetBufferMemoryRequirements(device, buffer, &memRequirements);
@@ -31,11 +30,11 @@ namespace BUFFER {
         allocInfo.allocationSize = memRequirements.size;
         allocInfo.memoryTypeIndex = KP::VERTEX::findMemoryType(memRequirements.memoryTypeBits, properties);
     
-        if (vkAllocateMemory(device, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
-            throw std::runtime_error("failed to allocate buffer memory!");
-        }
+        err = vkAllocateMemory(device, &allocInfo, Allocator, &bufferMemory);
+        check_vk_result(err, "failed to allocate buffer memory!");
     
-        vkBindBufferMemory(device, buffer, bufferMemory, 0);
+        err = vkBindBufferMemory(device, buffer, bufferMemory, 0);
+        check_vk_result(err);
     }
     
     void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size) {
@@ -60,10 +59,9 @@ struct UboStorage{
         
         /*
         */
-        UboStorage() 
-        {
-        this->objectId = createEntity(glm::vec3(0), 0.0f, false);
-            }
+        UboStorage() {
+            this->objectId = createEntity(glm::vec3(0), 0.0f, false);
+        }
             
 
         void create(){
@@ -108,9 +106,8 @@ struct UboStorage{
             layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
             layoutInfo.pBindings = bindings.data();
 
-            if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &uniformBuffers.descriptorSetLayout) != VK_SUCCESS) {
-                fatalMensage("failed to create descriptor set layout!");
-            }
+            err = vkCreateDescriptorSetLayout(device, &layoutInfo, Allocator, &uniformBuffers.descriptorSetLayout);
+            check_vk_result(err, "failed to create descriptor set layout!");
 
             setLayout.push_back(uniformBuffers.descriptorSetLayout);
         }
@@ -125,7 +122,8 @@ struct UboStorage{
             for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
                 createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers.uniformBuffers[i], uniformBuffers.uniformBuffersMemory[i]);
 
-                vkMapMemory(device, uniformBuffers.uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffers.uniformBuffersMapped[i]);
+                err = vkMapMemory(device, uniformBuffers.uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffers.uniformBuffersMapped[i]);
+                check_vk_result(err);
             }
         }
 
@@ -166,9 +164,8 @@ struct UboStorage{
             allocInfo.pSetLayouts = layouts.data();
 
             uniformBuffers. descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
-            if (vkAllocateDescriptorSets(device, &allocInfo, uniformBuffers.descriptorSets.data()) != VK_SUCCESS) {
-                throw std::runtime_error(fatalMensage("failed to allocate descriptor sets!"));
-            }
+            err = vkAllocateDescriptorSets(device, &allocInfo, uniformBuffers.descriptorSets.data());
+            check_vk_result(err, "failed to allocate descriptor sets!");
 
             for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
                 VkDescriptorBufferInfo bufferInfo{};
@@ -204,12 +201,12 @@ struct UboStorage{
 
         void cleanupBuffer(KP::STRUCT::uniformBuffers &uniformBuffers){
             for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-                vkDestroyBuffer(device, uniformBuffers.uniformBuffers[i], nullptr);
-                vkFreeMemory(device, uniformBuffers.uniformBuffersMemory[i], nullptr);
+                vkDestroyBuffer(device, uniformBuffers.uniformBuffers[i], Allocator);
+                vkFreeMemory(device, uniformBuffers.uniformBuffersMemory[i], Allocator);
             }
 
-            vkDestroyDescriptorPool(device, uniformBuffers.descriptorPool, nullptr);
-            vkDestroyDescriptorSetLayout(device, uniformBuffers.descriptorSetLayout, nullptr);
+            vkDestroyDescriptorPool(device, uniformBuffers.descriptorPool, Allocator);
+            vkDestroyDescriptorSetLayout(device, uniformBuffers.descriptorSetLayout, Allocator);
         }
 };
 

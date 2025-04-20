@@ -27,7 +27,8 @@ QueueFamilyIndices findQueuFamilies(VkPhysicalDevice device){
         }
         
         VkBool32 presentSupport = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);
+        err = vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);
+        check_vk_result(err);
         
         if (presentSupport) {
             indices.presentFamily = i;

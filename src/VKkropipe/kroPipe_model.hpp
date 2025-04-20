@@ -4,7 +4,9 @@
 #include "../VKconfiguration/kroPipe_vertex.hpp"
 #include "../VKconfiguration/kroPipe_buffer.hpp"
 #include "../kroPipe_include.hpp"
+#include "kroPipe_Log.hpp"
 #include "kroPipe_struct.hpp"
+#include <assimp/mesh.h>
 
 
 #define MAX_BONE_INFLUENCE 4
@@ -77,16 +79,16 @@ void cleanupVao(){
     */
     
     for(VkBuffer indexBuffer : vao.indexBuffers){
-        vkDestroyBuffer(device,indexBuffer, nullptr);
+        vkDestroyBuffer(device,indexBuffer, Allocator);
     }
     for(VkBuffer vertexBuffer : vao.vertexBuffers){
-        vkDestroyBuffer(device, vertexBuffer, nullptr);
+        vkDestroyBuffer(device, vertexBuffer, Allocator);
     }
     for(VkDeviceMemory indexBufferMemory : vao.indexBufferMemorys){
-        vkFreeMemory(device, indexBufferMemory, nullptr);
+        vkFreeMemory(device, indexBufferMemory, Allocator);
     }
     for(VkDeviceMemory vertexBufferMemory : vao.vertexBufferMemorys){
-        vkFreeMemory(device, vertexBufferMemory, nullptr);
+        vkFreeMemory(device, vertexBufferMemory, Allocator);
     }
 }
 
@@ -148,7 +150,9 @@ private:
                      stagingBuffer, stagingBufferMemory);
     
         void* data;
-        vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
+        err = vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
+        check_vk_result(err);
+        
         memcpy(data, indices.data(), (size_t) bufferSize);
         vkUnmapMemory(device, stagingBufferMemory);
     
@@ -213,6 +217,7 @@ private:
     
                 vertices.push_back(vertex);
             }
+
             // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
             for(unsigned int i = 0; i < mesh->mNumFaces; i++)
             {

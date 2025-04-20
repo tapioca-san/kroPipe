@@ -32,28 +32,33 @@ VkCommandBuffer beginSingleTimeCommands() {
     allocInfo.commandBufferCount = 1;
 
     VkCommandBuffer commandBuffer;
-    vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer);
+    err = vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer);
+    check_vk_result(err);
 
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-    vkBeginCommandBuffer(commandBuffer, &beginInfo);
+    err = vkBeginCommandBuffer(commandBuffer, &beginInfo);
+    check_vk_result(err);
 
     return commandBuffer;
 }
 
 void endSingleTimeCommands(VkCommandBuffer commandBuffer) {
-    vkEndCommandBuffer(commandBuffer);
+    err = vkEndCommandBuffer(commandBuffer);
+    check_vk_result(err);
 
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = &commandBuffer;
 
-    vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
-    vkQueueWaitIdle(graphicsQueue);
-
+    err = vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+    check_vk_result(err);
+    err = vkQueueWaitIdle(graphicsQueue);
+    check_vk_result(err);
+    
     vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
 }
 

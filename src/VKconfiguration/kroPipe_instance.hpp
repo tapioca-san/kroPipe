@@ -98,20 +98,19 @@ class Instance{
             KP::COMMANDBUFFER::createCommandBuffers();
             KP::RENDER::createSyncObjects();
 
-            KP::IMGUI::Imgui interface(instance, physicalDevice, device, presentQueue, graphicsIndex, pipelineCache, renderPass);
-            interface.setup();
+            //KP::IMGUI::Imgui interface(instance, physicalDevice, device, presentQueue, graphicsIndex, pipelineCache, renderPass);
             //
         }
         
         ~Instance(){
-            vkDestroyImageView(device, depthImageView, nullptr);
-            vkDestroyImage(device, depthImage, nullptr);
-            vkFreeMemory(device, depthImageMemory, nullptr);
+            vkDestroyImageView(device, depthImageView, Allocator);
+            vkDestroyImage(device, depthImage, Allocator);
+            vkFreeMemory(device, depthImageMemory, Allocator);
 
-            vkDestroySampler(device, textureSampler, nullptr);
-            vkDestroyImageView(device, textureImageView, nullptr);
-            vkDestroyImage(device, textureImage, nullptr);
-            vkFreeMemory(device, textureImageMemory, nullptr);
+            vkDestroySampler(device, textureSampler, Allocator);
+            vkDestroyImageView(device, textureImageView, Allocator);
+            vkDestroyImage(device, textureImage, Allocator);
+            vkFreeMemory(device, textureImageMemory, Allocator);
             for (KP::OBJECT::Model *&model: KP::OBJECT::allModel) {
                 model->UBO.cleanUp();
                 model->cleanupVao();
@@ -121,13 +120,13 @@ class Instance{
             KP::FRAMEBUFFER::CleanUpFramerBuffer();
             KP::PIPELINE::CleanUpPipeline();
             KP::IMAGEVIEW::DestroyImageview();
-            vkDestroySwapchainKHR(device, swapChain, nullptr);
+            vkDestroySwapchainKHR(device, swapChain, Allocator);
             if(debug){
-                KP::DEBUG::DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
+                KP::DEBUG::DestroyDebugUtilsMessengerEXT(instance, debugMessenger, Allocator);
             }
-            vkDestroySurfaceKHR(instance, surface, nullptr);
-            vkDestroyDevice(device, nullptr);
-            vkDestroyInstance(instance, nullptr);
+            vkDestroySurfaceKHR(instance, surface, Allocator);
+            vkDestroyDevice(device, Allocator);
+            vkDestroyInstance(instance, Allocator);
             cleanPointers();
 
         }
@@ -147,7 +146,7 @@ class Instance{
             appInfo.apiVersion = VK_API_VERSION_1_0;
                     
             VkInstanceCreateInfo createInfo{};
-            createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+            //createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
             createInfo.pApplicationInfo = &appInfo;
             //
             
@@ -176,9 +175,8 @@ class Instance{
 
             
             // making an instance with instance configuration that we've done. this must be the final step of instance
-                if(vkCreateInstance(&createInfo,nullptr,&instance) != VK_SUCCESS){
-                    throw std::runtime_error(fatalMensage("failed to create instance!\n"));
-                }
+                err = vkCreateInstance(&createInfo,Allocator,&instance);
+                check_vk_result(err, "failed to create instance!\n");
             //
         }
      
@@ -190,7 +188,8 @@ class Instance{
                 
                 std::vector<VkLayerProperties> avaibleLayers(layerCount);
 
-                vkEnumerateInstanceLayerProperties(&layerCount, avaibleLayers.data());
+                err = vkEnumerateInstanceLayerProperties(&layerCount, avaibleLayers.data());
+                check_vk_result(err);
                 
                 for (const char* layerName : validationLayers){
                     bool layerFound = false;

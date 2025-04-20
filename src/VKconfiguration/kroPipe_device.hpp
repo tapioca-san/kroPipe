@@ -127,7 +127,7 @@ void createLogicalDevice() {
         createInfo.enabledLayerCount = 0;
     }
 
-    if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &device) != VK_SUCCESS) {
+    if (vkCreateDevice(physicalDevice, &createInfo, Allocator, &device) != VK_SUCCESS) {
         throw std::runtime_error("failed to create logical device!");
     }
 
