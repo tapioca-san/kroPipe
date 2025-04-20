@@ -1,5 +1,5 @@
 
-#define NDEBUG
+//#define NDEBUG
 #define NVSYNC
 //#define NFRAMEPERSECOND
 //#define NFLYMODE

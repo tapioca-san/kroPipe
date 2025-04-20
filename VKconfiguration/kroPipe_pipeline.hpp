@@ -7,6 +7,7 @@
 #include "../kroPipe_include.hpp"
 #include "kroPipe_vertex.hpp"
 #include "kroPipe_depth.hpp"
+#include <vulkan/vulkan_core.h>
 
 
 namespace KP {
@@ -86,7 +87,6 @@ void createPipeline(STRUCT::shaderModule shader){
     cacheCreateInfo.initialDataSize = 0;
     cacheCreateInfo.pInitialData = nullptr;
     
-    VkPipelineCache pipelineCache;
     err = vkCreatePipelineCache(device, &cacheCreateInfo, Allocator, &pipelineCache);
     check_vk_result(err, "failed to create pipeline cache!");
 
@@ -251,6 +251,7 @@ void createRenderPass() {
 
 inline void CleanUpPipeline(){
     vkDestroyPipeline(device, graphicsPipeline, Allocator);
+    vkDestroyPipelineCache(device, pipelineCache, Allocator);
     vkDestroyPipelineLayout(device, pipelineLayout, Allocator);
     vkDestroyRenderPass(device, renderPass, Allocator);
 }

@@ -33,7 +33,6 @@ class window{
         mWindow = glfwCreateWindow(this->width, this->height, name.c_str(), nullptr, nullptr);
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        glfwMakeContextCurrent(mWindow);
         glfwSetWindowUserPointer(mWindow, this);
 
         // tell GLFW to disable cursor
