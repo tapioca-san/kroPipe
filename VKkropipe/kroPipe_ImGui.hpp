@@ -1,10 +1,9 @@
 #ifndef IMGUI_H
 #define IMGUI_H
 
-#include "../VKconfiguration/kroPipe_queuFamilies.hpp"
-#include "../VKconfiguration/kroPipe_command.hpp"
 #include "../VKconfiguration/kroPipe_window.hpp"
 #include "../kroPipe_include.hpp"
+#include "kroPipe_object.hpp"
 
 namespace KP {
 namespace IMGUI {
@@ -35,27 +34,18 @@ public:
     }
 
     void drawDemoWindows() {
-        static bool show_demo_window = true;
-        static bool show_another_window = false;
-        static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
+        char* buf;
         ImGui::Begin("Hello, world!");
-        ImGui::Text("This is some useful text.");
-        ImGui::Checkbox("Demo Window", &show_demo_window);
-        ImGui::Checkbox("Another Window", &show_another_window);
-        ImGui::ColorEdit3("clear color", (float*)&clear_color);
-        //ImGui::End();
-
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-        if (show_another_window) {
-            ImGui::Begin("Another Window", &show_another_window);
-            ImGui::Text("Hello from another window!");
-         //   ImGui::End();
+        if (ImGui::CollapsingHeader("Velocidade Avançada")){
+            ImGui::DragFloat("float X", &allObjects[sortedID[1]]->data.Position.x, 0.1f);
+            ImGui::DragFloat("float Y", &allObjects[sortedID[1]]->data.Position.y, 0.1f);
+            ImGui::DragFloat("float Z", &allObjects[sortedID[1]]->data.Position.z, 0.1f);
         }
+        
     }
 
     void cleanup() {
+        ImGui::PopStyleColor();
         ImGui_ImplVulkan_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
@@ -117,6 +107,7 @@ private:
         io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
         ImGui::StyleColorsDark();
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)); // Cor vermelha
 
         ImGui_ImplGlfw_InitForVulkan(window, true);
         ImGui_ImplVulkan_InitInfo init_info = {};

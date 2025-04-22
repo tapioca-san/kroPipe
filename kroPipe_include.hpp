@@ -71,6 +71,8 @@
     float lastTime = glfwGetTime();
     
     uint32_t imageIndex;
+
+    int* FPS_ptr = nullptr;
     
 
 //

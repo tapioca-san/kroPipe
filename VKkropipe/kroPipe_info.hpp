@@ -2,7 +2,9 @@
 #ifndef INFO_H
 #define INFO_H
 
-#include "../kroPipe_depedence.hpp"
+#include "../kroPipe_include.hpp"
+
+extern int* FPS_ptr;
 
 class FPSCounter {
 private:
@@ -15,6 +17,15 @@ public:
     
     FPSCounter() {
         lastTime = std::chrono::high_resolution_clock::now();
+        FPS_ptr = getFpsPointer();
+    }
+
+    ~FPSCounter(){
+        FPS_ptr = nullptr;
+    }
+
+    int* getFpsPointer(){
+        return &frameCount;
     }
 
     void update() {
