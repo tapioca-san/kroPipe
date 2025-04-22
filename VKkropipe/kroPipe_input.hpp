@@ -1,5 +1,6 @@
 #ifndef INPUT_H
 #define INPUT_H
+#include "kroPipe_camera.hpp"
 #include "kroPipe_object.hpp"
 #include "../VKconfiguration/kroPipe_buffer.hpp"
 #include "../kroPipe_include.hpp"
@@ -82,10 +83,10 @@ inline void playerFly(GLFWwindow *window, KP::OBJECT::Object *object, float delt
 }
 
 inline void processInput(GLFWwindow *window, KP::OBJECT::Object *object, float deltaTime, float baseSpeed = 3.0f, float sprintSpeed = 5.0f, float walkSpeed = 1.5f, float acceleration = 10.0f, float friction = 8.0f) {
-    if(flyMode){
+    if(flyMode && cameraPlayer.cameraWork){
         playerFly(window, object, deltaTime);
     }
-    else {
+    else if(!flyMode && cameraPlayer.cameraWork) {
         playerWalk(window, object, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS){
@@ -101,9 +102,12 @@ inline void processInput(GLFWwindow *window, KP::OBJECT::Object *object, float d
 
     if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS){
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        cameraPlayer.cameraWork = false;
+
     }
-    if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS){
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        cameraPlayer.cameraWork = true;
     }
 }
 

@@ -13,6 +13,7 @@
 #include "VKkropipe/kroPipe_info.hpp"
 #include "kroPipe_include.hpp"
 #include "kroPipe_engine.hpp"
+
 // Variable
     const char* nameWindow = "triangle";
 
@@ -27,7 +28,6 @@
 //
 
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
@@ -43,25 +43,19 @@ int main(){
     loadObjects(sortedID);
     
 
-    //glfwSetFramebufferSizeCallback(mWindow, framebuffer_size_callback);
     glfwSetCursorPosCallback(mWindow, mouse_callback);
     glfwSetScrollCallback(mWindow, scroll_callback);
 
     while(!glfwWindowShouldClose(mWindow)) {
         
-        ImGui_ImplVulkan_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        glfwPollEvents();
 
-        static int counter = 10;
-        ImGui::Begin("Exemplo");                          
-        ImGui::Text("Ola mundo!");                        
-        if (ImGui::Button("Clique aqui"))                 
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text("Contador = %d", counter);            
+        imguiInterface->newFrame(); 
+        imguiInterface->drawDemoWindows();          
         ImGui::End();
         ImGui::Render(); 
+        
+
 
         for(uint16_t i = 0; i < allObjects.size(); i++){
             kroPipe::gravityForce(allObjects[sortedID[i]], deltaTime);
@@ -74,7 +68,6 @@ int main(){
             info.update();
         }
         
-        glfwPollEvents();
         processInput(mWindow, allObjects[sortedID[0]], deltaTime);
         KP::RENDER::drawFrame();
     }
@@ -87,28 +80,30 @@ int main(){
 
 
 
-void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
-{
-    float xpos = static_cast<float>(xposIn);
-    float ypos = static_cast<float>(yposIn);
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn){   
+    if(cameraPlayer.cameraWork){
+        float xpos = static_cast<float>(xposIn);
+        float ypos = static_cast<float>(yposIn);
 
-    if (firstMouse)
-    {
+        if (firstMouse)
+        {
+            lastX = xpos;
+            lastY = ypos;
+            firstMouse = false;
+        }
+
+        float xoffset = xpos - lastX;
+        float yoffset = lastY - ypos;
+
         lastX = xpos;
         lastY = ypos;
-        firstMouse = false;
-    }
 
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-    lastX = xpos;
-    lastY = ypos;
-
-    cameraPlayer.ProcessMouseMovement(xoffset, yoffset);
+        cameraPlayer.ProcessMouseMovement(xoffset, yoffset);
+    }    
 }
 
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-    cameraPlayer.ProcessMouseScroll(static_cast<float>(yoffset));
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
+    if(cameraPlayer.cameraWork){
+        cameraPlayer.ProcessMouseScroll(static_cast<float>(yoffset));
+    }
 }

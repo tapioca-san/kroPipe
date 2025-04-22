@@ -1,6 +1,7 @@
 #ifndef RENDER_H
 #define RENDER_H
 
+#include "../VKkropipe/kroPipe_ImGui.hpp"
 #include "../VKkropipe/kroPipe_model.hpp"
 #include "../VKkropipe/kroPipe_Log.hpp"
 #include "../kroPipe_include.hpp"
@@ -68,7 +69,7 @@ inline void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageInd
     }
 
     // IMGUI RENDER 
-    ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
+    imguiInterface->render(commandBuffer);
 
 
     vkCmdEndRenderPass(commandBuffer);

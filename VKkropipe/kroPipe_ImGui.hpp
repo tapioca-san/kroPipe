@@ -11,6 +11,9 @@ namespace IMGUI {
 
 class Imgui {
 public:
+    
+    ImGuiIO *io = nullptr;
+    
     Imgui(GLFWwindow* window,const VkInstance& inst, const VkPhysicalDevice& physDevice, const VkDevice& dev,
           const VkQueue& queue, const uint32_t& graphicsQueueIndex,
           const VkPipelineCache& pipelineCache, VkRenderPass& renderPass)
@@ -24,10 +27,10 @@ public:
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        useMouse();
     }
 
     void render(VkCommandBuffer cmd) {
-        ImGui::Render();
         ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), cmd);
     }
 
@@ -41,14 +44,14 @@ public:
         ImGui::Checkbox("Demo Window", &show_demo_window);
         ImGui::Checkbox("Another Window", &show_another_window);
         ImGui::ColorEdit3("clear color", (float*)&clear_color);
-        ImGui::End();
+        //ImGui::End();
 
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
         if (show_another_window) {
             ImGui::Begin("Another Window", &show_another_window);
             ImGui::Text("Hello from another window!");
-            ImGui::End();
+         //   ImGui::End();
         }
     }
 
@@ -56,7 +59,7 @@ public:
         ImGui_ImplVulkan_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
-        vkDestroyDescriptorPool(device, imguiPool, nullptr);
+        vkDestroyDescriptorPool(device, imguiPool, Allocator);
     }
 
 private:
@@ -70,11 +73,17 @@ private:
     VkRenderPass renderPass;
     VkDescriptorPool imguiPool;
 
+    double xpos, ypos;
 
     static void check_vk_result(VkResult err) {
         if (err == VK_SUCCESS) return;
         fprintf(stderr, "[vulkan] Error: VkResult = %d\n", err);
         if (err < 0) abort();
+    }
+
+    void useMouse(){
+        glfwGetCursorPos(mWindow, &xpos, &ypos);
+        io->AddMousePosEvent((float)xpos, (float)ypos);
     }
 
     void setup() {
@@ -103,9 +112,9 @@ private:
         // ImGui Init
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+        io = &ImGui::GetIO();
+        io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
         ImGui::StyleColorsDark();
 
@@ -117,6 +126,7 @@ private:
         init_info.Queue = presentQueue;
         init_info.DescriptorPool = imguiPool;
         init_info.RenderPass = renderPass;
+        init_info.PipelineCache = pipelineCache;
         init_info.MinImageCount = 2;
         init_info.ImageCount = 3;
         init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
