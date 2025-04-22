@@ -49,12 +49,20 @@ int main(){
 
     while(!glfwWindowShouldClose(mWindow)) {
         
-        
-        /*
-        imguiInterface->newFrame();
-        imguiInterface->drawDemoWindows(); // ou seus painéis customizados
-        imguiInterface->render(commandBuffers[currentFrame]); // dentro do render pass
-        */
+        ImGui_ImplVulkan_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        static int counter = 10;
+        ImGui::Begin("Exemplo");                          
+        ImGui::Text("Ola mundo!");                        
+        if (ImGui::Button("Clique aqui"))                 
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text("Contador = %d", counter);            
+        ImGui::End();
+        ImGui::Render(); 
+
         for(uint16_t i = 0; i < allObjects.size(); i++){
             kroPipe::gravityForce(allObjects[sortedID[i]], deltaTime);
         }

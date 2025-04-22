@@ -186,7 +186,6 @@ void recreateSwapChain(){
     KP::FRAMEBUFFER::createFrameBuffers();
 
     //IM_ASSERT(g_MinImageCount >= 2);
-    //ImGui_ImplVulkanH_CreateOrResizeWindow(g_Instance, g_PhysicalDevice, g_Device, wd, g_QueueFamily, g_Allocator, width, height, g_MinImageCount);
     //ImGui_ImplVulkan_SetMinImageCount(MinImageCount);
     //ImGui_ImplVulkanH_CreateOrResizeWindow( instance, physicalDevice, device, &mWindow, presentQueue, Allocator, width, height, g_MinImageCount);
     //ImGui_ImplVulkan_SetMinImageCount(frame);

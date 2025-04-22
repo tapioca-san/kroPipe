@@ -36,7 +36,7 @@ class window{
         glfwSetWindowUserPointer(mWindow, this);
 
         // tell GLFW to disable cursor
-        glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        //glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 
     ~window(){

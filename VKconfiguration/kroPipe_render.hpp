@@ -29,6 +29,7 @@ inline void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageInd
         throw std::runtime_error(fatalMensage("failed to begin recording command buffer!"));
     }
 
+
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     renderPassInfo.renderPass = renderPass;
@@ -65,6 +66,10 @@ inline void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageInd
     for(KP::OBJECT::Model* model : KP::OBJECT::allModel){
         model->Draw(commandBuffer);
     }
+
+    // IMGUI RENDER 
+    ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
+
 
     vkCmdEndRenderPass(commandBuffer);
 

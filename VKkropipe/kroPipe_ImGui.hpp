@@ -5,8 +5,6 @@
 #include "../VKconfiguration/kroPipe_command.hpp"
 #include "../VKconfiguration/kroPipe_window.hpp"
 #include "../kroPipe_include.hpp"
-#include <GLFW/glfw3.h>
-#include <vulkan/vulkan_core.h>
 
 namespace KP {
 namespace IMGUI {
@@ -126,7 +124,6 @@ private:
         ImGui_ImplVulkan_Init(&init_info);
     }
 
-    // Esses métodos devem estar no seu sistema
     VkCommandBuffer beginSingleTimeCommands();
     void endSingleTimeCommands(VkCommandBuffer cmd);
 };
