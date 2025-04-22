@@ -65,16 +65,15 @@ class Instance{
     
     Instance(){
             // CALLBACK
-                glfwSetFramebufferSizeCallback(mWindow, framebufferResizeCallback);
+            glfwSetFramebufferSizeCallback(mWindow, framebufferResizeCallback);
             //
 
             // FUNCTIONS
-            
             createInstace();
             //setAllObjectNames();
-            KP::DEBUG::setupDebugMessenger(instance, debugMessenger);
-            KP::WINDOWSURFACE::createSurface(instance, mWindow);
-            KP::DEVICE::pickPhysicalDevice(instance);
+            KP::DEBUG::setupDebugMessenger(g_Instance, debugMessenger);
+            KP::WINDOWSURFACE::createSurface(g_Instance, mWindow);
+            KP::DEVICE::pickPhysicalDevice(g_Instance);
             KP::DEVICE::createLogicalDevice();
             KP::SWAPCHAIN::createSwapChain();
             KP::IMAGEVIEW::createImageViews();
@@ -97,20 +96,27 @@ class Instance{
             }  
             KP::COMMANDBUFFER::createCommandBuffers();
             KP::RENDER::createSyncObjects();
-
-            //KP::IMGUI::Imgui interface(instance, physicalDevice, device, presentQueue, graphicsIndex, pipelineCache, renderPass);
+            
+            imguiInterface = new KP::IMGUI::Imgui(
+                mWindow,g_Instance, g_PhysicalDevice, g_Device,
+                presentQueue, g_QueueFamily, g_PipelineCache,
+                renderPass
+            );
+            
+            
             //
         }
         
         ~Instance(){
-            vkDestroyImageView(device, depthImageView, Allocator);
-            vkDestroyImage(device, depthImage, Allocator);
-            vkFreeMemory(device, depthImageMemory, Allocator);
+            imguiInterface->cleanup();
+            vkDestroyImageView(g_Device, depthImageView, Allocator);
+            vkDestroyImage(g_Device, depthImage, Allocator);
+            vkFreeMemory(g_Device, depthImageMemory, Allocator);
 
-            vkDestroySampler(device, textureSampler, Allocator);
-            vkDestroyImageView(device, textureImageView, Allocator);
-            vkDestroyImage(device, textureImage, Allocator);
-            vkFreeMemory(device, textureImageMemory, Allocator);
+            vkDestroySampler(g_Device, textureSampler, Allocator);
+            vkDestroyImageView(g_Device, textureImageView, Allocator);
+            vkDestroyImage(g_Device, textureImage, Allocator);
+            vkFreeMemory(g_Device, textureImageMemory, Allocator);
             for (KP::OBJECT::Model *&model: KP::OBJECT::allModel) {
                 model->UBO.cleanUp();
                 model->cleanupVao();
@@ -120,13 +126,13 @@ class Instance{
             KP::FRAMEBUFFER::CleanUpFramerBuffer();
             KP::PIPELINE::CleanUpPipeline();
             KP::IMAGEVIEW::DestroyImageview();
-            vkDestroySwapchainKHR(device, swapChain, Allocator);
+            vkDestroySwapchainKHR(g_Device, swapChain, Allocator);
             if(debug){
-                KP::DEBUG::DestroyDebugUtilsMessengerEXT(instance, debugMessenger, Allocator);
+                KP::DEBUG::DestroyDebugUtilsMessengerEXT(g_Instance, debugMessenger, Allocator);
             }
-            vkDestroySurfaceKHR(instance, surface, Allocator);
-            vkDestroyDevice(device, Allocator);
-            vkDestroyInstance(instance, Allocator);
+            vkDestroySurfaceKHR(g_Instance, surface, Allocator);
+            vkDestroyDevice(g_Device, Allocator);
+            vkDestroyInstance(g_Instance, Allocator);
             cleanPointers();
 
         }
@@ -146,7 +152,7 @@ class Instance{
             appInfo.apiVersion = VK_API_VERSION_1_0;
                     
             VkInstanceCreateInfo createInfo{};
-            //createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+            createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
             createInfo.pApplicationInfo = &appInfo;
             //
             
@@ -175,7 +181,7 @@ class Instance{
 
             
             // making an instance with instance configuration that we've done. this must be the final step of instance
-                err = vkCreateInstance(&createInfo,Allocator,&instance);
+                err = vkCreateInstance(&createInfo,Allocator,&g_Instance);
                 check_vk_result(err, "failed to create instance!\n");
             //
         }

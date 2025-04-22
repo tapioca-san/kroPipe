@@ -46,6 +46,7 @@ if(queueFamilyCount == 0){
 
 graphicsIndex = indices.graphicsFamily.value();
 
+
 return indices;
 }
 

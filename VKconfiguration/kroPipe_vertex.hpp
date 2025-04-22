@@ -12,7 +12,7 @@ namespace VERTEX {
 
 uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
     
-    vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
+    vkGetPhysicalDeviceMemoryProperties(g_PhysicalDevice, &memProperties);
 
     for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
         if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
@@ -32,7 +32,7 @@ VkCommandBuffer beginSingleTimeCommands() {
     allocInfo.commandBufferCount = 1;
 
     VkCommandBuffer commandBuffer;
-    err = vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer);
+    err = vkAllocateCommandBuffers(g_Device, &allocInfo, &commandBuffer);
     check_vk_result(err);
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -59,7 +59,7 @@ void endSingleTimeCommands(VkCommandBuffer commandBuffer) {
     err = vkQueueWaitIdle(graphicsQueue);
     check_vk_result(err);
     
-    vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
+    vkFreeCommandBuffers(g_Device, commandPool, 1, &commandBuffer);
 }
 
 

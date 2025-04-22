@@ -13,9 +13,9 @@ namespace RENDER {
 inline void destroyRender(){
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        vkDestroySemaphore(device, renderFinishedSemaphores[i], Allocator);
-        vkDestroySemaphore(device, imageAvailableSemaphores[i], Allocator);
-        vkDestroyFence(device, inFlightFences[i], Allocator);
+        vkDestroySemaphore(g_Device, renderFinishedSemaphores[i], Allocator);
+        vkDestroySemaphore(g_Device, imageAvailableSemaphores[i], Allocator);
+        vkDestroyFence(g_Device, inFlightFences[i], Allocator);
     }
 
 }
@@ -75,7 +75,7 @@ inline void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageInd
 
 static inline VkResult acquireNextImage(){
     
-    VkResult result = vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    VkResult result = vkAcquireNextImageKHR(g_Device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR) {
         KP::SWAPCHAIN::recreateSwapChain();
@@ -86,7 +86,7 @@ static inline VkResult acquireNextImage(){
 }
 
 inline void drawFrame() {
-    vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+    vkWaitForFences(g_Device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
     err = acquireNextImage();
 
@@ -94,7 +94,7 @@ inline void drawFrame() {
         model->UBO.update();    
     }  
 
-    vkResetFences(device, 1, &inFlightFences[currentFrame]);
+    vkResetFences(g_Device, 1, &inFlightFences[currentFrame]);
 
     vkResetCommandBuffer(commandBuffers[currentFrame], /*VkCommandBufferResetFlagBits*/ 0);
    
@@ -160,9 +160,9 @@ inline void createSyncObjects() {
     fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
-            vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
-            vkCreateFence(device, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
+        if (vkCreateSemaphore(g_Device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
+            vkCreateSemaphore(g_Device, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
+            vkCreateFence(g_Device, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
             throw std::runtime_error(fatalMensage("failed to create synchronization objects for a frame!"));
         }
     }

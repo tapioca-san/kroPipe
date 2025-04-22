@@ -26,7 +26,7 @@ inline void createFrameBuffers() {
         framebufferInfo.height = swapChainExtent.height;
         framebufferInfo.layers = 1;
 
-        if (vkCreateFramebuffer(device, &framebufferInfo, Allocator, &swapChainFramebuffers[i]) != VK_SUCCESS) {
+        if (vkCreateFramebuffer(g_Device, &framebufferInfo, Allocator, &swapChainFramebuffers[i]) != VK_SUCCESS) {
             throw std::runtime_error(fatalMensage("failed to create framebuffer!"));
         }
     }
@@ -36,7 +36,7 @@ inline void createFrameBuffers() {
 
 inline void CleanUpFramerBuffer(){
     for (auto framebuffer : swapChainFramebuffers) {
-        vkDestroyFramebuffer(device, framebuffer, Allocator);
+        vkDestroyFramebuffer(g_Device, framebuffer, Allocator);
     }
 }
 

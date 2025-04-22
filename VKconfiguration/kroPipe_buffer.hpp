@@ -19,21 +19,21 @@ namespace BUFFER {
         bufferInfo.usage = usage;
         bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
     
-        err = vkCreateBuffer(device, &bufferInfo, nullptr, &buffer);
+        err = vkCreateBuffer(g_Device, &bufferInfo, nullptr, &buffer);
         check_vk_result(err, "failed to create buffer!");
     
         VkMemoryRequirements memRequirements;
-        vkGetBufferMemoryRequirements(device, buffer, &memRequirements);
+        vkGetBufferMemoryRequirements(g_Device, buffer, &memRequirements);
     
         VkMemoryAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
         allocInfo.allocationSize = memRequirements.size;
         allocInfo.memoryTypeIndex = KP::VERTEX::findMemoryType(memRequirements.memoryTypeBits, properties);
     
-        err = vkAllocateMemory(device, &allocInfo, Allocator, &bufferMemory);
+        err = vkAllocateMemory(g_Device, &allocInfo, Allocator, &bufferMemory);
         check_vk_result(err, "failed to allocate buffer memory!");
     
-        err = vkBindBufferMemory(device, buffer, bufferMemory, 0);
+        err = vkBindBufferMemory(g_Device, buffer, bufferMemory, 0);
         check_vk_result(err);
     }
     
@@ -106,7 +106,7 @@ struct UboStorage{
             layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
             layoutInfo.pBindings = bindings.data();
 
-            err = vkCreateDescriptorSetLayout(device, &layoutInfo, Allocator, &uniformBuffers.descriptorSetLayout);
+            err = vkCreateDescriptorSetLayout(g_Device, &layoutInfo, Allocator, &uniformBuffers.descriptorSetLayout);
             check_vk_result(err, "failed to create descriptor set layout!");
 
             setLayout.push_back(uniformBuffers.descriptorSetLayout);
@@ -122,7 +122,7 @@ struct UboStorage{
             for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
                 createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers.uniformBuffers[i], uniformBuffers.uniformBuffersMemory[i]);
 
-                err = vkMapMemory(device, uniformBuffers.uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffers.uniformBuffersMapped[i]);
+                err = vkMapMemory(g_Device, uniformBuffers.uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffers.uniformBuffersMapped[i]);
                 check_vk_result(err);
             }
         }
@@ -164,7 +164,7 @@ struct UboStorage{
             allocInfo.pSetLayouts = layouts.data();
 
             uniformBuffers. descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
-            err = vkAllocateDescriptorSets(device, &allocInfo, uniformBuffers.descriptorSets.data());
+            err = vkAllocateDescriptorSets(g_Device, &allocInfo, uniformBuffers.descriptorSets.data());
             check_vk_result(err, "failed to allocate descriptor sets!");
 
             for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
@@ -195,18 +195,18 @@ struct UboStorage{
                 descriptorWrites[1].descriptorCount = 1;
                 descriptorWrites[1].pImageInfo = &imageInfo;
 
-                vkUpdateDescriptorSets(device, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
+                vkUpdateDescriptorSets(g_Device, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
             }
         }
 
         void cleanupBuffer(KP::STRUCT::uniformBuffers &uniformBuffers){
             for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-                vkDestroyBuffer(device, uniformBuffers.uniformBuffers[i], Allocator);
-                vkFreeMemory(device, uniformBuffers.uniformBuffersMemory[i], Allocator);
+                vkDestroyBuffer(g_Device, uniformBuffers.uniformBuffers[i], Allocator);
+                vkFreeMemory(g_Device, uniformBuffers.uniformBuffersMemory[i], Allocator);
             }
 
-            vkDestroyDescriptorPool(device, uniformBuffers.descriptorPool, Allocator);
-            vkDestroyDescriptorSetLayout(device, uniformBuffers.descriptorSetLayout, Allocator);
+            vkDestroyDescriptorPool(g_Device, uniformBuffers.descriptorPool, Allocator);
+            vkDestroyDescriptorSetLayout(g_Device, uniformBuffers.descriptorSetLayout, Allocator);
         }
 };
 

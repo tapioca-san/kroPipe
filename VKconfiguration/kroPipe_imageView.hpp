@@ -20,7 +20,7 @@ inline void createImageViews() {
 
 inline void DestroyImageview(){
     for (auto imageView : swapChainImageViews) {
-        vkDestroyImageView(device, imageView, Allocator);
+        vkDestroyImageView(g_Device, imageView, Allocator);
     }
 }
 

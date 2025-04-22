@@ -37,8 +37,8 @@ static std::vector<char> readFile(const std::string& filename) {
 
 void destroyGraphicsPipeline(VkShaderModule vertShaderModule, VkShaderModule fragShaderModule){
     
-    vkDestroyShaderModule(device, fragShaderModule, Allocator);
-    vkDestroyShaderModule(device, vertShaderModule, Allocator);
+    vkDestroyShaderModule(g_Device, fragShaderModule, Allocator);
+    vkDestroyShaderModule(g_Device, vertShaderModule, Allocator);
 }
 
 VkShaderModule createShaderModule(const std::vector<char>& code) {
@@ -48,7 +48,7 @@ VkShaderModule createShaderModule(const std::vector<char>& code) {
     createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
     VkShaderModule shaderModule;
-    err = vkCreateShaderModule(device, &createInfo, Allocator, &shaderModule);
+    err = vkCreateShaderModule(g_Device, &createInfo, Allocator, &shaderModule);
     check_vk_result(err);
     
 
@@ -87,7 +87,7 @@ void createPipeline(STRUCT::shaderModule shader){
     cacheCreateInfo.initialDataSize = 0;
     cacheCreateInfo.pInitialData = nullptr;
     
-    err = vkCreatePipelineCache(device, &cacheCreateInfo, Allocator, &pipelineCache);
+    err = vkCreatePipelineCache(g_Device, &cacheCreateInfo, Allocator, &g_PipelineCache);
     check_vk_result(err, "failed to create pipeline cache!");
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
@@ -152,7 +152,7 @@ void createPipeline(STRUCT::shaderModule shader){
     pipelineLayoutInfo.setLayoutCount = 1;
     pipelineLayoutInfo.pSetLayouts = setLayout.data();
 
-    vkCreatePipelineLayout(device, &pipelineLayoutInfo, Allocator, &pipelineLayout);
+    vkCreatePipelineLayout(g_Device, &pipelineLayoutInfo, Allocator, &pipelineLayout);
     check_vk_result(err, "failed to create pipeline layout!");
 
     VkGraphicsPipelineCreateInfo pipelineInfo{};
@@ -172,7 +172,7 @@ void createPipeline(STRUCT::shaderModule shader){
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-    err = vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineInfo, Allocator, &graphicsPipeline);
+    err = vkCreateGraphicsPipelines(g_Device, g_PipelineCache, 1, &pipelineInfo, Allocator, &graphicsPipeline);
     check_vk_result(err, "failed to create graphics pipeline!");
     
 }
@@ -187,8 +187,8 @@ void createGraphicsPipeline() {
 
     
 
-    vkDestroyShaderModule(device, shader.fragShaderModule, Allocator);
-    vkDestroyShaderModule(device, shader.vertShaderModule, Allocator);
+    vkDestroyShaderModule(g_Device, shader.fragShaderModule, Allocator);
+    vkDestroyShaderModule(g_Device, shader.vertShaderModule, Allocator);
 }
 
 void createRenderPass() {
@@ -244,16 +244,16 @@ void createRenderPass() {
     renderPassInfo.dependencyCount = 1;
     renderPassInfo.pDependencies = &dependency;
 
-    err = vkCreateRenderPass(device, &renderPassInfo, Allocator, &renderPass);
+    err = vkCreateRenderPass(g_Device, &renderPassInfo, Allocator, &renderPass);
     check_vk_result(err, "failed to create render pass!");
     
 }
 
 inline void CleanUpPipeline(){
-    vkDestroyPipeline(device, graphicsPipeline, Allocator);
-    vkDestroyPipelineCache(device, pipelineCache, Allocator);
-    vkDestroyPipelineLayout(device, pipelineLayout, Allocator);
-    vkDestroyRenderPass(device, renderPass, Allocator);
+    vkDestroyPipeline(g_Device, graphicsPipeline, Allocator);
+    vkDestroyPipelineCache(g_Device, g_PipelineCache, Allocator);
+    vkDestroyPipelineLayout(g_Device, pipelineLayout, Allocator);
+    vkDestroyRenderPass(g_Device, renderPass, Allocator);
 }
 
 } // Pipeline

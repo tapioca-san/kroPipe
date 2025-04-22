@@ -61,7 +61,14 @@ bool isDeviceSuitable(VkPhysicalDevice device) {
 
 
 void pickPhysicalDevice(VkInstance& instance) {
-    uint32_t deviceCount = 0;
+    // Select Physical Device (GPU)
+   
+        // Select graphics queue family
+        //g_QueueFamily = ImGui_ImplVulkanH_SelectQueueFamilyIndex(g_PhysicalDevice);
+        //IM_ASSERT(g_QueueFamily != (uint32_t)-1);
+    
+    
+        uint32_t deviceCount = 0;
     vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
     std::vector<VkPhysicalDevice> devices(deviceCount);
     vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
@@ -72,23 +79,21 @@ void pickPhysicalDevice(VkInstance& instance) {
     
     for (const auto& device : devices) {
         if (isDeviceSuitable(device)) {
-            physicalDevice = device;
+            g_PhysicalDevice = device;
             break;
         }
     }
     
-    if (physicalDevice == VK_NULL_HANDLE) {
+    if (g_PhysicalDevice == VK_NULL_HANDLE) {
         throw std::runtime_error(fatalMensage("failed to find a suitable GPU!"));
     }
-    if (debug) {
-        deviceMensage(deviceProperties.deviceName);
-    }
-
+    
+    
 }
 
 
 void createLogicalDevice() {
-    QueueFamilyIndices indices = findQueuFamilies(physicalDevice);
+    QueueFamilyIndices indices = findQueuFamilies(g_PhysicalDevice);
 
     std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
     std::set<uint32_t> uniqueQueueFamilies = {indices.graphicsFamily.value(), indices.presentFamily.value()};
@@ -103,6 +108,7 @@ void createLogicalDevice() {
         queueCreateInfos.push_back(queueCreateInfo);
     }
 
+    
     VkPhysicalDeviceFeatures deviceFeatures{};
     deviceFeatures.samplerAnisotropy = VK_TRUE;
 
@@ -127,12 +133,12 @@ void createLogicalDevice() {
         createInfo.enabledLayerCount = 0;
     }
 
-    if (vkCreateDevice(physicalDevice, &createInfo, Allocator, &device) != VK_SUCCESS) {
+    if (vkCreateDevice(g_PhysicalDevice, &createInfo, Allocator, &g_Device) != VK_SUCCESS) {
         throw std::runtime_error("failed to create logical device!");
     }
 
-    vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);
-    vkGetDeviceQueue(device, indices.presentFamily.value(), 0, &presentQueue);
+    vkGetDeviceQueue(g_Device, indices.graphicsFamily.value(), 0, &graphicsQueue);
+    vkGetDeviceQueue(g_Device, indices.presentFamily.value(), 0, &presentQueue);
 }
 
 }//DEVICE

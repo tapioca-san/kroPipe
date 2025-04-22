@@ -79,16 +79,16 @@ void cleanupVao(){
     */
     
     for(VkBuffer indexBuffer : vao.indexBuffers){
-        vkDestroyBuffer(device,indexBuffer, Allocator);
+        vkDestroyBuffer(g_Device,indexBuffer, Allocator);
     }
     for(VkBuffer vertexBuffer : vao.vertexBuffers){
-        vkDestroyBuffer(device, vertexBuffer, Allocator);
+        vkDestroyBuffer(g_Device, vertexBuffer, Allocator);
     }
     for(VkDeviceMemory indexBufferMemory : vao.indexBufferMemorys){
-        vkFreeMemory(device, indexBufferMemory, Allocator);
+        vkFreeMemory(g_Device, indexBufferMemory, Allocator);
     }
     for(VkDeviceMemory vertexBufferMemory : vao.vertexBufferMemorys){
-        vkFreeMemory(device, vertexBufferMemory, Allocator);
+        vkFreeMemory(g_Device, vertexBufferMemory, Allocator);
     }
 }
 
@@ -121,9 +121,9 @@ private:
                      stagingBuffer, stagingBufferMemory);
     
         void* data;
-        vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
+        vkMapMemory(g_Device, stagingBufferMemory, 0, bufferSize, 0, &data);
         memcpy(data, vertices.data(), (size_t) bufferSize);
-        vkUnmapMemory(device, stagingBufferMemory);
+        vkUnmapMemory(g_Device, stagingBufferMemory);
     
         VkBuffer vertexBuffer;
         VkDeviceMemory vertexBufferMemory;
@@ -136,8 +136,8 @@ private:
         vao.vertexBuffers.push_back(vertexBuffer);
         vao.vertexBufferMemorys.push_back(vertexBufferMemory);
     
-        vkDestroyBuffer(device, stagingBuffer, nullptr);
-        vkFreeMemory(device, stagingBufferMemory, nullptr);
+        vkDestroyBuffer(g_Device, stagingBuffer, nullptr);
+        vkFreeMemory(g_Device, stagingBufferMemory, nullptr);
     }
     
     void createIndexBuffer(const std::vector<uint16_t> &indices, VAO &vao) {
@@ -150,11 +150,11 @@ private:
                      stagingBuffer, stagingBufferMemory);
     
         void* data;
-        err = vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
+        err = vkMapMemory(g_Device, stagingBufferMemory, 0, bufferSize, 0, &data);
         check_vk_result(err);
         
         memcpy(data, indices.data(), (size_t) bufferSize);
-        vkUnmapMemory(device, stagingBufferMemory);
+        vkUnmapMemory(g_Device, stagingBufferMemory);
     
         VkBuffer indexBuffer;
         VkDeviceMemory indexBufferMemory;
@@ -167,8 +167,8 @@ private:
         vao.indexBuffers.push_back(indexBuffer);
         vao.indexBufferMemorys.push_back(indexBufferMemory);
     
-        vkDestroyBuffer(device, stagingBuffer, nullptr);
-        vkFreeMemory(device, stagingBufferMemory, nullptr);
+        vkDestroyBuffer(g_Device, stagingBuffer, nullptr);
+        vkFreeMemory(g_Device, stagingBufferMemory, nullptr);
     }
 
     KP::STRUCT::Mesh processMesh(aiMesh* mesh, const aiScene* scene) {

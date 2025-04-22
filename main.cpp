@@ -48,12 +48,13 @@ int main(){
     glfwSetScrollCallback(mWindow, scroll_callback);
 
     while(!glfwWindowShouldClose(mWindow)) {
+        
+        
         /*
-        ImGui_ImplVulkan_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        imguiInterface->newFrame();
+        imguiInterface->drawDemoWindows(); // ou seus painéis customizados
+        imguiInterface->render(commandBuffers[currentFrame]); // dentro do render pass
         */
-
         for(uint16_t i = 0; i < allObjects.size(); i++){
             kroPipe::gravityForce(allObjects[sortedID[i]], deltaTime);
         }
@@ -70,7 +71,7 @@ int main(){
         KP::RENDER::drawFrame();
     }
 
-    vkDeviceWaitIdle(device);
+    vkDeviceWaitIdle(g_Device);
     return 0;
 }
 

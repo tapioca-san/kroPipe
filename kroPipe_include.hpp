@@ -5,7 +5,8 @@
 
 
 // debug mode
-    #ifdef NDEBUG
+    #include <cstdint>
+#ifdef NDEBUG
     const bool debug = false;
     #else
     const bool debug = true;
@@ -74,18 +75,28 @@
 
 //
 
+VkAllocationCallbacks*   g_Allocator = nullptr;
+VkInstance               g_Instance = VK_NULL_HANDLE;
+VkPhysicalDevice         g_PhysicalDevice = VK_NULL_HANDLE;
+VkDevice                 g_Device = VK_NULL_HANDLE;
+uint32_t                 g_QueueFamily = (uint32_t)-1;
+VkQueue                  g_Queue = VK_NULL_HANDLE;
+VkPipelineCache          g_PipelineCache = VK_NULL_HANDLE;
+VkDescriptorPool         g_DescriptorPool = VK_NULL_HANDLE;
+
+ImGui_ImplVulkanH_Window g_MainWindowData;
+ImGui_ImplVulkanH_Window* wd = &g_MainWindowData;
+uint32_t                 g_MinImageCount = 2;
+bool                     g_SwapChainRebuild = false;
+
 // VARIABLES to use anywhere
 
     VkAllocationCallbacks* Allocator = nullptr;
 
-    VkInstance instance;
     VkDebugUtilsMessengerEXT debugMessenger;
 
     VkSurfaceKHR surface;
     
-    VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-    VkDevice device;
-
     VkQueue graphicsQueue;
     uint32_t graphicsIndex;
     
@@ -101,14 +112,11 @@
     VkRenderPass renderPass;
     
     VkPipelineLayout pipelineLayout;
-    VkPipelineCache pipelineCache;
     VkPipeline graphicsPipeline;
 
     VkCommandPool commandPool;
     
     std::vector<VkCommandBuffer> commandBuffers;
-
-    VkDescriptorPool descriptorPool;
 
     std::vector<VkDescriptorSet> descriptorSets;
     std::vector<VkDescriptorSetLayout> setLayout;
@@ -136,12 +144,12 @@
     
 
     VkResult err;
+    
 
     std::string directoryFile = (std::string)std::filesystem::current_path() + "/VKconfiguration"; 
     std::string directoryFileManually = "";
 
 
-    
 
 
 //
