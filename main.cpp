@@ -1,8 +1,8 @@
 
 //#define NDEBUG
-#define NVSYNC
+//#define NVSYNC
 //#define NFRAMEPERSECOND
-//#define NFLYMODE
+#define NFLYMODE
 //https://github.com/ocornut/imgui/blob/master/examples/example_glfw_vulkan/main.cpp
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -51,8 +51,7 @@ int main(){
         glfwPollEvents();
 
         imguiInterface->newFrame(); 
-        imguiInterface->drawDemoWindows();          
-        ImGui::End();
+        imguiInterface->drawWindows();         
         ImGui::Render(); 
         
 

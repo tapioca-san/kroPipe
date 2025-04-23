@@ -92,8 +92,7 @@ void cleanupVao(){
     }
 }
 
-Model(std::string modelPath)
-{
+Model(std::string modelPath){
     
     this->modelPath = modelPath;
 
@@ -260,7 +259,7 @@ inline void loadAllModels(){
 }
 }    
 KP::OBJECT::Model* glock = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/m4a1.obj");
-//KP::OBJECT::Model* minhasCabeca = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/project_-_cirno_fumo_3d_scan.glb");
+KP::OBJECT::Model* minhasCabeca = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/project_-_cirno_fumo_3d_scan.glb");
 
 
 #endif // MODEL_H

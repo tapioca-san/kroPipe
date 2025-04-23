@@ -7,27 +7,27 @@
 // debug mode
     #include <cstdint>
 #ifdef NDEBUG
-    const bool debug = false;
+        bool debug = false;
     #else
-    const bool debug = true;
+        bool debug = true;
     #endif
 
     #ifdef NVSYNC
-    const bool vsync = false;
+        bool vsync = false;
     #else
-    const bool vsync = true;
+        bool vsync = true;
     #endif
 
     #ifdef NFRAMEPERSECOND
-    const bool framePerSecond = false;
+        bool framePerSecond = false;
     #else
-    const bool framePerSecond = true;
+        bool framePerSecond = true;
     #endif
 
     #ifdef NFLYMODE
-    const bool flyMode = false;
+        bool flyMode = false;
     #else
-    const bool flyMode = true;
+        bool flyMode = true;
     #endif
     
 // 
