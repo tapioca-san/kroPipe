@@ -6,7 +6,6 @@
 #include "../kroPipe_include.hpp"
 #include "kroPipe_Log.hpp"
 #include "kroPipe_struct.hpp"
-#include <assimp/mesh.h>
 
 
 #define MAX_BONE_INFLUENCE 4
@@ -239,6 +238,7 @@ private:
             processNode(node->mChildren[i], scene);
         }
     }
+
 };
 
 // VARIABLES ------------------------------------------------------

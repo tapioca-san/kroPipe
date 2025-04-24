@@ -38,21 +38,12 @@ public:
        
         ImGui::Begin("Objects Configuration Window");
         for(uint32_t i = 0; i < allObjects.size(); i++){
+            ImGui::PushID(i);
             std::string headerName = "Object " + std::to_string(i);
-
-            if(ImGui::CollapsingHeader(headerName.c_str())){
-                ImGui::DragFloat("float Position X", &allObjects[sortedID[i]]->data.Position.x, 0.1f);
-                ImGui::DragFloat("float Position Y", &allObjects[sortedID[i]]->data.Position.y, 0.1f);
-                ImGui::DragFloat("float Position Z", &allObjects[sortedID[i]]->data.Position.z, 0.1f);
-                
-                ImGui::DragFloat("float Rotate X", &allObjects[sortedID[i]]->data.Rotation.x, 0.1f);
-                ImGui::DragFloat("float Rotate Y", &allObjects[sortedID[i]]->data.Rotation.y, 0.1f);
-                ImGui::DragFloat("float Rotate Z", &allObjects[sortedID[i]]->data.Rotation.z, 0.1f);
-                
-                ImGui::DragFloat("float Scale X", &allObjects[sortedID[i]]->data.Scale.x, 0.1f);
-                ImGui::DragFloat("float Scale Y", &allObjects[sortedID[i]]->data.Scale.y, 0.1f);
-                ImGui::DragFloat("float Scale Z", &allObjects[sortedID[i]]->data.Scale.z, 0.1f);
-            }
+                ImGui::PushID(i);
+                allObjects[sortedID[i]]->DrawTransformUI(headerName);
+                ImGui::PopID();
+            ImGui::PopID();
         }
         ImGui::End(); 
 

@@ -137,6 +137,22 @@ namespace OBJECT {
             }
         }
 
+        void DrawTransformUI(std::string &headerName){
+            if(ImGui::CollapsingHeader(headerName.c_str())){
+                ImGui::DragFloat("float Position X", &data.Position.x, 0.1f);
+                ImGui::DragFloat("float Position Y", &data.Position.y, 0.1f);
+                ImGui::DragFloat("float Position Z", &data.Position.z, 0.1f);
+                
+                ImGui::DragFloat("float Rotate X", &data.Rotation.x, 0.1f);
+                ImGui::DragFloat("float Rotate Y", &data.Rotation.y, 0.1f);
+                ImGui::DragFloat("float Rotate Z", &data.Rotation.z, 0.1f);
+                
+                ImGui::DragFloat("float Scale X", &data.Scale.x, 0.1f);
+                ImGui::DragFloat("float Scale Y", &data.Scale.y, 0.1f);
+                ImGui::DragFloat("float Scale Z", &data.Scale.z, 0.1f);
+            }
+        }
+
         ~Object() {
         }
     };
