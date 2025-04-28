@@ -1,7 +1,6 @@
 #ifndef GRAVITY_H
 #define GRAVITY_H
 
-#include "../kroPipe_include.hpp"
 #include "kroPipe_object.hpp"
 
 namespace kroPipe {
@@ -13,7 +12,7 @@ const float GRAVIDADE = 12.8;
 
 //gravidade ksksk. o que tu esperaria? gravidade com realmente os calculos de gravidade que aprendi em física
 
-void gravityForce(KP::OBJECT::Object *object, float deltaTime){
+inline void gravityForce(KP::OBJECT::Object *object, float deltaTime){
         object->data.velocity.y -= GRAVIDADE * deltaTime;
         object->data.Position += object->data.velocity * deltaTime;
         

@@ -8,7 +8,7 @@
 
 
 
-std::vector<std::string> logError;
+inline std::vector<std::string> logError;
 
 inline void defaultErrorNoText(std::string type, std::string mensage){
     if(mensage == ""){
@@ -66,7 +66,7 @@ void modelMensage(t mensage...){
         defaultMensage("MODEL", mensage);
 }
 
-void check_vk_result(VkResult err, std::string informationError = ""){ // this is for checking if creating 
+inline void check_vk_result(VkResult err, std::string informationError = ""){ // this is for checking if creating 
     if (err == VK_SUCCESS)
         return;
     fprintf(stderr, "[vulkan] Error: VkResult = %d\n", err);

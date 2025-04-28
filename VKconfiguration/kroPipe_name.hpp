@@ -9,13 +9,13 @@ template <class T>
 VkObjectType GetVkObjectType();
 
 template <>
-VkObjectType GetVkObjectType<VkBuffer>() { return VK_OBJECT_TYPE_BUFFER; }
+inline VkObjectType GetVkObjectType<VkBuffer>() { return VK_OBJECT_TYPE_BUFFER; }
 template <>
-VkObjectType GetVkObjectType<VkImage>() { return VK_OBJECT_TYPE_IMAGE; }
+inline VkObjectType GetVkObjectType<VkImage>() { return VK_OBJECT_TYPE_IMAGE; }
 template <>
-VkObjectType GetVkObjectType<VkShaderModule>() { return VK_OBJECT_TYPE_SHADER_MODULE; }
+inline VkObjectType GetVkObjectType<VkShaderModule>() { return VK_OBJECT_TYPE_SHADER_MODULE; }
 template <>
-VkObjectType GetVkObjectType<VkPipeline>() { return VK_OBJECT_TYPE_PIPELINE; }
+inline VkObjectType GetVkObjectType<VkPipeline>() { return VK_OBJECT_TYPE_PIPELINE; }
 
 template <class T>
 void AddDebugName(T handle, const char* name) {

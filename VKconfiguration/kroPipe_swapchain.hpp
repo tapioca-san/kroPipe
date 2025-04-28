@@ -9,13 +9,12 @@ parei na parte "Criando a corrente de troca"
 #define SWAPCHAIN_H
 
 #include "../VKkropipe/kroPipe_Log.hpp"
-#include "../kroPipe_include.hpp"
 #include "kroPipe_queuFamilies.hpp"
-#include "kroPipe_windowSurface.hpp"
+#include "kroPipe_frameBuffer.hpp"
+#include "../kroPipe_include.hpp"
+#include "kroPipe_imageView.hpp"
 #include "kroPipe_extension.hpp"
 #include "kroPipe_window.hpp"
-#include "kroPipe_imageView.hpp"
-#include "kroPipe_frameBuffer.hpp"
 #include "kroPipe_depth.hpp"
 
 
@@ -23,14 +22,14 @@ namespace KP {
 namespace SWAPCHAIN {
 
 // VARIABLE
-    uint32_t formatCount;
-    uint32_t presentModeCount;
+    inline uint32_t formatCount;
+    inline uint32_t presentModeCount;
 
     
-    bool swapChainAdequate = false;
+    inline bool swapChainAdequate = false;
 //
 
-SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device) { // get information from our physical device and store it on "SwapChainSupportDetails details"
+inline SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device) { // get information from our physical device and store it on "SwapChainSupportDetails details"
     
     SwapChainSupportDetails details;
     
@@ -53,7 +52,7 @@ SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device) { // get 
     return details;
 }
 
-VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
+inline VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
     for (const auto& availableFormat : availableFormats) {
         if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
             return availableFormat;
@@ -61,7 +60,7 @@ VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>
     }
     return availableFormats[0];
 }
-VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
+inline VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
     for (const auto& availablePresentMode : availablePresentModes) {
         if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
             return availablePresentMode;
@@ -69,7 +68,7 @@ VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& avai
     }
     return VK_PRESENT_MODE_FIFO_KHR;
 }
-VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
+inline VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
     if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
         return capabilities.currentExtent;
     } else {
@@ -86,7 +85,7 @@ VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
 }
 
 
-void createSwapChain() {
+inline void createSwapChain() {
     SwapChainSupportDetails swapChainSupport = querySwapChainSupport(g_PhysicalDevice);
 
     VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
@@ -150,7 +149,7 @@ void createSwapChain() {
 
 }
 
-void cleanupSwapChain(){
+inline void cleanupSwapChain(){
     vkDestroyImageView(g_Device, depthImageView, Allocator);
     vkDestroyImage(g_Device, depthImage, Allocator);
     vkFreeMemory(g_Device, depthImageMemory, Allocator);
@@ -165,7 +164,7 @@ void cleanupSwapChain(){
     vkDestroySwapchainKHR(g_Device, swapChain, Allocator);
 }
 
-void recreateSwapChain(){
+inline void recreateSwapChain(){
     
     int width = 0, height = 0;
     glfwGetFramebufferSize(mWindow, &width, &height);

@@ -6,11 +6,11 @@
 #include "kroPipe_extension.hpp"
 
 
-VkQueue presentQueue;
+inline VkQueue presentQueue;
 
 
 
-QueueFamilyIndices findQueuFamilies(VkPhysicalDevice device){
+inline QueueFamilyIndices findQueuFamilies(VkPhysicalDevice device){
     QueueFamilyIndices indices;
 
     uint32_t queueFamilyCount = 0;

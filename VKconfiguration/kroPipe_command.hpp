@@ -1,18 +1,16 @@
 #ifndef COMMANDBUFFER_H
 #define COMMANDBUFFER_H
 
-#include "../VKkropipe/kroPipe_struct.hpp"
 #include "../VKkropipe/kroPipe_Log.hpp"
 #include "../kroPipe_include.hpp"
 #include "kroPipe_extension.hpp"
 #include "kroPipe_queuFamilies.hpp"
-#include "kroPipe_vertex.hpp"
 
 namespace KP {
 namespace COMMANDBUFFER {
 
 
-void createCommandPool(){
+inline void createCommandPool(){
 
     QueueFamilyIndices queueFamilyIndices = findQueuFamilies(g_PhysicalDevice);
 
@@ -26,7 +24,7 @@ void createCommandPool(){
     
 }
 
-void createCommandBuffers() { 
+inline void createCommandBuffers() { 
     commandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
 
     VkCommandBufferAllocateInfo allocInfo{};
@@ -40,7 +38,7 @@ void createCommandBuffers() {
     
 }
 
-void createDescriptorPool(VkDescriptorPool &descriptorPool) {
+inline void createDescriptorPool(VkDescriptorPool &descriptorPool) {
     std::array<VkDescriptorPoolSize, 2> poolSizes{};
     poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
     poolSizes[0].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
@@ -57,7 +55,7 @@ void createDescriptorPool(VkDescriptorPool &descriptorPool) {
     check_vk_result(err, "failed to create descriptor pool!");
 }
 
-void destroyCommandPool(){
+inline void destroyCommandPool(){
     vkDestroyCommandPool(g_Device, commandPool, nullptr);
 
 }

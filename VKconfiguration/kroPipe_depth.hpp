@@ -8,7 +8,7 @@
 namespace KP {
 namespace DEPTH {
 
-VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) {
+inline VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) {
     for (VkFormat format : candidates) {
         VkFormatProperties props;
         vkGetPhysicalDeviceFormatProperties(g_PhysicalDevice, format, &props);
@@ -23,7 +23,7 @@ VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTil
     throw std::runtime_error(fatalMensage("failed to find supported format!"));
 }
 
-VkFormat findDepthFormat() {
+inline VkFormat findDepthFormat() {
     return findSupportedFormat(
         {VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
         VK_IMAGE_TILING_OPTIMAL,
@@ -31,11 +31,11 @@ VkFormat findDepthFormat() {
     );
 }
 
-bool hasStencilComponent(VkFormat format) {
+inline bool hasStencilComponent(VkFormat format) {
     return format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT;
 }
 
-void createDepthResources(){
+inline void createDepthResources(){
 
     VkFormat depthFormat = findDepthFormat();
     KP::TEXTURE::createImage(swapChainExtent.width, swapChainExtent.height, depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, depthImage, depthImageMemory);

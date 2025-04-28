@@ -3,14 +3,13 @@
 
 //#include "../VKkropipe/kroPipe_model.hpp"
 
-#include "../VKkropipe/kroPipe_struct.hpp"
 #include "../VKkropipe/kroPipe_Log.hpp"
 #include "../kroPipe_include.hpp"
 
 namespace KP {
 namespace VERTEX {
 
-uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
+inline uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
     
     vkGetPhysicalDeviceMemoryProperties(g_PhysicalDevice, &memProperties);
 
@@ -24,7 +23,7 @@ uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
     return 0;
 }
 
-VkCommandBuffer beginSingleTimeCommands() {
+inline VkCommandBuffer beginSingleTimeCommands() {
     VkCommandBufferAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
@@ -45,7 +44,7 @@ VkCommandBuffer beginSingleTimeCommands() {
     return commandBuffer;
 }
 
-void endSingleTimeCommands(VkCommandBuffer commandBuffer) {
+inline void endSingleTimeCommands(VkCommandBuffer commandBuffer) {
     err = vkEndCommandBuffer(commandBuffer);
     check_vk_result(err);
 

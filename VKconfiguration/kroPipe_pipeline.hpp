@@ -2,26 +2,23 @@
 #define PIPELINE_H
 
 #include "../VKkropipe/kroPipe_struct.hpp"
-#include "../VKkropipe/kroPipe_model.hpp"
 #include "../VKkropipe/kroPipe_Log.hpp"
 #include "../kroPipe_include.hpp"
-#include "kroPipe_vertex.hpp"
 #include "kroPipe_depth.hpp"
-#include <vulkan/vulkan_core.h>
 
 
 namespace KP {
 
 namespace PIPELINE {
 
-auto bindingDescription = KP::STRUCT::VertexVulkan::getBindingDescription();
-auto attributeDescriptions = KP::STRUCT::VertexVulkan::getAttributeDescriptions();
+inline auto bindingDescription = KP::STRUCT::VertexVulkan::getBindingDescription();
+inline auto attributeDescriptions = KP::STRUCT::VertexVulkan::getAttributeDescriptions();
 
 static std::vector<char> readFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
     
     if (!file.is_open()) {
-        //throw std::runtime_error("failed to open file!");
+        throw std::runtime_error("failed to open file!");
     }
 
     size_t fileSize = (size_t) file.tellg();
@@ -35,13 +32,13 @@ static std::vector<char> readFile(const std::string& filename) {
 
 
 
-void destroyGraphicsPipeline(VkShaderModule vertShaderModule, VkShaderModule fragShaderModule){
+inline void destroyGraphicsPipeline(VkShaderModule vertShaderModule, VkShaderModule fragShaderModule){
     
     vkDestroyShaderModule(g_Device, fragShaderModule, Allocator);
     vkDestroyShaderModule(g_Device, vertShaderModule, Allocator);
 }
 
-VkShaderModule createShaderModule(const std::vector<char>& code) {
+inline VkShaderModule createShaderModule(const std::vector<char>& code) {
     VkShaderModuleCreateInfo createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
     createInfo.codeSize = code.size();
@@ -55,7 +52,7 @@ VkShaderModule createShaderModule(const std::vector<char>& code) {
     return shaderModule;
 }
 
-STRUCT::shaderModule UseShaders(const std::string& directoryPath, const std::string& vertShaderPath, const std::string& fragShaderPath) {
+inline STRUCT::shaderModule UseShaders(const std::string& directoryPath, const std::string& vertShaderPath, const std::string& fragShaderPath) {
 
     STRUCT::shaderModule outShaderModule;
 
@@ -71,7 +68,7 @@ STRUCT::shaderModule UseShaders(const std::string& directoryPath, const std::str
     return outShaderModule;
 }
 
-void createPipeline(STRUCT::shaderModule shader){
+inline void createPipeline(STRUCT::shaderModule shader){
     auto bindingDescription = KP::STRUCT::VertexVulkan::getBindingDescription();
     auto attributeDescriptions = KP::STRUCT::VertexVulkan::getAttributeDescriptions();
     
@@ -178,20 +175,17 @@ void createPipeline(STRUCT::shaderModule shader){
 }
 
 
-void createGraphicsPipeline() {
+inline void createGraphicsPipeline() {
     
     STRUCT::shaderModule shader = UseShaders(directoryFileManually, "VKconfiguration/shaders/vert.spv", "VKconfiguration/shaders/frag.spv");
 
     createPipeline(shader);
-    
-
-    
 
     vkDestroyShaderModule(g_Device, shader.fragShaderModule, Allocator);
     vkDestroyShaderModule(g_Device, shader.vertShaderModule, Allocator);
 }
 
-void createRenderPass() {
+inline void createRenderPass() {
     VkAttachmentDescription colorAttachment{};
     colorAttachment.format = swapChainImageFormat;
     colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;

@@ -158,6 +158,6 @@ private:
 } // namespace KP
 
 
-KP::IMGUI::Imgui* imguiInterface = nullptr;
+inline KP::IMGUI::Imgui* imguiInterface = nullptr;
 
 #endif // IMGUI_H

@@ -12,7 +12,7 @@
 namespace KP {
 namespace BUFFER {
 
-    void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory) { //to send variables to the GPU memory. we use this with VKBUFFER to send our information.
+    inline void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory) { //to send variables to the GPU memory. we use this with VKBUFFER to send our information.
         VkBufferCreateInfo bufferInfo{};
         bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         bufferInfo.size = size;
@@ -37,7 +37,7 @@ namespace BUFFER {
         check_vk_result(err);
     }
     
-    void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size) {
+    inline void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size) {
         VkCommandBuffer commandBuffer = KP::VERTEX::beginSingleTimeCommands();
     
         VkBufferCopy copyRegion{};

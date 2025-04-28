@@ -12,17 +12,17 @@ namespace DEVICE {
 
 
 // Graphic cards informations
-    VkPhysicalDeviceProperties deviceProperties;
-    VkPhysicalDeviceFeatures deviceFeatures;
-    VkPhysicalDeviceFeatures supportedFeatures;
+    inline VkPhysicalDeviceProperties deviceProperties;
+    inline VkPhysicalDeviceFeatures deviceFeatures;
+    inline VkPhysicalDeviceFeatures supportedFeatures;
 
 //
 
 // VARIABLE
-    float queuePriority = 0.0f; // this is for increase the priority of our fetch. when reached 1.0, our fetch got the high priority.
+    inline float queuePriority = 0.0f; // this is for increase the priority of our fetch. when reached 1.0, our fetch got the high priority.
 
 //
-bool checkDeviceExtensionSupport(VkPhysicalDevice &device) {
+inline bool checkDeviceExtensionSupport(VkPhysicalDevice &device) {
     uint32_t extensionCount;
 
     vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
@@ -39,7 +39,7 @@ bool checkDeviceExtensionSupport(VkPhysicalDevice &device) {
 }
 
 
-bool isDeviceSuitable(VkPhysicalDevice device) {
+inline bool isDeviceSuitable(VkPhysicalDevice device) {
     QueueFamilyIndices indices = findQueuFamilies(device);
 
     bool extensionsSupported = checkDeviceExtensionSupport(device);
@@ -60,7 +60,7 @@ bool isDeviceSuitable(VkPhysicalDevice device) {
 
 
 
-void pickPhysicalDevice(VkInstance& instance) {
+inline void pickPhysicalDevice(VkInstance& instance) {
     // Select Physical Device (GPU)
    
         // Select graphics queue family
@@ -92,7 +92,7 @@ void pickPhysicalDevice(VkInstance& instance) {
 }
 
 
-void createLogicalDevice() {
+inline void createLogicalDevice() {
     QueueFamilyIndices indices = findQueuFamilies(g_PhysicalDevice);
 
     std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;

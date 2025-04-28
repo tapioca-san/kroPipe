@@ -1,7 +1,6 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include "../VKconfiguration/kroPipe_vertex.hpp"
 #include "../VKconfiguration/kroPipe_buffer.hpp"
 #include "../kroPipe_include.hpp"
 #include "kroPipe_Log.hpp"
@@ -242,7 +241,7 @@ private:
 };
 
 // VARIABLES ------------------------------------------------------
-    std::vector<Model*> allModel; // memoria apagada na Vkconfiguration/kroPipe_instance.hpp, função ~instance em cleanPointers
+    inline std::vector<Model*> allModel; // memoria apagada na Vkconfiguration/kroPipe_instance.hpp, função ~instance em cleanPointers
 //
     
 inline Model* createModel(std::string modelPath){ 
@@ -258,8 +257,8 @@ inline void loadAllModels(){
 }
 }
 }    
-KP::OBJECT::Model* glock = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/m4a1.obj");
-KP::OBJECT::Model* minhasCabeca = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/project_-_cirno_fumo_3d_scan.glb");
+inline KP::OBJECT::Model* glock = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/m4a1.obj");
+inline KP::OBJECT::Model* minhasCabeca = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/project_-_cirno_fumo_3d_scan.glb");
 
 
 #endif // MODEL_H

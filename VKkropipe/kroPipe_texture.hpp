@@ -11,7 +11,7 @@ namespace KP {
 namespace TEXTURE {
 
 
-void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory) {
+inline void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory) {
     VkImageCreateInfo imageInfo{};
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -46,7 +46,7 @@ void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling
     vkBindImageMemory(g_Device, image, imageMemory, 0);
 }
 
-void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) {
+inline void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) {
     VkCommandBuffer commandBuffer = KP::VERTEX::beginSingleTimeCommands();
 
     VkImageMemoryBarrier barrier{};
@@ -94,7 +94,7 @@ void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayo
 }
 
 
-void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height) {
+inline void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height) {
     VkCommandBuffer commandBuffer = KP::VERTEX::beginSingleTimeCommands();
     VkBufferImageCopy region{};
     region.bufferOffset = 0;
@@ -123,7 +123,7 @@ void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t 
     KP::VERTEX::endSingleTimeCommands(commandBuffer);
 }
 
-void createTextureImage() {
+inline void createTextureImage() {
     int texWidth, texHeight, texChannels;
     stbi_uc* pixels = stbi_load("/home/pipebomb/Downloads/model3D/rif_m4a1.tga", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
     VkDeviceSize imageSize = texWidth * texHeight * 4;
@@ -157,7 +157,7 @@ void createTextureImage() {
 
 // part 2
 
-VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags) {
+inline VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags) {
     VkImageViewCreateInfo viewInfo{};
     viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
     viewInfo.image = image;
@@ -178,14 +178,14 @@ VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags a
 }
 
 
-void createTextureImageView(){
+inline void createTextureImageView(){
     
     textureImageView = createImageView(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT);
 
 }
 
 
-void createTextureSampler() {
+inline void createTextureSampler() {
 
     VkPhysicalDeviceProperties properties{};
     vkGetPhysicalDeviceProperties(g_PhysicalDevice, &properties);

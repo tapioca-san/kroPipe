@@ -109,8 +109,8 @@ struct VAO {
 } // STRUCT
 } // KP
 
-KP::STRUCT::uniformBuffers uniformBuffers2;
-KP::STRUCT::QueueFamilyIndices indices;
+inline KP::STRUCT::uniformBuffers uniformBuffers2;
+inline KP::STRUCT::QueueFamilyIndices indices;
 
 
 #endif//STRUCT_H

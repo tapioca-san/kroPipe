@@ -75,10 +75,6 @@ int main(){
     return 0;
 }
 
-
-
-
-
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn){   
     if(cameraPlayer.cameraWork){
         float xpos = static_cast<float>(xposIn);

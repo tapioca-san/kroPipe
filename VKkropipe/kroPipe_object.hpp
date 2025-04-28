@@ -1,7 +1,6 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include "../kroPipe_depedence.hpp"
 #include "kroPipe_struct.hpp"
 
 static int lastID = 0;
@@ -162,7 +161,7 @@ namespace OBJECT {
 }
 } // namespace kroPipe
 
-std::vector<KP::OBJECT::Object*> allObjects;
-std::vector<int> sortedID;
+inline std::vector<KP::OBJECT::Object*> allObjects;
+inline std::vector<int> sortedID;
 
 #endif // OBJECT_H
