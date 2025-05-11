@@ -37,7 +37,7 @@ inline void createImage(uint32_t width, uint32_t height, VkFormat format, VkImag
     VkMemoryAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocInfo.allocationSize = memRequirements.size;
-    allocInfo.memoryTypeIndex = KP::VERTEX::findMemoryType(memRequirements.memoryTypeBits, properties);
+    allocInfo.memoryTypeIndex = KP::VERTEX::OBJECT_vertex.findMemoryType(memRequirements.memoryTypeBits, properties);
 
     if (vkAllocateMemory(g_Device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
         throw std::runtime_error("failed to allocate image memory!");
@@ -47,7 +47,7 @@ inline void createImage(uint32_t width, uint32_t height, VkFormat format, VkImag
 }
 
 inline void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) {
-    VkCommandBuffer commandBuffer = KP::VERTEX::beginSingleTimeCommands();
+    VkCommandBuffer commandBuffer = KP::VERTEX::OBJECT_vertex.beginSingleTimeCommands();
 
     VkImageMemoryBarrier barrier{};
     barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -90,12 +90,12 @@ inline void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout 
         1, &barrier
     );
 
-    KP::VERTEX::endSingleTimeCommands(commandBuffer);
+    KP::VERTEX::OBJECT_vertex.endSingleTimeCommands(commandBuffer);
 }
 
 
 inline void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height) {
-    VkCommandBuffer commandBuffer = KP::VERTEX::beginSingleTimeCommands();
+    VkCommandBuffer commandBuffer = KP::VERTEX::OBJECT_vertex.beginSingleTimeCommands();
     VkBufferImageCopy region{};
     region.bufferOffset = 0;
     region.bufferRowLength = 0;
@@ -120,12 +120,12 @@ inline void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, ui
         1,
         &region
     );
-    KP::VERTEX::endSingleTimeCommands(commandBuffer);
+    KP::VERTEX::OBJECT_vertex.endSingleTimeCommands(commandBuffer);
 }
 
 inline void createTextureImage() {
     int texWidth, texHeight, texChannels;
-    stbi_uc* pixels = stbi_load("/home/pipebomb/Downloads/model3D/rif_m4a1.tga", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+    stbi_uc* pixels = stbi_load("/home/pipebomb/Picture/image22.png", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
     VkDeviceSize imageSize = texWidth * texHeight * 4;
 
     if (!pixels) {

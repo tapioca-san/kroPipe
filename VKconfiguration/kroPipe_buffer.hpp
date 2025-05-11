@@ -28,7 +28,7 @@ namespace BUFFER {
         VkMemoryAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
         allocInfo.allocationSize = memRequirements.size;
-        allocInfo.memoryTypeIndex = KP::VERTEX::findMemoryType(memRequirements.memoryTypeBits, properties);
+        allocInfo.memoryTypeIndex = KP::VERTEX::OBJECT_vertex.findMemoryType(memRequirements.memoryTypeBits, properties);
     
         err = vkAllocateMemory(g_Device, &allocInfo, Allocator, &bufferMemory);
         check_vk_result(err, "failed to allocate buffer memory!");
@@ -38,13 +38,13 @@ namespace BUFFER {
     }
     
     inline void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size) {
-        VkCommandBuffer commandBuffer = KP::VERTEX::beginSingleTimeCommands();
+        VkCommandBuffer commandBuffer = KP::VERTEX::OBJECT_vertex.beginSingleTimeCommands();
     
         VkBufferCopy copyRegion{};
         copyRegion.size = size;
         vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
     
-        KP::VERTEX::endSingleTimeCommands(commandBuffer);
+        KP::VERTEX::OBJECT_vertex.endSingleTimeCommands(commandBuffer);
     }
 
 struct UboStorage{
@@ -66,7 +66,7 @@ struct UboStorage{
 
         void create(){
             createUniformBuffers(uniformBuffers);
-            KP::COMMANDBUFFER::createDescriptorPool(uniformBuffers.descriptorPool);
+            KP::COMMANDBUFFER::OBJECT_command.createDescriptorPool(uniformBuffers.descriptorPool);
             createDescriptorSets(uniformBuffers);
         }
         

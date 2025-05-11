@@ -11,8 +11,12 @@ namespace KP {
 
 namespace PIPELINE {
 
-inline auto bindingDescription = KP::STRUCT::VertexVulkan::getBindingDescription();
-inline auto attributeDescriptions = KP::STRUCT::VertexVulkan::getAttributeDescriptions();
+class Pipeline{
+    
+public:
+    
+VkVertexInputBindingDescription bindingDescription = KP::STRUCT::VertexVulkan::getBindingDescription();
+std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions = KP::STRUCT::VertexVulkan::getAttributeDescriptions();
 
 static std::vector<char> readFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
@@ -197,7 +201,7 @@ inline void createRenderPass() {
     colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     VkAttachmentDescription depthAttachment{};
-    depthAttachment.format = KP::DEPTH::findDepthFormat();
+    depthAttachment.format = KP::DEPTH::OBJECT_depth.findDepthFormat();
     depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -249,7 +253,8 @@ inline void CleanUpPipeline(){
     vkDestroyPipelineLayout(g_Device, pipelineLayout, Allocator);
     vkDestroyRenderPass(g_Device, renderPass, Allocator);
 }
-
+};//CLASS PIPELINE
+inline KP::PIPELINE::Pipeline OBJECT_pipeline;
 } // Pipeline
 } // KP
 #endif //PIPELINE_H

@@ -11,6 +11,10 @@
 namespace KP {
 namespace RENDER {
 
+class Render{
+
+public:
+    
 inline void destroyRender(){
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
@@ -39,7 +43,7 @@ inline void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageInd
     renderPassInfo.renderArea.extent = swapChainExtent;
 
     std::array<VkClearValue, 2> clearValues{};
-    clearValues[0].color = {{0.0f, 0.0f, 1.0f, 1.0f}};
+    clearValues[0].color = clearColor;
     clearValues[1].depthStencil = {1.0f, 0};
     
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
@@ -84,7 +88,7 @@ static inline VkResult acquireNextImage(){
     VkResult result = vkAcquireNextImageKHR(g_Device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR) {
-        KP::SWAPCHAIN::recreateSwapChain();
+        KP::SWAPCHAIN::OBJECT_swapChain.recreateSwapChain();
     } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
         throw std::runtime_error(fatalMensage("failed to acquire swap chain image!"));
     }
@@ -140,11 +144,11 @@ inline void drawFrame() {
 
     presentInfo.pImageIndices = &imageIndex;
 
-    err = vkQueuePresentKHR(presentQueue, &presentInfo);
+    err = vkQueuePresentKHR(KP::QUEUFAMILIES::OBJECT_queuFamilies.presentQueue, &presentInfo);
 
     if (err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR || framebufferResized) {
         framebufferResized = false;
-        KP::SWAPCHAIN::recreateSwapChain();
+        KP::SWAPCHAIN::OBJECT_swapChain.recreateSwapChain();
     } else if (err != VK_SUCCESS) {
         throw std::runtime_error(fatalMensage("failed to present swap chain image!"));
     }
@@ -173,7 +177,8 @@ inline void createSyncObjects() {
         }
     }
 }
-
+};//CLASS RENDER
+inline KP::RENDER::Render OBJECT_render;
 }//RENDER
 }//KP
 

@@ -7,13 +7,15 @@
 namespace KP {
 namespace DEBUG {
 
+class Debug{
 
+public:
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
-    VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-    VkDebugUtilsMessageTypeFlagsEXT messageType,
-    const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-    void* pUserData) {
-
+VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+VkDebugUtilsMessageTypeFlagsEXT messageType,
+const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+void* pUserData) {
+    
     if (messageSeverity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
         
         warnMensage(pCallbackData->pMessage); 
@@ -23,7 +25,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
     }
     
     
-
+    
     return VK_FALSE;
 }
 
@@ -44,13 +46,13 @@ inline VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugU
     }
 }
 
-   
+
 inline void setupDebugMessenger(VkInstance &instance, VkDebugUtilsMessengerEXT &debugMessenger) {
     if (!debug) return;
-
+    
     VkDebugUtilsMessengerCreateInfoEXT createInfo;
     populateDebugMessengerCreateInfo(createInfo);
-
+    
     if (CreateDebugUtilsMessengerEXT(instance, &createInfo, Allocator, &debugMessenger) != VK_SUCCESS) {
         throw std::runtime_error(fatalMensage("failed to set up debug messenger!"));
     }
@@ -62,7 +64,11 @@ inline void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMesse
         func(instance, debugMessenger, pAllocator);
     }
 }
-
+        
+};//DEBUG class
+inline KP::DEBUG::Debug OBJECT_debug;
 }//DEBUG
 }//KP
+
+
 #endif // DEBUG_H

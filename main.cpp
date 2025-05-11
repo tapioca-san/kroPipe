@@ -1,9 +1,8 @@
 
-//#define NDEBUG
-//#define NVSYNC
-//#define NFRAMEPERSECOND
-#define NFLYMODE
-//https://github.com/ocornut/imgui/blob/master/examples/example_glfw_vulkan/main.cpp
+#define APP_NDEBUG
+//#define APP_NVSYNC
+//#define APP_NFRAMEPERSECOND
+#define   APP_NFLYMODE
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "VKconfiguration/kroPipe_window.hpp"
@@ -68,7 +67,7 @@ int main(){
         }
         
         processInput(mWindow, allObjects[sortedID[0]], deltaTime);
-        KP::RENDER::drawFrame();
+        KP::RENDER::OBJECT_render.drawFrame();
     }
 
     vkDeviceWaitIdle(g_Device);
@@ -102,3 +101,56 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
         cameraPlayer.ProcessMouseScroll(static_cast<float>(yoffset));
     }
 }
+
+
+/*
+
+function timeOfImpact(rect1, rect2) {
+    const dvx = rect1.vx - rect2.vx;
+    const dvy = rect1.vy - rect2.vy;
+
+    if(dvx == 0 && dvy == 0) return false;
+
+    let x1 = rect1.x + (rect2.width - rect1.width) / 2,
+        y1 = rect1.y + (rect2.height - rect1.height) / 2,
+        x2 = rect2.x,
+        y2 = rect2.y;
+
+    const tx1 = (x2 - x1 - rect1.width) / dvx;
+    const tx2 = (x2 + rect2.width - x1) / dvx;
+    const ty1 = (y2 - y1 - rect1.height) / dvy;
+    const ty2 = (y2 + rect2.height - y1) / dvy;
+
+    const minx = Math.min(tx1, tx2);
+    const maxx = Math.max(tx1, tx2);
+    const miny = Math.min(ty1, ty2);
+    const maxy = Math.max(ty1, ty2);
+
+    if(minx > maxy || miny > maxx || maxx < 0 || maxy < 0 || minx > 1 || miny > 1) return false;
+
+    return Math.max(minx, miny, 0);
+    // if it returns 0, it means they were already colliding at the beginning of the frame.
+}
+
+test case:
+
+const rect1 = {
+    x: 0,
+    y: 0,
+    width: 10,
+    height: 10,
+    vx: 1000,
+    vy: 0
+};
+
+const rect2 = {
+    x: 1015,
+    y: 0,
+    width: 20,
+    height: 20,
+    vx: -1000,
+    vy: 0
+};
+
+console.log(timeOfImpact(rect1, rect2)); // 0.5
+*/

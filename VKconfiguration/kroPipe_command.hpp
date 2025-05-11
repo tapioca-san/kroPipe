@@ -3,16 +3,17 @@
 
 #include "../VKkropipe/kroPipe_Log.hpp"
 #include "../kroPipe_include.hpp"
-#include "kroPipe_extension.hpp"
 #include "kroPipe_queuFamilies.hpp"
 
 namespace KP {
 namespace COMMANDBUFFER {
 
+class Command{
 
+public:    
+    
 inline void createCommandPool(){
-
-    QueueFamilyIndices queueFamilyIndices = findQueuFamilies(g_PhysicalDevice);
+    KP::QUEUFAMILIES::QueueFamilyIndices queueFamilyIndices = KP::QUEUFAMILIES::OBJECT_queuFamilies.findQueuFamilies(g_PhysicalDevice);
 
     VkCommandPoolCreateInfo poolInfo{};
     poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -39,6 +40,7 @@ inline void createCommandBuffers() {
 }
 
 inline void createDescriptorPool(VkDescriptorPool &descriptorPool) {
+    
     std::array<VkDescriptorPoolSize, 2> poolSizes{};
     poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
     poolSizes[0].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
@@ -59,6 +61,9 @@ inline void destroyCommandPool(){
     vkDestroyCommandPool(g_Device, commandPool, nullptr);
 
 }
+
+}; // COMMAND
+inline KP::COMMANDBUFFER::Command OBJECT_command;
 }//COMMANDBUFFER
 }//KP
 

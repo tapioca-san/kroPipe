@@ -23,9 +23,6 @@
 //#include "kroPipe_name.hpp"
 
 
-#ifndef EXTENSION_H
-    #include "kroPipe_extension.hpp"
-#endif
 
 
 // GLOBAL VARIABLE
@@ -54,7 +51,6 @@ class Instance{
     }
 
     public:
-    // LOCAL VARIABLE
     
     const std::vector<const char*> validationLayers = {
         "VK_LAYER_KHRONOS_validation"
@@ -69,23 +65,31 @@ class Instance{
             //
 
             // FUNCTIONS
-            createInstace();
             //setAllObjectNames();
-            KP::DEBUG::setupDebugMessenger(g_Instance, debugMessenger);
-            KP::WINDOWSURFACE::createSurface(g_Instance, mWindow);
-            KP::DEVICE::pickPhysicalDevice(g_Instance);
-            KP::DEVICE::createLogicalDevice();
-            KP::SWAPCHAIN::createSwapChain();
-            KP::IMAGEVIEW::createImageViews();
-            KP::PIPELINE::createRenderPass();    
-            for(KP::OBJECT::Model* model : KP::OBJECT::allModel){
-                model->UBO.createDescriptorLayout();    
-            }  
-            KP::PIPELINE::createGraphicsPipeline();  
-            KP::COMMANDBUFFER::createCommandPool();
-            KP::DEPTH::createDepthResources();
-            KP::OBJECT::loadAllModels();
-            KP::FRAMEBUFFER::createFrameBuffers();
+          
+            createInstace();
+            { // INIT VULKAN BASIC THINGS
+                KP::DEBUG::OBJECT_debug.setupDebugMessenger(g_Instance, debugMessenger);
+                KP::WINDOWSURFACE::OBJECT_windowSurface.createSurface(g_Instance, mWindow);
+                KP::DEVICE::OBJECT_device.pickPhysicalDevice(g_Instance);
+                KP::DEVICE::OBJECT_device.createLogicalDevice();
+                KP::SWAPCHAIN::OBJECT_swapChain.createSwapChain();
+                KP::IMAGEVIEW::OBJECT_imageView.createImageViews();
+                KP::PIPELINE::OBJECT_pipeline.createRenderPass();    
+            }
+            { // LOAD ALL MODELS THROUGH //VKkropipe/kroPipe_model.hpp
+                for(KP::OBJECT::Model* model : KP::OBJECT::allModel){
+                    model->UBO.createDescriptorLayout();    
+                }  
+            }
+            { // INIT VULKAN BASIC THINGS
+                KP::PIPELINE::OBJECT_pipeline.createGraphicsPipeline();  
+                KP::COMMANDBUFFER::OBJECT_command.createCommandPool();
+                KP::DEPTH::OBJECT_depth.createDepthResources();
+                KP::OBJECT::loadAllModels(); // Load every
+            }
+            
+            KP::FRAMEBUFFER::OBJECT_frameBuffer.createFrameBuffers();
             KP::TEXTURE::createTextureImage();
             KP::TEXTURE::createTextureImageView();
             KP::TEXTURE::createTextureSampler();
@@ -94,15 +98,17 @@ class Instance{
             for(KP::OBJECT::Model* model : KP::OBJECT::allModel){
                 model->UBO.create();    
             }  
-            KP::COMMANDBUFFER::createCommandBuffers();
-            KP::RENDER::createSyncObjects();
+            KP::COMMANDBUFFER::OBJECT_command.createCommandBuffers();
+            KP::RENDER::OBJECT_render.createSyncObjects();
             
-            imguiInterface = new KP::IMGUI::Imgui(
-                mWindow,g_Instance, g_PhysicalDevice, g_Device,
-                presentQueue, g_QueueFamily, g_PipelineCache,
-                renderPass
-            );
-            
+            { // create interface 2d to manage engine grafics
+                imguiInterface = new KP::IMGUI::Imgui(
+                    mWindow,g_Instance, g_PhysicalDevice, g_Device,
+                    KP::QUEUFAMILIES::OBJECT_queuFamilies.presentQueue, g_QueueFamily, g_PipelineCache,
+                    renderPass
+                );
+            }
+                
             
             //
         }
@@ -121,14 +127,14 @@ class Instance{
                 model->UBO.cleanUp();
                 model->cleanupVao();
             }
-            KP::RENDER::destroyRender();
-            KP::COMMANDBUFFER::destroyCommandPool();
-            KP::FRAMEBUFFER::CleanUpFramerBuffer();
-            KP::PIPELINE::CleanUpPipeline();
-            KP::IMAGEVIEW::DestroyImageview();
+            KP::RENDER::OBJECT_render.destroyRender();
+            KP::COMMANDBUFFER::OBJECT_command.destroyCommandPool();
+            KP::FRAMEBUFFER::OBJECT_frameBuffer.CleanUpFramerBuffer();
+            KP::PIPELINE::OBJECT_pipeline.CleanUpPipeline();
+            KP::IMAGEVIEW::OBJECT_imageView.DestroyImageview();
             vkDestroySwapchainKHR(g_Device, swapChain, Allocator);
             if(debug){
-                KP::DEBUG::DestroyDebugUtilsMessengerEXT(g_Instance, debugMessenger, Allocator);
+                KP::DEBUG::OBJECT_debug.DestroyDebugUtilsMessengerEXT(g_Instance, debugMessenger, Allocator);
             }
             vkDestroySurfaceKHR(g_Instance, surface, Allocator);
             vkDestroyDevice(g_Device, Allocator);
@@ -169,7 +175,7 @@ class Instance{
                     createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
                     createInfo.ppEnabledLayerNames = validationLayers.data();
                     
-                    KP::DEBUG::populateDebugMessengerCreateInfo(debugCreateInfo);
+                    KP::DEBUG::OBJECT_debug.populateDebugMessengerCreateInfo(debugCreateInfo);
                     createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
                     
                 } else {

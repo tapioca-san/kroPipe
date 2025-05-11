@@ -3,10 +3,23 @@
 
 #include "../VKkropipe/kroPipe_Log.hpp"
 #include "../kroPipe_include.hpp"
-#include "kroPipe_extension.hpp"
 
+namespace KP {
+namespace QUEUFAMILIES {
 
-inline VkQueue presentQueue;
+struct QueueFamilyIndices {
+    std::optional<uint32_t> graphicsFamily;
+    std::optional<uint32_t> presentFamily;
+
+    bool isComplete() {
+        return graphicsFamily.has_value() && presentFamily.has_value();
+    }
+};
+
+class queuFamilies{
+    
+    public:
+VkQueue presentQueue;
 
 
 
@@ -49,6 +62,9 @@ graphicsIndex = indices.graphicsFamily.value();
 
 return indices;
 }
+};//CLASS QUEUFAMILIES
 
-
+inline KP::QUEUFAMILIES::queuFamilies OBJECT_queuFamilies;
+}//QUEUFAMILIES
+}//KP
 #endif //QUEUFAMILIES_H

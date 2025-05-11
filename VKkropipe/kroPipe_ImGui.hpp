@@ -4,7 +4,8 @@
 #include "../VKconfiguration/kroPipe_window.hpp"
 #include "../kroPipe_include.hpp"
 #include "kroPipe_object.hpp"
-#include <cstdint>
+
+inline VkClearColorValue clearColor = {{0.0f, 0.0f, 0.0f, 1.0f}};
 
 namespace KP {
 namespace IMGUI {
@@ -12,6 +13,7 @@ namespace IMGUI {
 class Imgui {
 public:
     
+
     ImGuiIO *io = nullptr;
     
     Imgui(GLFWwindow* window,const VkInstance& inst, const VkPhysicalDevice& physDevice, const VkDevice& dev,
@@ -40,9 +42,9 @@ public:
         for(uint32_t i = 0; i < allObjects.size(); i++){
             ImGui::PushID(i);
             std::string headerName = "Object " + std::to_string(i);
-                ImGui::PushID(i);
-                allObjects[sortedID[i]]->DrawTransformUI(headerName);
-                ImGui::PopID();
+            ImGui::PushID(i);
+            allObjects[sortedID[i]]->DrawTransformUI(headerName);
+            ImGui::PopID();
             ImGui::PopID();
         }
         ImGui::End(); 
@@ -51,6 +53,8 @@ public:
         if(ImGui::CollapsingHeader("objeto")){
             ImGui::Checkbox("FreeView", &flyMode);
             ImGui::Checkbox("Show FPS", &framePerSecond);
+            ImGui::DragFloat3("Clean Color", clearColor.float32, 0.01, 0.0, 1.0);
+            
         }
         ImGui::End(); 
         

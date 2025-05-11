@@ -5,26 +5,25 @@
 
 
 // debug mode
-    #include <cstdint>
-#ifdef NDEBUG
+    #ifdef APP_NDEBUG
         bool debug = false;
     #else
         bool debug = true;
     #endif
 
-    #ifdef NVSYNC
+    #ifdef APP_NVSYNC
         bool vsync = false;
     #else
         bool vsync = true;
     #endif
 
-    #ifdef NFRAMEPERSECOND
+    #ifdef APP_NFRAMEPERSECOND
         bool framePerSecond = false;
     #else
         bool framePerSecond = true;
     #endif
 
-    #ifdef NFLYMODE
+    #ifdef APP_NFLYMODE
         bool flyMode = false;
     #else
         bool flyMode = true;

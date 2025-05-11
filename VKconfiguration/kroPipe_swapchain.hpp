@@ -13,7 +13,6 @@ parei na parte "Criando a corrente de troca"
 #include "kroPipe_frameBuffer.hpp"
 #include "../kroPipe_include.hpp"
 #include "kroPipe_imageView.hpp"
-#include "kroPipe_extension.hpp"
 #include "kroPipe_window.hpp"
 #include "kroPipe_depth.hpp"
 
@@ -21,13 +20,20 @@ parei na parte "Criando a corrente de troca"
 namespace KP {
 namespace SWAPCHAIN {
 
-// VARIABLE
-    inline uint32_t formatCount;
-    inline uint32_t presentModeCount;
-
+struct SwapChainSupportDetails{
     
-    inline bool swapChainAdequate = false;
-//
+    VkSurfaceCapabilitiesKHR capabilities;
+    std::vector<VkSurfaceFormatKHR> formats;
+    std::vector<VkPresentModeKHR> presentModes;
+};
+
+class SwapChain{
+    
+public:
+
+uint32_t formatCount;
+uint32_t presentModeCount;
+bool swapChainAdequate = false;
 
 inline SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device) { // get information from our physical device and store it on "SwapChainSupportDetails details"
     
@@ -108,7 +114,7 @@ inline void createSwapChain() {
     createInfo.imageArrayLayers = 1;
     createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-    QueueFamilyIndices indices = findQueuFamilies(g_PhysicalDevice);
+    KP::QUEUFAMILIES::QueueFamilyIndices indices = KP::QUEUFAMILIES::OBJECT_queuFamilies.findQueuFamilies(g_PhysicalDevice);
     uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
 
     if (indices.graphicsFamily != indices.presentFamily) {
@@ -180,18 +186,15 @@ inline void recreateSwapChain(){
     cleanupSwapChain();
 
     createSwapChain();
-    KP::IMAGEVIEW::createImageViews();
-    KP::DEPTH::createDepthResources();
-    KP::FRAMEBUFFER::createFrameBuffers();
-
-    //IM_ASSERT(g_MinImageCount >= 2);
-    //ImGui_ImplVulkan_SetMinImageCount(MinImageCount);
-    //ImGui_ImplVulkanH_CreateOrResizeWindow( instance, physicalDevice, device, &mWindow, presentQueue, Allocator, width, height, g_MinImageCount);
-    //ImGui_ImplVulkan_SetMinImageCount(frame);
-    //ImGui_ImplVulkanH_CreateOrResizeWindow(instance, physicalDevice, device, &mWindow, g_QueueFamily, g_Allocator, fb_width, fb_height, g_MinImageCount);
+    KP::IMAGEVIEW::OBJECT_imageView.createImageViews();
+    KP::DEPTH::OBJECT_depth.createDepthResources();
+    KP::FRAMEBUFFER::OBJECT_frameBuffer.createFrameBuffers();
 
 }    
 
+};//CLASS SWAPCHAIN
+
+inline KP::SWAPCHAIN::SwapChain OBJECT_swapChain;
 
 }//SWAPCHAIN
 }//KP

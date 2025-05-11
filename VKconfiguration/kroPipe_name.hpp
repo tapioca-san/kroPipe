@@ -3,6 +3,8 @@
 
 #include "../kroPipe_include.hpp"
 
+// Nothing here is working
+
 extern VkDevice device;
 
 template <class T>

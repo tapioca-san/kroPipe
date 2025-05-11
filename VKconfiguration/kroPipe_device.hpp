@@ -4,22 +4,28 @@
 #include "../VKkropipe/kroPipe_Log.hpp"
 #include "../kroPipe_include.hpp"
 #include "kroPipe_queuFamilies.hpp"
-#include "kroPipe_extension.hpp"
 #include "kroPipe_swapchain.hpp"
+
+const std::vector<const char*> deviceExtensions = {
+    VK_KHR_SWAPCHAIN_EXTENSION_NAME
+};
 
 namespace KP {
 namespace DEVICE {
 
-
+class Device{
+    
+    
+public:
 // Graphic cards informations
-    inline VkPhysicalDeviceProperties deviceProperties;
-    inline VkPhysicalDeviceFeatures deviceFeatures;
-    inline VkPhysicalDeviceFeatures supportedFeatures;
+    VkPhysicalDeviceProperties deviceProperties;
+    VkPhysicalDeviceFeatures deviceFeatures;
+    VkPhysicalDeviceFeatures supportedFeatures;
 
 //
 
 // VARIABLE
-    inline float queuePriority = 0.0f; // this is for increase the priority of our fetch. when reached 1.0, our fetch got the high priority.
+    float queuePriority = 0.0f; // this is for increase the priority of our fetch. when reached 1.0, our fetch got the high priority.
 
 //
 inline bool checkDeviceExtensionSupport(VkPhysicalDevice &device) {
@@ -40,7 +46,7 @@ inline bool checkDeviceExtensionSupport(VkPhysicalDevice &device) {
 
 
 inline bool isDeviceSuitable(VkPhysicalDevice device) {
-    QueueFamilyIndices indices = findQueuFamilies(device);
+    KP::QUEUFAMILIES::QueueFamilyIndices indices = KP::QUEUFAMILIES::OBJECT_queuFamilies.findQueuFamilies(device);
 
     bool extensionsSupported = checkDeviceExtensionSupport(device);
 
@@ -50,7 +56,7 @@ inline bool isDeviceSuitable(VkPhysicalDevice device) {
     vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
     bool swapChainAdequate = false;
     if (extensionsSupported) {
-        SwapChainSupportDetails swapChainSupport = KP::SWAPCHAIN::querySwapChainSupport(device);
+        KP::SWAPCHAIN::SwapChainSupportDetails swapChainSupport = KP::SWAPCHAIN::OBJECT_swapChain.querySwapChainSupport(device);
         swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
     }
 
@@ -93,7 +99,7 @@ inline void pickPhysicalDevice(VkInstance& instance) {
 
 
 inline void createLogicalDevice() {
-    QueueFamilyIndices indices = findQueuFamilies(g_PhysicalDevice);
+    KP::QUEUFAMILIES::QueueFamilyIndices indices = KP::QUEUFAMILIES::OBJECT_queuFamilies.findQueuFamilies(g_PhysicalDevice);
 
     std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
     std::set<uint32_t> uniqueQueueFamilies = {indices.graphicsFamily.value(), indices.presentFamily.value()};
@@ -138,9 +144,12 @@ inline void createLogicalDevice() {
     }
 
     vkGetDeviceQueue(g_Device, indices.graphicsFamily.value(), 0, &graphicsQueue);
-    vkGetDeviceQueue(g_Device, indices.presentFamily.value(), 0, &presentQueue);
+    vkGetDeviceQueue(g_Device, indices.presentFamily.value(), 0, &KP::QUEUFAMILIES::OBJECT_queuFamilies.presentQueue);
 }
 
+}; //CLASS DEVICE
+
+inline KP::DEVICE::Device OBJECT_device;
 }//DEVICE
 }//KP
 

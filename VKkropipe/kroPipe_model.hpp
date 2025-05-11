@@ -21,9 +21,6 @@ public:
     
     VAO vao;
     KP::BUFFER::UboStorage UBO;
-
-
-    std::vector<VkDeviceMemory> uniformBufferMemory;
     
 //void renderModel(Vertex &InfoModel, VertexVulkan handle)
 
@@ -209,10 +206,40 @@ private:
                     vector.z = mesh->mBitangents[i].z;
                     vertex.Bitangent = vector;
                 }
-                else
+                else{
                     vertex.TexCoords = glm::vec2(0.0f, 0.0f);
-    
-                vertices.push_back(vertex);
+                }
+                /*
+                for (unsigned int i = 0; i < scene->mNumMaterials; i++) {
+                    aiMaterial* material = scene->mMaterials[i];
+                    
+                    // Verifica se há uma textura difusa
+                    if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
+                        aiString texturePath;
+                        material->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath);
+                        
+                        // Verifica se é uma textura embutida
+                        if (const aiTexture* texture = scene->GetEmbeddedTexture(texturePath.C_Str())) {
+                            if (texture->mHeight == 0) {
+                                // mHeight == 0 → textura comprimida (ex: PNG ou JPEG)
+                                stbi_load_from_memory(
+                                    reinterpret_cast<unsigned char*>(texture->pcData),
+                                    texture->mWidth,
+                                    &width, &height, &nrChannels, 0
+                                );
+                            } else {
+                                // textura não comprimida (ex: RGBA bruta)
+                            // texture->pcData é um array de aiTexel
+                            // você pode copiar para sua estrutura de textura
+                        }
+                    } else {
+                        // Textura externa: texturePath.C_Str() é o caminho do arquivo
+                }
+            }
+        }
+        */
+        
+        vertices.push_back(vertex);
             }
 
             // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
@@ -257,8 +284,7 @@ inline void loadAllModels(){
 }
 }
 }    
-inline KP::OBJECT::Model* glock = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/m4a1.obj");
-inline KP::OBJECT::Model* minhasCabeca = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/project_-_cirno_fumo_3d_scan.glb");
+inline KP::OBJECT::Model* glock = KP::OBJECT::createModel("/home/pipebomb/Downloads/model3D/bocchi_the_rock.glb");
 
 
 #endif // MODEL_H

@@ -7,7 +7,9 @@
 namespace KP {
 namespace FRAMEBUFFER {
 
-
+class FrameBuffer{
+    public:
+    
 inline void createFrameBuffers() {
     swapChainFramebuffers.resize(swapChainImageViews.size());
 
@@ -40,6 +42,9 @@ inline void CleanUpFramerBuffer(){
     }
 }
 
+}; //CLASS FRAMEBUFFER
+
+inline KP::FRAMEBUFFER::FrameBuffer OBJECT_frameBuffer;
 
 }//FRAMEBUFFER
 }//KP

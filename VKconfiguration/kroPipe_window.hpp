@@ -1,10 +1,9 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "../VKkropipe/kroPipe_Log.hpp"
 #include "../kroPipe_include.hpp"
 
-GLFWwindow* mWindow;
+inline GLFWwindow* mWindow;
 
 class window{
 

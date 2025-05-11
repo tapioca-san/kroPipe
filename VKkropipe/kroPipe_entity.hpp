@@ -4,6 +4,14 @@
 #include "../kroPipe_include.hpp"
 #include "kroPipe_object.hpp"
 
+struct entityInfo{
+
+    glm::vec3 position; 
+    float floorPos; 
+    bool is_myself;
+
+};
+
 // glm::vec3 position, float floorPos
 inline int createEntity(glm::vec3 position, float floorPos, bool is_myself) {
     KP::OBJECT::Object* player = new KP::OBJECT::Object(position, floorPos, is_myself);

@@ -9,6 +9,9 @@
 namespace KP {
 namespace IMAGEVIEW {
 
+class ImageView{
+    
+public:
 
 inline void createImageViews() {
     swapChainImageViews.resize(swapChainImages.size());
@@ -23,7 +26,8 @@ inline void DestroyImageview(){
         vkDestroyImageView(g_Device, imageView, Allocator);
     }
 }
-
+};//CLASS IMAGEVIEW
+inline KP::IMAGEVIEW::ImageView OBJECT_imageView;
 }//IMAGEVIEW
 }//KP
 #endif //IMAGEVIEW_H

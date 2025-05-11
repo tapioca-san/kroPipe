@@ -9,6 +9,9 @@
 namespace KP {
 namespace VERTEX {
 
+class Vertex{
+public:
+
 inline uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
     
     vkGetPhysicalDeviceMemoryProperties(g_PhysicalDevice, &memProperties);
@@ -61,8 +64,9 @@ inline void endSingleTimeCommands(VkCommandBuffer commandBuffer) {
     vkFreeCommandBuffers(g_Device, commandPool, 1, &commandBuffer);
 }
 
+};//CLASS VERTEX
 
-
+inline KP::VERTEX::Vertex OBJECT_vertex;
 }//VERTEX
 }//KP
 
