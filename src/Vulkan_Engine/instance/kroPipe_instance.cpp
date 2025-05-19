@@ -8,8 +8,8 @@
 namespace KP {
 namespace ENGINE {
 
-// Definições das variáveis globais/namespace (sem extern)
-VkInstance VK_instance = VK_NULL_HANDLE; // Definição
+
+VkInstance VK_instance; //criação da variavel
 
 // Definições dos métodos da classe Instance
 
@@ -104,5 +104,6 @@ std::vector<const char*> Instance::getRequiredExtensions() {
     return extensions;
 }
 
+KP::ENGINE::Instance OBJECT_instance; // Cria uma instância local da classe Instance
 } // namespace ENGINE
 } // namespace KP

@@ -1,6 +1,7 @@
 #include "kroPipe_queuFamilies.hpp"
 #include "../debug/kroPipe_debug.hpp" // check_vk_result, fatalMessage, err
 #include "../window/kroPipe_window.hpp" // OBJECT_window
+#include "../window/kroPipe_windowSurface.hpp" // Para obter o surface
 
 namespace KP {
 namespace ENGINE {
@@ -37,7 +38,7 @@ QueueFamilyIndices QueuFamilies::findQueuFamilies(VkPhysicalDevice device){
         // Verificar suporte de apresentação para a surface
         VkBool32 presentSupport = false;
         // Usando OBJECT_window do namespace e check_vk_result/err do namespace
-        KP::ENGINE::err = vkGetPhysicalDeviceSurfaceSupportKHR(device, i, KP::ENGINE::OBJECT_window.VK_surface, &presentSupport);
+        KP::ENGINE::err = vkGetPhysicalDeviceSurfaceSupportKHR(device, i, KP::ENGINE::OBJECT_windowSurface.VK_surface, &presentSupport);
         KP::ENGINE::check_vk_result(KP::ENGINE::err, "Failed to get physical device surface support"); // Adicionado mensagem de erro
 
         if (presentSupport) {

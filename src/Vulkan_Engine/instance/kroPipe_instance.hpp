@@ -4,15 +4,13 @@
 #include "../../kroPipe_depedence.hpp"
 #include "../debug/kroPipe_debug.hpp" // Necessário para Debugger, debug, validationLayersMessage, warnMessage
 
-#include <vector> // std::vector
-#include <string> // std::string
-
 namespace KP {
 namespace ENGINE {
 
 // Variáveis globais/namespace (declaradas extern)
-extern KP::ENGINE::Debugger OBJECT_debugger; // Assinando como extern
-extern VkInstance VK_instance; // Assinando como extern
+extern KP::ENGINE::Debugger OBJECT_debugger;
+
+extern VkInstance VK_instance; // Criada varivel instance apenas acessivel se consultar dentro do objeto OBJECT_instace (declarada com extern)
 
 // Classe Instance (Gerenciador da Instância Vulkan e setup inicial)
 class Instance {
@@ -22,6 +20,8 @@ private:
     static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
 
 public:
+
+
     // Variáveis membro da classe (validationLayers pode ser membro ou global/namespace)
     // Mantido como membro da classe Instance como no original
     const std::vector<const char*> validationLayers = {
@@ -38,8 +38,8 @@ public:
     // mas deve ir para kroPipe_debug.cpp (e já foi movida para lá).
 };
 
-// Nota: Não há um objeto Instance declarado globalmente aqui no original.
-// A criação parece ocorrer na função Aplication::init().
+
+extern KP::ENGINE::Instance OBJECT_instance; //Declara uma instância local da classe Instance
 
 } // namespace ENGINE
 } // namespace KP

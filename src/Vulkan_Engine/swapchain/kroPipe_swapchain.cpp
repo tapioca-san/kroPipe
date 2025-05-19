@@ -1,15 +1,12 @@
-#include "kroPipe_swapchain.hpp"
+#include "../window/kroPipe_windowSurface.hpp" // OBJECT_windowsurface
+#include "../buffers/kroPipe_frameBuffer.hpp" // OBJECT_frameBuffer
+#include "../queue/kroPipe_queuFamilies.hpp" // OBJECT_queuFamilies, QueueFamilyIndices
+#include "../image/kroPipe_imageView.hpp"   // OBJECT_imageView, swapChainImageViews, swapChainImages
 #include "../window/kroPipe_window.hpp" // OBJECT_window, mWindow
 #include "../device/kroPipe_device.hpp" // OBJECT_device
-#include "../queue/kroPipe_queuFamilies.hpp" // OBJECT_queuFamilies, QueueFamilyIndices
 #include "../debug/kroPipe_debug.hpp" // check_vk_result, err, VK_Allocator
-#include "../buffers/kroPipe_frameBuffer.hpp" // OBJECT_frameBuffer
 #include "../depth/kroPipe_depth.hpp"       // OBJECT_depth, depthImageView, depthImage, depthImageMemory
-#include "../image/kroPipe_imageView.hpp"   // OBJECT_imageView, swapChainImageViews, swapChainImages
-
-#include <vector>
-#include <algorithm>
-#include <limits>
+#include "kroPipe_swapchain.hpp"
 
 namespace KP {
 namespace ENGINE {
@@ -29,25 +26,25 @@ SwapChainSupportDetails SwapChain::querySwapChainSupport(VkPhysicalDevice device
     SwapChainSupportDetails details;
 
     // Usando OBJECT_window do namespace
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, KP::ENGINE::OBJECT_window.VK_surface, &details.capabilities);
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, KP::ENGINE::OBJECT_windowSurface.VK_surface, &details.capabilities);
 
     uint32_t formatCount;
     // Usando OBJECT_window do namespace
-    vkGetPhysicalDeviceSurfaceFormatsKHR(device, KP::ENGINE::OBJECT_window.VK_surface, &formatCount, nullptr);
+    vkGetPhysicalDeviceSurfaceFormatsKHR(device, KP::ENGINE::OBJECT_windowSurface.VK_surface, &formatCount, nullptr);
 
     if (formatCount != 0) {
         details.formats.resize(formatCount);
         // Usando OBJECT_window do namespace
-        vkGetPhysicalDeviceSurfaceFormatsKHR(device, KP::ENGINE::OBJECT_window.VK_surface, &formatCount, details.formats.data());
+        vkGetPhysicalDeviceSurfaceFormatsKHR(device, KP::ENGINE::OBJECT_windowSurface.VK_surface, &formatCount, details.formats.data());
     }
 
     uint32_t presentModeCount;
     // Usando OBJECT_window do namespace
-    vkGetPhysicalDeviceSurfacePresentModesKHR(device, KP::ENGINE::OBJECT_window.VK_surface, &presentModeCount, nullptr);
+    vkGetPhysicalDeviceSurfacePresentModesKHR(device, KP::ENGINE::OBJECT_windowSurface.VK_surface, &presentModeCount, nullptr);
     if (presentModeCount != 0) {
         details.presentModes.resize(presentModeCount);
         // Usando OBJECT_window do namespace
-        vkGetPhysicalDeviceSurfacePresentModesKHR(device, KP::ENGINE::OBJECT_window.VK_surface, &presentModeCount, details.presentModes.data());
+        vkGetPhysicalDeviceSurfacePresentModesKHR(device, KP::ENGINE::OBJECT_windowSurface.VK_surface, &presentModeCount, details.presentModes.data());
     }
 
     return details;
@@ -78,7 +75,7 @@ VkExtent2D SwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilit
     } else {
         int width, height;
         // Usando mWindow do namespace
-        glfwGetFramebufferSize(KP::ENGINE::mWindow, &width, &height);
+        glfwGetFramebufferSize(KP::ENGINE::GLFW_window, &width, &height);
         VkExtent2D actualExtent = {
             static_cast<uint32_t>(width),
             static_cast<uint32_t>(height)
@@ -105,7 +102,7 @@ void SwapChain::createSwapChain() {
 
     VkSwapchainCreateInfoKHR createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    createInfo.surface = KP::ENGINE::OBJECT_window.VK_surface; // Usando objeto do namespace
+    createInfo.surface = KP::ENGINE::OBJECT_windowSurface.VK_surface; // Usando objeto do namespace
 
     createInfo.minImageCount = imageCount;
     createInfo.imageFormat = surfaceFormat.format;
@@ -186,9 +183,9 @@ void SwapChain::cleanupSwapChain(){
 void SwapChain::recreateSwapChain(){
     // Usando mWindow do namespace
     int width = 0, height = 0;
-    glfwGetFramebufferSize(KP::ENGINE::mWindow, &width, &height);
+    glfwGetFramebufferSize(KP::ENGINE::GLFW_window, &width, &height);
     while (width == 0 || height == 0) {
-        glfwGetFramebufferSize(KP::ENGINE::mWindow, &width, &height);
+        glfwGetFramebufferSize(KP::ENGINE::GLFW_window, &width, &height);
         glfwWaitEvents();
     }
 

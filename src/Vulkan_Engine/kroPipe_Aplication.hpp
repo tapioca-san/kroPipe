@@ -2,6 +2,7 @@
 #define APP_HPP
 
 // Inclua todos os headers dos componentes que a Aplicação principal usa
+#include "window/kroPipe_windowSurface.hpp"
 #include "buffers/kroPipe_frameBuffer.hpp"
 #include "swapchain/kroPipe_swapchain.hpp"
 #include "queue/kroPipe_queuFamilies.hpp"

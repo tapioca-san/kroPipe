@@ -5,9 +5,9 @@
 
 namespace KP {
 namespace ENGINE {
-
-// Variável global do GLFWwindow (declarada extern)
-extern GLFWwindow* mWindow;
+    
+    
+extern GLFWwindow* GLFW_window; // Variável de janela do GLFW para criação de janela (declarada com extern)
 
 // Classe Window
 class Window {
@@ -17,8 +17,9 @@ private:
     std::string name; // Adicionado std::string
 
 public:
-    VkSurfaceKHR VK_surface = VK_NULL_HANDLE; // Inicializado para garantir estado conhecido
+ 
 
+    
     Window(int width, int height, const std::string& name);
     ~Window();
 
@@ -26,7 +27,7 @@ public:
     int getWidth() const { return width; }
     int getHeight() const { return height; }
     const std::string& getName() const { return name; }
-    GLFWwindow* getGlfwWindow() const { return mWindow; }
+    GLFWwindow* getGlfwWindow() const { return GLFW_window; }
 
 };
 

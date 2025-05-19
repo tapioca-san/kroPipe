@@ -1,5 +1,6 @@
 #include "kroPipe_Aplication.hpp"
-// Headers já incluídos em app.hpp
+#include "instance/kroPipe_instance.hpp"
+#include "window/kroPipe_window.hpp"
 
 
 // Definição única do objeto da Aplicação (sem extern)
@@ -9,13 +10,14 @@ Aplication OBJECT_aplication;
 void Aplication::init(){
     // Chamando métodos e usando objetos/variáveis do namespace KP::ENGINE
     // Instância da classe Instance - pode ser membro da classe Aplication se quiser
-    KP::ENGINE::Instance instanceManager; // Cria uma instância local da classe Instance
 
-    instanceManager.createInstance(); // Chama o método na instância local
+    KP::ENGINE::OBJECT_instance.createInstance(); // Chama o método na instância local
 
     // Usando OBJECT_debugger e VK_instance do namespace, e debugMessenger (membro da classe Aplication)
     KP::ENGINE::OBJECT_debugger.setupDebugMessenger(KP::ENGINE::VK_instance, debugMessenger);
 
+    KP::ENGINE::OBJECT_windowSurface.createSurface(KP::ENGINE::VK_instance, KP::ENGINE::GLFW_window, KP::ENGINE::OBJECT_windowSurface.VK_surface);
+    
     // Usando OBJECT_device e VK_instance do namespace
     KP::ENGINE::OBJECT_device.pickPhysicalDevice(KP::ENGINE::VK_instance);
 
