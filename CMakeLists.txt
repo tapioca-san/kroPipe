@@ -49,28 +49,28 @@ file(GLOB HEADERS
 )
 
 # Bibliotecas do ImGui
-add_library(imgui
-    ${IMGUI_DIR}/imgui.cpp
-    ${IMGUI_DIR}/imgui_draw.cpp
-    ${IMGUI_DIR}/imgui_tables.cpp
-    ${IMGUI_DIR}/imgui_widgets.cpp
-    ${IMGUI_DIR}/imgui_demo.cpp
-)
+#add_library(imgui
+#    ${IMGUI_DIR}/imgui.cpp
+#    ${IMGUI_DIR}/imgui_draw.cpp
+#    ${IMGUI_DIR}/imgui_tables.cpp
+#    ${IMGUI_DIR}/imgui_widgets.cpp
+#    ${IMGUI_DIR}/imgui_demo.cpp
+#)
 
-target_include_directories(
-    imgui PUBLIC ${IMGUI_DIR}
-    )
-    
-
-add_library(imgui_backend
-    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
-    ${IMGUI_DIR}/backends/imgui_impl_vulkan.cpp
-)
-
-target_include_directories(imgui_backend PUBLIC
-    ${IMGUI_DIR}
-    ${IMGUI_DIR}/backends
-)
+#target_include_directories(
+#    imgui PUBLIC ${IMGUI_DIR}
+#    )
+#    
+#                                                           Só adicionar IMGUI quando for usar
+#add_library(imgui_backend
+#    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+#    ${IMGUI_DIR}/backends/imgui_impl_vulkan.cpp
+#)
+#
+#target_include_directories(imgui_backend PUBLIC
+#    ${IMGUI_DIR}
+#    ${IMGUI_DIR}/backends
+#)
 
 # Executável principal
 add_executable(nial ${SOURCES} ${HEADERS})
@@ -84,6 +84,6 @@ target_link_libraries(nial
         Vulkan::Vulkan
         glfw
         assimp
-        imgui
-        imgui_backend
+#        imgui
+#        imgui_backend
 )
