@@ -92,7 +92,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL Debugger::debugCallback(
     const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
     void* pUserData) {
     if (messageSeverity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
-        warnMessage(pCallbackData->pMessage); // Chamando a função do namespace
+        warnMessage(pCallbackData->pMessage); // Mensagens do Vulkan que são urgentes
     } else {
         validationLayersMessage(pCallbackData->pMessage); // Chamando a função do namespace
     }

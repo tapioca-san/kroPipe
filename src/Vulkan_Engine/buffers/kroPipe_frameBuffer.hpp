@@ -8,15 +8,11 @@
 #include "../debug/kroPipe_debug.hpp" // Necessário para fatalMessage, VK_Allocator
 #include "../depth/kroPipe_depth.hpp" // Necessário para depthImageView
 
-#include <vector> // std::vector
-#include <array>  // std::array
-
 namespace KP {
 namespace ENGINE {
 
 class FrameBuffer{
 public:
-    // Métodos da classe FrameBuffer
     void createFrameBuffers();
     void CleanUpFramerBuffer();
 

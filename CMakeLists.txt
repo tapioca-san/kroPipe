@@ -32,6 +32,8 @@ file(GLOB SOURCES
     "src/Vulkan_Engine/depth/*.cpp"
     "src/Vulkan_Engine/image/*.cpp"
     "src/Vulkan_Engine/pipeline/*.cpp"
+    "src/Vulkan_Engine/vertex/*.cpp"
+    "src/Vulkan_Engine/command/*.cpp"
 )
 file(GLOB HEADERS 
     "src/*.hpp"
@@ -46,6 +48,8 @@ file(GLOB HEADERS
     "src/Vulkan_Engine/depth/*.hpp"
     "src/Vulkan_Engine/image/*.hpp"
     "src/Vulkan_Engine/pipeline/*.hpp"
+    "src/Vulkan_Engine/vertex/*.hpp"
+    "src/Vulkan_Engine/command/*.hpp"
 )
 
 # Bibliotecas do ImGui

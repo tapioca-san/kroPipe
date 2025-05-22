@@ -24,6 +24,12 @@ void Aplication::init(){
     // Usando OBJECT_device do namespace
     KP::ENGINE::OBJECT_device.createLogicalDevice();
 
+    while(!glfwWindowShouldClose(KP::ENGINE::GLFW_window)) { // render frame by frame
+        
+        glfwPollEvents();
+    }
+
+
     // Criar Surface depois de pickPhysicalDevice (que pode precisar dela para isDeviceSuitable)
     // E antes de createSwapChain (que *definitivamente* precisa dela)
     // A criação da surface geralmente fica associada à janela.

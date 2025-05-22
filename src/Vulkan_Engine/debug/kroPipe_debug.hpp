@@ -30,7 +30,7 @@ void modelMessage(const std::string& message);
 // Classe Debugger
 class Debugger {
 public:
-    // A função de callback do Vulkan deve ser static
+    // A função de callback do Vulkan deve ser static. ela é a responsavel para mandar mensagem para nós
     static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT messageType,
@@ -43,7 +43,6 @@ public:
     void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator);
 };
 
-// Objeto Debugger (declarado extern)
 extern KP::ENGINE::Debugger OBJECT_debugger;
 
 } // namespace ENGINE

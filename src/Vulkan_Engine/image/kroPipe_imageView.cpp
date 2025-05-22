@@ -12,8 +12,6 @@ namespace ENGINE {
 std::vector<VkImage> swapChainImages; // Definição
 std::vector<VkImageView> swapChainImageViews; // Definição
 
-// Definição do objeto ImageView (sem extern)
-KP::ENGINE::ImageView OBJECT_imageView;
 
 // Definição dos métodos da classe ImageView
 
@@ -53,6 +51,9 @@ void ImageView::DestroyImageview(){
     }
     KP::ENGINE::swapChainImageViews.clear(); // Limpar o vector após destruir
 }
+
+// Definição do objeto ImageView (sem extern)
+KP::ENGINE::ImageView OBJECT_imageView;
 
 } // namespace ENGINE
 } // namespace KP
