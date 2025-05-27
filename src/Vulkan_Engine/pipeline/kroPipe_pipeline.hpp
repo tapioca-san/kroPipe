@@ -19,11 +19,11 @@ namespace KP {
 namespace ENGINE {
 
 // Variáveis globais/namespace (declaradas extern)
-extern VkPipelineCache          g_PipelineCache; // Assinando como extern
-extern std::vector<VkDescriptorSetLayout> setLayout; // Assinando como extern
-extern VkPipelineLayout pipelineLayout; // Assinando como extern
-extern VkPipeline graphicsPipeline; // Assinando como extern
-extern std::string directoryFileManually; // Assinando como extern
+extern VkPipelineCache                      PipelineCache; // Assinando como extern
+extern std::vector<VkDescriptorSetLayout>   setLayout; // Assinando como extern
+extern VkPipelineLayout                     pipelineLayout; // Assinando como extern
+extern VkPipeline                           graphicsPipeline; // Assinando como extern
+extern std::string                          directoryProject; // Assinando como extern
 
 // Definição ÚNICA do Render Pass (declarada extern)
 // A definição real estará no .cpp

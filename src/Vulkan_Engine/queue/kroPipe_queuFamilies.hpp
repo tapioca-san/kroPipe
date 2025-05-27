@@ -2,11 +2,9 @@
 #define KROPIPE_QUEUFAMILIES_HPP
 
 #include "../../kroPipe_depedence.hpp"
-#include "../debug/kroPipe_debug.hpp" // check_vk_result, fatalMessage, err
-#include "../window/kroPipe_window.hpp" // OBJECT_window (para vkGetPhysicalDeviceSurfaceSupportKHR)
+//#include "../debug/kroPipe_debug.hpp" // check_vk_result, fatalMessage, err
+//#include "../window/kroPipe_window.hpp" // OBJECT_window (para vkGetPhysicalDeviceSurfaceSupportKHR)
 
-#include <optional> // std::optional
-#include <vector>   // std::vector
 
 namespace KP {
 namespace ENGINE {

@@ -6,22 +6,19 @@
 // #include "../depth/kroPipe_depth.hpp"
 // #include "kroPipe_vertex_data.hpp"
 
-#include <fstream> // std::ifstream
-#include <stdexcept> // std::runtime_error
-#include <vector> // std::vector
-#include <string> // std::string
-#include <array> // std::array
 
 
 namespace KP {
 namespace ENGINE {
 
 // Definições das variáveis globais/namespace (sem extern)
-VkPipelineCache          g_PipelineCache = VK_NULL_HANDLE; // Definição
-std::vector<VkDescriptorSetLayout> setLayout; // Definição (inicializado vazio)
-VkPipelineLayout pipelineLayout = VK_NULL_HANDLE; // Definição
-VkPipeline graphicsPipeline = VK_NULL_HANDLE; // Definição
-std::string directoryFileManually = "/home/pipebomb/dev/cpp/vulkan/teste/src/"; // Definição
+VkPipelineCache                                 PipelineCache = VK_NULL_HANDLE; // Definição
+std::vector<VkDescriptorSetLayout>              setLayout; // Definição (inicializado vazio)
+VkPipelineLayout                                pipelineLayout = VK_NULL_HANDLE; // Definição
+VkPipeline                                      graphicsPipeline = VK_NULL_HANDLE; // Definição
+std::string                                     directoryProject = "/home/pipebomb/dev/cpp/vulkan/teste/src"; // Definição
+std::string                                     directoryShader = "/Vulkan_Engine/shader/";
+
 
 // Definição ÚNICA do Render Pass (sem extern)
 VkRenderPass VK_renderPass = VK_NULL_HANDLE; // Definição
@@ -88,8 +85,8 @@ void Pipeline::destroyGraphicsPipeline(VkShaderModule vertShaderModule, VkShader
     // Usando OBJECT_device, VK_Allocator do namespace
     // Estes handles de shaderModule devem ser destruídos após a criação da pipeline,
     // não necessariamente neste método de limpeza da pipeline inteira.
-    // vkDestroyShaderModule(KP::ENGINE::OBJECT_device.VK_Device, fragShaderModule, KP::ENGINE::VK_Allocator);
-    // vkDestroyShaderModule(KP::ENGINE::OBJECT_device.VK_Device, vertShaderModule, KP::ENGINE::VK_Allocator);
+    vkDestroyShaderModule(KP::ENGINE::OBJECT_device.VK_Device, fragShaderModule, KP::ENGINE::VK_Allocator);
+    vkDestroyShaderModule(KP::ENGINE::OBJECT_device.VK_Device, vertShaderModule, KP::ENGINE::VK_Allocator);
 }
 
 void Pipeline::createPipeline(shaderModule shader){
@@ -119,7 +116,7 @@ void Pipeline::createPipeline(shaderModule shader){
     // cacheCreateInfo.pInitialData = data;
 
     // Usando OBJECT_device, VK_Allocator, err, check_vk_result do namespace
-    KP::ENGINE::err = vkCreatePipelineCache(KP::ENGINE::OBJECT_device.VK_Device, &cacheCreateInfo, KP::ENGINE::VK_Allocator, &g_PipelineCache); // Cria o membro g_PipelineCache
+    KP::ENGINE::err = vkCreatePipelineCache(KP::ENGINE::OBJECT_device.VK_Device, &cacheCreateInfo, KP::ENGINE::VK_Allocator, &PipelineCache); // Cria o membro g_PipelineCache
     KP::ENGINE::check_vk_result(KP::ENGINE::err, "failed to create pipeline cache!");
 
 
@@ -199,7 +196,6 @@ void Pipeline::createPipeline(shaderModule shader){
     KP::ENGINE::err = vkCreatePipelineLayout(KP::ENGINE::OBJECT_device.VK_Device, &pipelineLayoutInfo, KP::ENGINE::VK_Allocator, &pipelineLayout); // Cria o membro pipelineLayout
     KP::ENGINE::check_vk_result(KP::ENGINE::err, "failed to create pipeline layout!");
 
-
     // Info principal da Pipeline Gráfica
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -223,7 +219,7 @@ void Pipeline::createPipeline(shaderModule shader){
     pipelineInfo.basePipelineIndex = -1; // Opcional para derivar pipelines
 
     // Usando OBJECT_device, g_PipelineCache, VK_Allocator, err, check_vk_result do namespace
-    KP::ENGINE::err = vkCreateGraphicsPipelines(KP::ENGINE::OBJECT_device.VK_Device, g_PipelineCache, 1, &pipelineInfo, KP::ENGINE::VK_Allocator, &graphicsPipeline); // Cria o membro graphicsPipeline
+    KP::ENGINE::err = vkCreateGraphicsPipelines(KP::ENGINE::OBJECT_device.VK_Device, PipelineCache, 1, &pipelineInfo, KP::ENGINE::VK_Allocator, &graphicsPipeline); // Cria o membro graphicsPipeline
     KP::ENGINE::check_vk_result(KP::ENGINE::err, "failed to create graphics pipeline!");
 
     // Módulos de shader podem ser destruídos após a criação da pipeline
@@ -233,7 +229,7 @@ void Pipeline::createPipeline(shaderModule shader){
 
 void Pipeline::createGraphicsPipeline() {
     // Usando directoryFileManually e métodos estáticos UseShaders, createPipeline
-    KP::ENGINE::shaderModule shader = Pipeline::UseShaders(KP::ENGINE::directoryFileManually, "VKconfiguration/shaders/vert.spv", "VKconfiguration/shaders/frag.spv");
+    KP::ENGINE::shaderModule shader = Pipeline::UseShaders(KP::ENGINE::directoryProject, directoryShader + "vert.spv", directoryShader + "frag.spv");
 
     createPipeline(shader); // Chamando método da classe
 
@@ -305,7 +301,7 @@ void Pipeline::createRenderPass() {
 void Pipeline::CleanUpPipeline(){
     // Usando membros da classe e OBJECT_device, VK_Allocator do namespace
     vkDestroyPipeline(KP::ENGINE::OBJECT_device.VK_Device, graphicsPipeline, KP::ENGINE::VK_Allocator); // Destroi o membro graphicsPipeline
-    vkDestroyPipelineCache(KP::ENGINE::OBJECT_device.VK_Device, g_PipelineCache, KP::ENGINE::VK_Allocator); // Destroi o membro g_PipelineCache
+    vkDestroyPipelineCache(KP::ENGINE::OBJECT_device.VK_Device, PipelineCache, KP::ENGINE::VK_Allocator); // Destroi o membro g_PipelineCache
     vkDestroyPipelineLayout(KP::ENGINE::OBJECT_device.VK_Device, pipelineLayout, KP::ENGINE::VK_Allocator); // Destroi o membro pipelineLayout
     vkDestroyRenderPass(KP::ENGINE::OBJECT_device.VK_Device, VK_renderPass, KP::ENGINE::VK_Allocator); // Destroi VK_renderPass (que é extern)
 }

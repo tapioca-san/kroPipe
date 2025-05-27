@@ -6,6 +6,12 @@
 // Definição única do objeto da Aplicação (sem extern)
 Aplication OBJECT_aplication;
 
+void Aplication::clean(){
+
+
+    
+}
+
 // Definição do método de inicialização da classe Aplication
 void Aplication::init(){
     // Chamando métodos e usando objetos/variáveis do namespace KP::ENGINE
@@ -24,6 +30,20 @@ void Aplication::init(){
     // Usando OBJECT_device do namespace
     KP::ENGINE::OBJECT_device.createLogicalDevice();
 
+
+    KP::ENGINE::OBJECT_swapChain.createSwapChain();
+    KP::ENGINE::OBJECT_imageView.createImageViews();
+    KP::ENGINE::OBJECT_pipeline.createRenderPass();    
+    { // LOAD ALL MODELS THROUGH //VKkropipe/kroPipe_model.hpp
+        for(KP::ENGINE::Model* model : KP::ENGINE::allModel){
+            model->UBO.createDescriptorLayout(); // this function set everything on setLayouts to use to graphicsPipeline under here
+        }  
+    }
+    
+    KP::ENGINE::OBJECT_pipeline.createGraphicsPipeline();  
+    KP::ENGINE::OBJECT_command.createCommandPool();
+    KP::ENGINE::OBJECT_depth.createDepthResources();
+    //KP::OBJECT::loadAllModels(); // Load every
     while(!glfwWindowShouldClose(KP::ENGINE::GLFW_window)) { // render frame by frame
         
         glfwPollEvents();

@@ -6,12 +6,15 @@
 #include "buffers/kroPipe_frameBuffer.hpp"
 #include "swapchain/kroPipe_swapchain.hpp"
 #include "queue/kroPipe_queuFamilies.hpp"
+#include "pipeline/kroPipe_pipeline.hpp"
 #include "instance/kroPipe_instance.hpp"
 #include "image/kroPipe_imageView.hpp"
+#include "command/kroPipe_command.hpp"
 #include "window/kroPipe_window.hpp"
 #include "device/kroPipe_device.hpp"
 #include "depth/kroPipe_depth.hpp"
-#include "debug/kroPipe_debug.hpp" // Necessário para debugMessenger e variáveis de debug
+#include "debug/kroPipe_debug.hpp"// Necessário para debugMessenger e variáveis de debug
+#include "load/kroPipe_model.hpp"
 
 // Variáveis globais/namespace relacionadas a debug (já declaradas em kroPipe_debug.hpp)
 // extern bool debug;
@@ -28,6 +31,7 @@ public:
     // Método de inicialização
     void init();
 
+    void clean();
     // Métodos de limpeza e loop principal (adicione conforme necessário)
     // void run();
     // void cleanup();

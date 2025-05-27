@@ -2,7 +2,6 @@
 #define KROPIPE_IMAGEVIEW_HPP
 
 #include "../../kroPipe_depedence.hpp"
-#include "../debug/kroPipe_debug.hpp"   // VK_Allocator
 
 #include <vector> // std::vector
 

@@ -61,7 +61,9 @@ namespace ENGINE {
 
 std::vector<VkCommandBuffer> commandBuffers;// crialão da variavel que foi declarada no kroPipe_command.hpp
 
-VkCommandPool commandPool;// crialão da variavel que foi declarada no kroPipe_command.hpp
-    
+VkCommandPool commandPool;// criação da variavel que foi declarada no kroPipe_command.hpp
+
+KP::ENGINE::Command OBJECT_command; // criação da variavel já declarada no kroPipe_command.hpp com extern
+
 }//ENGINE
 }//KP

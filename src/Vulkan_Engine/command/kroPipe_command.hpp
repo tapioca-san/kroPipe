@@ -21,7 +21,7 @@ void createDescriptorPool(VkDescriptorPool &descriptorPool);
 void destroyCommandPool();
 
 }; // COMMAND
-inline KP::ENGINE::Command OBJECT_command;
+extern KP::ENGINE::Command OBJECT_command; // declaração de variavel com extern
 }//COMMANDBUFFER
 }//KP
 

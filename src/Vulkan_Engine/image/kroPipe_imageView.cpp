@@ -1,9 +1,13 @@
-#include "kroPipe_imageView.hpp"
-#include "../device/kroPipe_device.hpp" // OBJECT_device
-#include "../debug/kroPipe_debug.hpp"   // VK_Allocator, check_vk_result, err
+//#include "kroPipe_imageView.hpp"
+//include "../device/kroPipe_device.hpp" // OBJECT_device
+//#include "../debug/kroPipe_debug.hpp"   // VK_Allocator, check_vk_result, err
+
+// includes em cima são desnecessario para esse caso. caso precise, remova
+
+
 #include "../swapchain/kroPipe_swapchain.hpp" // swapChainImageFormat, swapChainImages (já declarados no .hpp deste arquivo)
 
-#include "../device/kroPipe_device.hpp" // OBJECT_device
+//#include "../device/kroPipe_device.hpp" // OBJECT_device não necessario ao caso
 
 namespace KP {
 namespace ENGINE {
