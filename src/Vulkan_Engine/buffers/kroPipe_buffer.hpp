@@ -7,8 +7,6 @@ namespace KP {
 namespace ENGINE {
 
 
-    
-extern const int MAX_FRAMES_IN_FLIGHT;
 
 extern uint32_t currentFrame;
 

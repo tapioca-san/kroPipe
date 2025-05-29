@@ -75,7 +75,7 @@ VkExtent2D SwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilit
     } else {
         int width, height;
         // Usando mWindow do namespace
-        glfwGetFramebufferSize(KP::ENGINE::GLFW_window, &width, &height);
+        glfwGetFramebufferSize(KP::ENGINE::OBJECT_window.GLFW_window, &width, &height);
         VkExtent2D actualExtent = {
             static_cast<uint32_t>(width),
             static_cast<uint32_t>(height)
@@ -183,9 +183,9 @@ void SwapChain::cleanupSwapChain(){
 void SwapChain::recreateSwapChain(){
     // Usando mWindow do namespace
     int width = 0, height = 0;
-    glfwGetFramebufferSize(KP::ENGINE::GLFW_window, &width, &height);
+    glfwGetFramebufferSize(KP::ENGINE::OBJECT_window.GLFW_window, &width, &height);
     while (width == 0 || height == 0) {
-        glfwGetFramebufferSize(KP::ENGINE::GLFW_window, &width, &height);
+        glfwGetFramebufferSize(KP::ENGINE::OBJECT_window.GLFW_window, &width, &height);
         glfwWaitEvents();
     }
 

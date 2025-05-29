@@ -12,5 +12,7 @@ int main() {
         return EXIT_FAILURE;
     }
 
+    OBJECT_aplication.clean();
+
     return EXIT_SUCCESS;
 }

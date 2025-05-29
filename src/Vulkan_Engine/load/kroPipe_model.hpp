@@ -1,10 +1,8 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include "../pipeline/kroPipe_pipeline.hpp"
 #include "../buffers/kroPipe_buffer.hpp"
-#include "../device/kroPipe_device.hpp"
-#include "../debug/kroPipe_debug.hpp"
+#include "../pipeline/kroPipe_pipeline.hpp"
 
 
 

@@ -7,18 +7,10 @@
 #include "../queue/kroPipe_queuFamilies.hpp" // Necessário para QueueFamilyIndices
 #include "../debug/kroPipe_debug.hpp" // Necessário para check_vk_result, err
 
-// Headers forward declarations para evitar dependência circular (buffers, depth, image)
-// Se você usar esses headers aqui apenas em ponteiros ou referências, forward declaration basta.
-// Mas como você usa tipos concretos e acessa membros, vai precisar dos includes.
-// Vamos incluir os headers completos já que as definições estão separadas.
 #include "../buffers/kroPipe_frameBuffer.hpp" // Necessário para std::vector<VkFramebuffer>
 #include "../depth/kroPipe_depth.hpp"       // Necessário para depthImageView, depthImage, depthImageMemory
 #include "../image/kroPipe_imageView.hpp"   // Necessário para swapChainImageViews, swapChainImages
 
-#include <vector>    // std::vector
-#include <algorithm> // std::clamp
-#include <limits>    // std::numeric_limits
-#include <optional>  // std::optional
 
 
 namespace KP {

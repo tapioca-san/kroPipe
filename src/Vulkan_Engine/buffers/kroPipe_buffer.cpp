@@ -1,13 +1,13 @@
 #include "../command/kroPipe_command.hpp"
 #include "../device/kroPipe_device.hpp"
 #include "../vertex/kroPipe_vertex.hpp"
+#include "../render/kroPipe_render.hpp"
 #include "../debug/kroPipe_debug.hpp"
 #include "kroPipe_buffer.hpp"
 
 namespace KP {
 namespace ENGINE {
 
-const int MAX_FRAMES_IN_FLIGHT = 2;
 
 uint32_t currentFrame = 0;
 

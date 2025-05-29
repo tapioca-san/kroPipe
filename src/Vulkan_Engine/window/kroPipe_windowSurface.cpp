@@ -1,6 +1,5 @@
 #include "kroPipe_windowSurface.hpp"
 #include "../debug/kroPipe_debug.hpp"
-#include <vulkan/vulkan_core.h>
 
 void KP::ENGINE::WindowSurface::createSurface(VkInstance &instance, GLFWwindow *window, VkSurfaceKHR &surface) {
     
@@ -12,6 +11,6 @@ void KP::ENGINE::WindowSurface::createSurface(VkInstance &instance, GLFWwindow *
 
 namespace KP {
 namespace ENGINE {
-KP::ENGINE::WindowSurface OBJECT_windowSurface; // amarzena o "ID" da janela gerado pelo glfw para podermos direcionar o vulkan renderizar só naquela tela, sem afetar outras janelas e sendo o mais direto o possível
+KP::ENGINE::WindowSurface OBJECT_windowSurface;
 } // namespace ENGINE
 } // namespace KP
