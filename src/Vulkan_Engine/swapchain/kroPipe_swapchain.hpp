@@ -17,6 +17,9 @@ namespace KP {
 namespace ENGINE {
 
 // Variáveis globais/namespace relacionadas ao Swap Chain (declaradas extern)
+extern std::vector<VkImage> swapChainImages; 
+extern std::vector<VkImageView> swapChainImageViews; 
+
 extern VkFormat swapChainImageFormat;
 extern VkExtent2D swapChainExtent;
 extern VkSwapchainKHR swapChain; // Assinando como extern

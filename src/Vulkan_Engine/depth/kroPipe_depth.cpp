@@ -2,8 +2,7 @@
 #include "../device/kroPipe_device.hpp" // OBJECT_device
 #include "../debug/kroPipe_debug.hpp"   // fatalMessage, check_vk_result, err, VK_Allocator
 #include "../swapchain/kroPipe_swapchain.hpp" // swapChainExtent (já declarados no .hpp deste arquivo)
-// Incluir .cpp ou .hpp para createImage, createImageView se estiverem em outro lugar
-// #include "../texture/kroPipe_texture.cpp" // Se as definições estiverem em um .cpp
+#include "../texture/kroPipe_texture.hpp"
 
 namespace KP {
 namespace ENGINE {
@@ -39,12 +38,21 @@ bool Depth::hasStencilComponent(VkFormat format) {
     return format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT;
 }
 
+VkFormat Depth::findDepthFormat() {
+    return findSupportedFormat(
+        {VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
+        VK_IMAGE_TILING_OPTIMAL,
+        VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+    );
+}
 
 void Depth::createDepthResources(){
-    VkFormat depthFormat = findDepthFormat(); // Chamando método da classe
-
-   
-}
+        
+        VkFormat depthFormat = findDepthFormat();
+        KP::ENGINE::createImage(swapChainExtent.width, swapChainExtent.height, depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, depthImage, depthImageMemory);
+        depthImageView = KP::ENGINE::createImageView(depthImage, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
+        
+    }
 
 } // namespace ENGINE
 } // namespace KP

@@ -7,7 +7,8 @@
 
 namespace KP {
 namespace ENGINE {
-
+    
+std::vector<VkDescriptorSetLayout> setLayout;
 
 uint32_t currentFrame = 0;
 
@@ -89,7 +90,7 @@ void KP::ENGINE::UboStorage::createDescriptorSetLayout(KP::ENGINE::UniformBuffer
     layoutInfo.pBindings = bindings.data();
     err = vkCreateDescriptorSetLayout(KP::ENGINE::OBJECT_device.VK_Device, &layoutInfo, KP::ENGINE::VK_Allocator, &uniformBuffers.descriptorSetLayout);
     check_vk_result(err, "failed to create descriptor set layout!");
-    //setLayout.push_back(uniformBuffers.descriptorSetLayout);
+    setLayout.push_back(uniformBuffers.descriptorSetLayout);
 }
 
 void KP::ENGINE::UboStorage::createUniformBuffers(KP::ENGINE::UniformBuffers &uniformBuffers) {

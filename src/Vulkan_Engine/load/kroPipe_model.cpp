@@ -143,8 +143,8 @@ KP::ENGINE::Mesh KP::ENGINE::Model::processMesh(aiMesh* mesh, const aiScene* sce
     VertexVulkan vertex{};
     for(unsigned int i = 0; i < mesh->mNumVertices; i++)
         {
-            glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
-            // positions
+            glm::vec3 vector;
+            
             vector.x = mesh->mVertices[i].x;
             vector.y = mesh->mVertices[i].y;
             vector.z = mesh->mVertices[i].z;
@@ -157,12 +157,9 @@ KP::ENGINE::Mesh KP::ENGINE::Model::processMesh(aiMesh* mesh, const aiScene* sce
                 vector.z = mesh->mNormals[i].z;
                 vertex.Normal = vector;
             }
-            // texture coordinates
-            if(mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+            if(mesh->mTextureCoords[0]) 
             {
                 glm::vec2 vec;
-                // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
-                // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
                 vec.x = mesh->mTextureCoords[0][i].x; 
                 vec.y = mesh->mTextureCoords[0][i].y;
                 vertex.TexCoords = vec;
@@ -183,11 +180,9 @@ KP::ENGINE::Mesh KP::ENGINE::Model::processMesh(aiMesh* mesh, const aiScene* sce
             
             vertices.push_back(vertex);
         }
-        // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
         for(unsigned int i = 0; i < mesh->mNumFaces; i++)
         {
             aiFace face = mesh->mFaces[i];
-            // retrieve all indices of the face and store them in the indices vector
             for(unsigned int j = 0; j < face.mNumIndices; j++)
                 indices.push_back(face.mIndices[j]);        
         }
@@ -223,7 +218,7 @@ namespace KP {
 namespace ENGINE {
 
 std::vector<Model*> allModel; 
-KP::ENGINE::Model* glock = KP::ENGINE::createModel("/home/pipebomb/Downloads/model3D/construction_site_building_site_architecture.glb");
+KP::ENGINE::Model* glock = KP::ENGINE::createModel("/home/pipebomb/Downloads/M4a1/M4a1.obj");
 
 }//ENGINE
 }//KP

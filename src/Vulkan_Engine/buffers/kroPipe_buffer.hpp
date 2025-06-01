@@ -6,7 +6,7 @@
 namespace KP {
 namespace ENGINE {
 
-
+extern std::vector<VkDescriptorSetLayout> setLayout; // uso para o pipeline 
 
 extern uint32_t currentFrame;
 
@@ -38,6 +38,8 @@ struct UboStorage{
         
         UniformBuffers uniformBuffers;
         UniformBufferObject UBO;
+
+        
         int objectId;    
 
         size_t bufferSize = sizeof(UniformBufferObject);

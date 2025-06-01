@@ -12,6 +12,8 @@ namespace KP {
 namespace ENGINE {
 
 // Definições das variáveis globais/namespace (sem extern)
+std::vector<VkImage> swapChainImages; 
+std::vector<VkImageView> swapChainImageViews; 
 VkFormat swapChainImageFormat;
 VkExtent2D swapChainExtent;
 VkSwapchainKHR swapChain = VK_NULL_HANDLE; // Definição

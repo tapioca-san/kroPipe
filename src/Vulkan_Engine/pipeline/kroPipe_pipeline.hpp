@@ -3,24 +3,19 @@
 
 #include "../../kroPipe_depedence.hpp"
 // Incluir headers para objetos e variáveis usados (agora que definições estão em .cpp)
+#include "../buffers/kroPipe_buffer.hpp"
 #include "../device/kroPipe_device.hpp" // OBJECT_device
 #include "../debug/kroPipe_debug.hpp"   // check_vk_result, err, VK_Allocator, fatalMessage
 #include "../depth/kroPipe_depth.hpp"   // OBJECT_depth (para findDepthFormat)
 #include "../swapchain/kroPipe_swapchain.hpp" // swapChainImageFormat (já declarado extern aqui)
 #include "kroPipe_vertex_data.hpp"      // VertexVulkan
 
-#include <vector>   // std::vector
-#include <string>   // std::string
-#include <fstream>  // std::ifstream
-#include <array>    // std::array
-#include <stdexcept>// std::runtime_error
 
 namespace KP {
 namespace ENGINE {
 
 // Variáveis globais/namespace (declaradas extern)
 extern VkPipelineCache                      PipelineCache; // Assinando como extern
-extern std::vector<VkDescriptorSetLayout>   setLayout; // Assinando como extern
 extern VkPipelineLayout                     pipelineLayout; // Assinando como extern
 extern VkPipeline                           graphicsPipeline; // Assinando como extern
 extern std::string                          directoryProject; // Assinando como extern
