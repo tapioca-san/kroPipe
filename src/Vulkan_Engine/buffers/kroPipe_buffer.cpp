@@ -1,10 +1,10 @@
+#include "../texture/kroPipe_texture.hpp"
 #include "../command/kroPipe_command.hpp"
 #include "../device/kroPipe_device.hpp"
 #include "../vertex/kroPipe_vertex.hpp"
 #include "../render/kroPipe_render.hpp"
 #include "../debug/kroPipe_debug.hpp"
 #include "kroPipe_buffer.hpp"
-
 namespace KP {
 namespace ENGINE {
     
@@ -147,8 +147,8 @@ void KP::ENGINE::UboStorage::createDescriptorSets(KP::ENGINE::UniformBuffers &un
         
         VkDescriptorImageInfo imageInfo{};
         imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        //imageInfo.imageView = textureImageView;
-        //imageInfo.sampler = textureSampler;
+        imageInfo.imageView = textureImageView;
+        imageInfo.sampler = textureSampler;
         std::array<VkWriteDescriptorSet, 2> descriptorWrites{};
         descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         descriptorWrites[0].dstSet = uniformBuffers.descriptorSets[i];

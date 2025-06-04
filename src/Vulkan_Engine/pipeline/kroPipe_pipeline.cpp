@@ -195,8 +195,7 @@ void Pipeline::createGraphicsPipeline() {
 }
 
 void Pipeline::createRenderPass() {
-   
-    VkAttachmentDescription colorAttachment{};
+   VkAttachmentDescription colorAttachment{};
     colorAttachment.format = swapChainImageFormat;
     colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
@@ -249,7 +248,7 @@ void Pipeline::createRenderPass() {
     renderPassInfo.pDependencies = &dependency;
 
     KP::ENGINE::err = vkCreateRenderPass(KP::ENGINE::OBJECT_device.VK_Device, &renderPassInfo, KP::ENGINE::VK_Allocator, &VK_renderPass); // Cria o membro VK_renderPass (que é extern)
-    KP::ENGINE::check_vk_result(KP::ENGINE::err, "failed to create render pass!");
+    check_vk_result(err, "failed to create render pass!");
 }
 
 void Pipeline::CleanUpPipeline(){

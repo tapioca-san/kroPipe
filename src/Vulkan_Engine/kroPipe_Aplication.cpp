@@ -8,6 +8,8 @@
 Aplication OBJECT_aplication;
 
 
+float deltaTime;
+float lastTime = glfwGetTime();
 
 void Aplication::init(){
 
@@ -30,12 +32,11 @@ void Aplication::init(){
     KP::ENGINE::OBJECT_pipeline.createGraphicsPipeline();  
     KP::ENGINE::OBJECT_command.createCommandPool();
     KP::ENGINE::OBJECT_depth.createDepthResources();
-    //KP::ENGINE::loadAllModels();
+    KP::ENGINE::loadAllModels();
     KP::ENGINE::OBJECT_frameBuffer.createFrameBuffers();
     KP::ENGINE::createTextureImage();
     KP::ENGINE::createTextureImageView();
     KP::ENGINE::createTextureSampler();
-    /*
     
     for(KP::ENGINE::Model* model : KP::ENGINE::allModel){
         model->UBO.create();    
@@ -43,10 +44,22 @@ void Aplication::init(){
     
     KP::ENGINE::OBJECT_command.createCommandBuffers();
     KP::ENGINE::OBJECT_render.createSyncObjects();
-    */
     
     while(!glfwWindowShouldClose(KP::ENGINE::OBJECT_window.GLFW_window)) {
+        glfwPollEvents();
+    
+        //ImGui::Render(); 
         
+
+
+        //for(uint16_t i = 0; i < allObjects.size(); i++){
+        //    kroPipe::gravityForce(allObjects[sortedID[i]], deltaTime);
+        //}
+        float currentTime = glfwGetTime();
+        deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+
+        KP::ENGINE::OBJECT_render.drawFrame();
         glfwPollEvents();
     }
 
