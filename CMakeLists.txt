@@ -7,7 +7,10 @@ find_package(Vulkan REQUIRED)
 find_package(assimp REQUIRED)
 find_package(glfw3 REQUIRED)
 
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+#set(CMAKE_CXX_FLAGS_RELEASE "-O3") # compilação rapida
+set(CMAKE_CXX_FLAGS_DEBUG "-g") 
 
 # Caminho do ImGui
 set(IMGUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/include/imgui-master")
@@ -34,6 +37,9 @@ file(GLOB SOURCES
     "src/Vulkan_Engine/pipeline/*.cpp"
     "src/Vulkan_Engine/vertex/*.cpp"
     "src/Vulkan_Engine/command/*.cpp"
+    "src/Vulkan_Engine/load/*.cpp"
+    "src/Vulkan_Engine/render/*.cpp"
+    "src/Vulkan_Engine/texture/*.cpp"
 )
 file(GLOB HEADERS 
     "src/*.hpp"
@@ -50,6 +56,9 @@ file(GLOB HEADERS
     "src/Vulkan_Engine/pipeline/*.hpp"
     "src/Vulkan_Engine/vertex/*.hpp"
     "src/Vulkan_Engine/command/*.hpp"
+    "src/Vulkan_Engine/load/*.hpp"
+    "src/Vulkan_Engine/render/*.hpp"
+    "src/Vulkan_Engine/texture/*.hpp"
 )
 
 # Bibliotecas do ImGui

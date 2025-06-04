@@ -32,10 +32,10 @@ void Aplication::init(){
     KP::ENGINE::OBJECT_depth.createDepthResources();
     //KP::ENGINE::loadAllModels();
     KP::ENGINE::OBJECT_frameBuffer.createFrameBuffers();
-    /*
     KP::ENGINE::createTextureImage();
     KP::ENGINE::createTextureImageView();
     KP::ENGINE::createTextureSampler();
+    /*
     
     for(KP::ENGINE::Model* model : KP::ENGINE::allModel){
         model->UBO.create();    

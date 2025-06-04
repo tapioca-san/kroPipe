@@ -26,23 +26,20 @@ bool Device::checkDeviceExtensionSupport(VkPhysicalDevice &device) {
 
 
 bool Device::isDeviceSuitable(VkPhysicalDevice device) {
-    // Usando objetos/funções do namespace KP::ENGINE
     KP::ENGINE::QueueFamilyIndices indices = KP::ENGINE::OBJECT_queuFamilies.findQueuFamilies(device);
 
     bool extensionsSupported = checkDeviceExtensionSupport(device);
 
-    vkGetPhysicalDeviceProperties(device, &deviceProperties); // Atualiza membros da classe
-    vkGetPhysicalDeviceFeatures(device, &deviceFeatures);   // Atualiza membros da classe
+    vkGetPhysicalDeviceProperties(device, &deviceProperties); 
+    vkGetPhysicalDeviceFeatures(device, &deviceFeatures);   
 
-    vkGetPhysicalDeviceFeatures(device, &supportedFeatures); // Atualiza membros da classe
+    vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
     bool swapChainAdequate = false;
     if (extensionsSupported) {
-        // Usando objeto do namespace KP::ENGINE
         KP::ENGINE::SwapChainSupportDetails swapChainSupport = KP::ENGINE::OBJECT_swapChain.querySwapChainSupport(device);
         swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
     }
 
-    // Verificando features diretamente nos membros atualizados
     return indices.isComplete() && extensionsSupported && swapChainAdequate && supportedFeatures.samplerAnisotropy;
 }
 
@@ -51,27 +48,26 @@ void Device::pickPhysicalDevice(VkInstance& instance) {
     vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
     if (deviceCount == 0) {
-        throw std::runtime_error(KP::ENGINE::fatalMessage("failed to find GPUs with Vulkan support!")); // Chamando fatalMessage do namespace
+        throw std::runtime_error(KP::ENGINE::fatalMessage("failed to find GPUs with Vulkan support!"));
     }
 
     std::vector<VkPhysicalDevice> devices(deviceCount);
     vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
 
     for (const auto& device : devices) {
-        if (isDeviceSuitable(device)) { // Chamando método da classe
-            VK_PhysicalDevice = device; // Atualiza membro da classe
+        if (isDeviceSuitable(device)) { 
+            VK_PhysicalDevice = device; 
             break;
         }
     }
 
     if (VK_PhysicalDevice == VK_NULL_HANDLE) {
-        throw std::runtime_error(KP::ENGINE::fatalMessage("failed to find a suitable GPU!")); // Chamando fatalMessage do namespace
+        throw std::runtime_error(KP::ENGINE::fatalMessage("failed to find a suitable GPU!")); 
     }
 }
 
 void Device::createLogicalDevice() {
-    // Usando objeto/funções do namespace KP::ENGINE
-    KP::ENGINE::QueueFamilyIndices indices = KP::ENGINE::OBJECT_queuFamilies.findQueuFamilies(VK_PhysicalDevice); // Usando membro da classe
+    KP::ENGINE::QueueFamilyIndices indices = KP::ENGINE::OBJECT_queuFamilies.findQueuFamilies(VK_PhysicalDevice);
 
     std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
     std::set<uint32_t> uniqueQueueFamilies = {indices.graphicsFamily.value(), indices.presentFamily.value()};
@@ -86,8 +82,8 @@ void Device::createLogicalDevice() {
         queueCreateInfos.push_back(queueCreateInfo);
     }
 
-    VkPhysicalDeviceFeatures deviceFeaturesToEnable{}; // Features que queremos explicitamente habilitar
-    deviceFeaturesToEnable.samplerAnisotropy = VK_TRUE; // Habilita anisotropia
+    VkPhysicalDeviceFeatures deviceFeaturesToEnable{};
+    deviceFeaturesToEnable.samplerAnisotropy = VK_TRUE;
 
     VkDeviceCreateInfo createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -95,30 +91,24 @@ void Device::createLogicalDevice() {
     createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
     createInfo.pQueueCreateInfos = queueCreateInfos.data();
 
-    createInfo.pEnabledFeatures = &deviceFeaturesToEnable; // Habilitando features desejadas
-
-    // Ativação de extensões (deviceExtensions é uma variável global/namespace)
+    createInfo.pEnabledFeatures = &deviceFeaturesToEnable; 
     createInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
     createInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
-    // Ativação de validation layers (validationLayers é uma variável global/namespace)
-    if (KP::ENGINE::debug) { // Usando variável debug do namespace
+    if (KP::ENGINE::debug) { 
         createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
         createInfo.ppEnabledLayerNames = validationLayers.data();
     } else {
         createInfo.enabledLayerCount = 0;
     }
 
-    // Usando alocador global VK_Allocator do namespace
-    if (vkCreateDevice(VK_PhysicalDevice, &createInfo, KP::ENGINE::VK_Allocator, &VK_Device) != VK_SUCCESS) { // Atualiza membro da classe
-        throw std::runtime_error(KP::ENGINE::fatalMessage("failed to create logical device!")); // Chamando fatalMessage do namespace
+    if (vkCreateDevice(VK_PhysicalDevice, &createInfo, KP::ENGINE::VK_Allocator, &VK_Device) != VK_SUCCESS) {
+        throw std::runtime_error(KP::ENGINE::fatalMessage("failed to create logical device!")); 
     }
 
-    // Obter as queues
-    // vkGetDeviceQueue(VK_Device, indices.graphicsFamily.value(), 0, &graphicsQueue); // graphicsQueue não é membro de Device, mas sim de QueuFamilies
-    // Obtenha graphicsQueue na classe QueuFamilies, se necessário.
-    vkGetDeviceQueue(VK_Device, indices.presentFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.presentQueue); // Usando membro da classe QueuFamilies
-}
+    // queue gráfica guardada na queue families
+    vkGetDeviceQueue(VK_Device, indices.graphicsFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.graphicsQueue);
+    vkGetDeviceQueue(VK_Device, indices.presentFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.presentQueue); }
 
 } // namespace ENGINE
 } // namespace KP
