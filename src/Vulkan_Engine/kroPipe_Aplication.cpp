@@ -1,3 +1,4 @@
+#include <vulkan/vulkan_core.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include "kroPipe_Aplication.hpp"
 #include "debug/kroPipe_debug.hpp"
@@ -67,19 +68,20 @@ void Aplication::init(){
 
 
 void Aplication::clean() {
+    vkDeviceWaitIdle(KP::ENGINE::OBJECT_device.VK_Device);
     vkDestroyImageView(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::depthImageView, KP::ENGINE::VK_Allocator);
-        vkDestroyImage(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::depthImage, KP::ENGINE::VK_Allocator);
-        vkFreeMemory(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::depthImageMemory, KP::ENGINE::VK_Allocator);
-        vkDestroySampler(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::textureSampler, KP::ENGINE::VK_Allocator);
-        vkDestroyImageView(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::textureImageView, KP::ENGINE::VK_Allocator);
-        vkDestroyImage(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::textureImage, KP::ENGINE::VK_Allocator);
-        vkFreeMemory(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::textureImageMemory, KP::ENGINE::VK_Allocator);
-        for (KP::ENGINE::Model *&model: KP::ENGINE::allModel) {
-            model->UBO.cleanUp();
-            model->cleanupVao();
-        }
-        KP::ENGINE::OBJECT_render.destroyRender();
-            
+    vkDestroyImage(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::depthImage, KP::ENGINE::VK_Allocator);
+    vkFreeMemory(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::depthImageMemory, KP::ENGINE::VK_Allocator);
+    vkDestroySampler(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::textureSampler, KP::ENGINE::VK_Allocator);
+    vkDestroyImageView(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::textureImageView, KP::ENGINE::VK_Allocator);
+    vkDestroyImage(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::textureImage, KP::ENGINE::VK_Allocator);
+    vkFreeMemory(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::textureImageMemory, KP::ENGINE::VK_Allocator);
+    for (KP::ENGINE::Model *&model: KP::ENGINE::allModel) {
+        model->UBO.cleanUp();
+        model->cleanupVao();
+    }
+    KP::ENGINE::OBJECT_render.destroyRender();
+        
     //KP::LIGHT::OBJECT_light.cleanUp();
     KP::ENGINE::OBJECT_command.destroyCommandPool();
     KP::ENGINE::OBJECT_frameBuffer.CleanUpFramerBuffer();

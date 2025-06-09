@@ -1,10 +1,11 @@
 #include "kroPipe_render.hpp"
+#include <vulkan/vulkan_core.h>
 
 namespace KP {
 namespace ENGINE {
 
 
-const int MAX_FRAMES_IN_FLIGHT = 2;
+const int MAX_FRAMES_IN_FLIGHT = 2; // quando crescer, adiiconar 3 aqui e gerenciar isso
 
 std::vector<VkSemaphore> imageAvailableSemaphores;
 std::vector<VkSemaphore> renderFinishedSemaphores;
@@ -14,14 +15,23 @@ bool framebufferResized = false;
 
 KP::ENGINE::Render OBJECT_render;
 
-void KP::ENGINE::Render::destroyRender(){
 
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        vkDestroySemaphore(KP::ENGINE::OBJECT_device.VK_Device, renderFinishedSemaphores[i], KP::ENGINE::VK_Allocator);
-        vkDestroySemaphore(KP::ENGINE::OBJECT_device.VK_Device, imageAvailableSemaphores[i], KP::ENGINE::VK_Allocator);
-        vkDestroyFence(KP::ENGINE::OBJECT_device.VK_Device, inFlightFences[i], KP::ENGINE::VK_Allocator);
-    }
+VkFenceCreateInfo Render::FenceCreateInfo(VkFenceCreateFlags flags){
+    VkFenceCreateInfo fenceCreateInfo = {};
+    fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    fenceCreateInfo.pNext = nullptr;
+    fenceCreateInfo.flags = flags;
+    return fenceCreateInfo;
 }
+
+VkSemaphoreCreateInfo Render::SemaphoreCreateInfo(VkSemaphoreCreateFlags flags){
+    VkSemaphoreCreateInfo semCreateInfo = {};
+    semCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+    semCreateInfo.pNext = nullptr;
+    semCreateInfo.flags = flags;
+    return semCreateInfo;
+}
+
 
 void KP::ENGINE::Render::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
 
@@ -81,7 +91,6 @@ void KP::ENGINE::Render::recordCommandBuffer(VkCommandBuffer commandBuffer, uint
 }
 
 VkResult KP::ENGINE::Render::acquireNextImage(){
-    
     VkResult result = vkAcquireNextImageKHR(KP::ENGINE::OBJECT_device.VK_Device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR) {
@@ -94,34 +103,29 @@ VkResult KP::ENGINE::Render::acquireNextImage(){
 
 void KP::ENGINE::Render::drawFrame() {
     vkWaitForFences(KP::ENGINE::OBJECT_device.VK_Device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
-
     err = acquireNextImage();
+    check_vk_result(err);
 
     for(KP::ENGINE::Model* model : KP::ENGINE::allModel){
         model->UBO.update();    
     }  
-
+    
     vkResetFences(KP::ENGINE::OBJECT_device.VK_Device, 1, &inFlightFences[currentFrame]);
 
     vkResetCommandBuffer(KP::ENGINE::commandBuffers[currentFrame], /*VkCommandBufferResetFlagBits*/ 0);
    
     recordCommandBuffer(commandBuffers[currentFrame], imageIndex);
     
+    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+    VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
+    VkSemaphore waitSemaphores[] = {imageAvailableSemaphores[currentFrame]};
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.commandBufferCount = 1; // attention
     submitInfo.pCommandBuffers = &commandBuffers[currentFrame];
-
-    VkSemaphore waitSemaphores[] = {imageAvailableSemaphores[currentFrame]};
-    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
     submitInfo.waitSemaphoreCount = 1;
     submitInfo.pWaitSemaphores = waitSemaphores;
     submitInfo.pWaitDstStageMask = waitStages;
-
-    submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &commandBuffers[currentFrame];
-
-    VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
 
@@ -158,12 +162,9 @@ void KP::ENGINE::Render::createSyncObjects() {
     renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
     inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
 
-    VkSemaphoreCreateInfo semaphoreInfo{};
-    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+    VkSemaphoreCreateInfo semaphoreInfo = SemaphoreCreateInfo(0);  
+    VkFenceCreateInfo fenceInfo = FenceCreateInfo(VK_FENCE_CREATE_SIGNALED_BIT);
 
-    VkFenceCreateInfo fenceInfo{};
-    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         if (vkCreateSemaphore(KP::ENGINE::OBJECT_device.VK_Device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
@@ -171,6 +172,15 @@ void KP::ENGINE::Render::createSyncObjects() {
             vkCreateFence(KP::ENGINE::OBJECT_device.VK_Device, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
             throw std::runtime_error(fatalMessage("failed to create synchronization objects for a frame!"));
         }
+    }
+}
+
+void KP::ENGINE::Render::destroyRender(){
+
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        vkDestroySemaphore(KP::ENGINE::OBJECT_device.VK_Device, renderFinishedSemaphores[i], KP::ENGINE::VK_Allocator);
+        vkDestroySemaphore(KP::ENGINE::OBJECT_device.VK_Device, imageAvailableSemaphores[i], KP::ENGINE::VK_Allocator);
+        vkDestroyFence(KP::ENGINE::OBJECT_device.VK_Device, inFlightFences[i], KP::ENGINE::VK_Allocator);
     }
 }
 

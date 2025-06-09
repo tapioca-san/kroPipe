@@ -218,7 +218,7 @@ namespace KP {
 namespace ENGINE {
 
 std::vector<Model*> allModel; 
-KP::ENGINE::Model* glock = KP::ENGINE::createModel("/home/pipebomb/Downloads/M4a1/M4a1.obj");
+KP::ENGINE::Model* glock = KP::ENGINE::createModel("/home/pipebomb/Downloads/base.fbx");
 
 }//ENGINE
 }//KP

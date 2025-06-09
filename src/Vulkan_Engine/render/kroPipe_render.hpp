@@ -22,15 +22,19 @@ private:
 
 public:
     
+
 void destroyRender();
 void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
+
+VkFenceCreateInfo FenceCreateInfo(VkFenceCreateFlags flags);
+
+VkSemaphoreCreateInfo SemaphoreCreateInfo(VkSemaphoreCreateFlags flags);
 
 VkResult acquireNextImage();
 
 void drawFrame();
 
 void createSyncObjects();
-
 };//CLASS RENDER
 
 extern KP::ENGINE::Render OBJECT_render;

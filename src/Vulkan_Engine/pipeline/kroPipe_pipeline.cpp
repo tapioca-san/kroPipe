@@ -1,17 +1,14 @@
+#include "../buffers/kroPipe_buffer.hpp"
+#include "../device/kroPipe_device.hpp" 
+#include "../debug/kroPipe_debug.hpp"   
+#include "../depth/kroPipe_depth.hpp"   
+#include "../../kroPipe_depedence.hpp"
 #include "kroPipe_pipeline.hpp"
-// Incluídos no .hpp agora que definições estão separadas
-// #include "../device/kroPipe_device.hpp"
-// #include "../../kroPipe_depedence.hpp"
-// #include "../debug/kroPipe_debug.hpp"
-// #include "../depth/kroPipe_depth.hpp"
-// #include "kroPipe_vertex_data.hpp"
-
 
 
 namespace KP {
 namespace ENGINE {
 
-// Definições das variáveis globais/namespace (sem extern)
 VkPipelineCache                                 PipelineCache = VK_NULL_HANDLE; // Definição
 VkPipelineLayout                                pipelineLayout = VK_NULL_HANDLE; // Definição
 VkPipeline                                      graphicsPipeline = VK_NULL_HANDLE; // Definição
@@ -19,20 +16,16 @@ std::string                                     directoryProject = "/home/pipebo
 std::string                                     directoryShader = "/Vulkan_Engine/shader/";
 
 
-// Definição ÚNICA do Render Pass (sem extern)
-VkRenderPass VK_renderPass = VK_NULL_HANDLE; // Definição
+VkRenderPass VK_renderPass = VK_NULL_HANDLE; 
 
-// Definição do objeto Pipeline (sem extern)
 KP::ENGINE::Pipeline OBJECT_pipeline;
 
-// Definição dos métodos estáticos da classe Pipeline
 
 std::vector<char> Pipeline::readFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
-
+    
     if (!file.is_open()) {
-        // Usando fatalMessage do namespace
-        throw std::runtime_error(KP::ENGINE::fatalMessage("failed to open file! (maybe shaders path is incorrect): " + filename)); // Adicionado nome do arquivo
+        throw std::runtime_error("failed to open file!"); // Se não tiver shaders, da erro
     }
 
     size_t fileSize = (size_t) file.tellg();
@@ -40,7 +33,7 @@ std::vector<char> Pipeline::readFile(const std::string& filename) {
     file.seekg(0);
     file.read(buffer.data(), fileSize);
     file.close();
-
+    
     return buffer;
 }
 
@@ -88,13 +81,6 @@ void Pipeline::createPipeline(shaderModule shader){
     vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
     vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
-    VkPipelineCacheCreateInfo cacheCreateInfo{};
-    cacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-    cacheCreateInfo.initialDataSize = 0;
-    cacheCreateInfo.pInitialData = nullptr;
-    
-    KP::ENGINE::err = vkCreatePipelineCache(KP::ENGINE::OBJECT_device.VK_Device, &cacheCreateInfo, KP::ENGINE::VK_Allocator, &PipelineCache); // Cria o membro g_PipelineCache
-    KP::ENGINE::check_vk_result(KP::ENGINE::err, "failed to create pipeline cache!");
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
     inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -156,7 +142,7 @@ void Pipeline::createPipeline(shaderModule shader){
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.setLayoutCount = 1;
-    pipelineLayoutInfo.pSetLayouts = KP::ENGINE::setLayout.data(); // setLayout esta vazio
+    pipelineLayoutInfo.pSetLayouts = setLayout.data();
 
     KP::ENGINE::err = vkCreatePipelineLayout(KP::ENGINE::OBJECT_device.VK_Device, &pipelineLayoutInfo, KP::ENGINE::VK_Allocator, &pipelineLayout);
     KP::ENGINE::check_vk_result(err, "failed to create pipeline layout!");
@@ -178,6 +164,7 @@ void Pipeline::createPipeline(shaderModule shader){
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
+    
     KP::ENGINE::err = vkCreateGraphicsPipelines(KP::ENGINE::OBJECT_device.VK_Device, PipelineCache, 1, &pipelineInfo, KP::ENGINE::VK_Allocator, &graphicsPipeline); // Cria o membro graphicsPipeline
     KP::ENGINE::check_vk_result(KP::ENGINE::err, "failed to create graphics pipeline!");
 
@@ -206,8 +193,8 @@ void Pipeline::createRenderPass() {
     colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     VkAttachmentDescription depthAttachment{};
-    depthAttachment.format = KP::ENGINE::OBJECT_depth.findDepthFormat();
-    depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+    depthAttachment.format = KP::ENGINE::OBJECT_depth.findDepthFormat(); // está em cima nesse mesmo arquivo
+    depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT; // deixa bem mais realista o depth, pelo o que lembro
     depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;

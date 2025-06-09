@@ -3,6 +3,7 @@
 #include "../queue/kroPipe_queuFamilies.hpp" // OBJECT_queuFamilies, QueueFamilyIndices
 #include "../image/kroPipe_imageView.hpp"   // OBJECT_imageView, swapChainImageViews, swapChainImages
 #include "../window/kroPipe_window.hpp" // OBJECT_window, mWindow
+#include "../render/kroPipe_render.hpp"
 #include "../device/kroPipe_device.hpp" // OBJECT_device
 #include "../debug/kroPipe_debug.hpp" // check_vk_result, err, VK_Allocator
 #include "../depth/kroPipe_depth.hpp"       // OBJECT_depth, depthImageView, depthImage, depthImageMemory
@@ -97,7 +98,7 @@ void SwapChain::createSwapChain() {
     VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes); // Chamando static member
     VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities); // Chamando static member
 
-    uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
+    uint32_t imageCount = MAX_FRAMES_IN_FLIGHT;
     if (swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount) {
         imageCount = swapChainSupport.capabilities.maxImageCount;
     }
