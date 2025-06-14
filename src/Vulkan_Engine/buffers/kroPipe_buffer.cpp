@@ -1,3 +1,4 @@
+#include "../../Utils/object/kroPipe_object.hpp"
 #include "../texture/kroPipe_texture.hpp"
 #include "../command/kroPipe_command.hpp"
 #include "../device/kroPipe_device.hpp"
@@ -6,8 +7,6 @@
 #include "../debug/kroPipe_debug.hpp"
 #include "kroPipe_buffer.hpp"
 #include "../camera/kroPipe_camera.hpp"
-#include "../object/kroPipe_entity.hpp"
-#include "../object/kroPipe_object.hpp"
 
 namespace KP {
 namespace ENGINE {

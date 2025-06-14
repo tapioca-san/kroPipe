@@ -2,26 +2,27 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "kroPipe_Aplication.hpp"
 
-#include "debug/kroPipe_debug.hpp"
-#include "instance/kroPipe_instance.hpp"
-#include "window/kroPipe_window.hpp"
+#include "../Utils/camera/kroPipe_camera.hpp"
+#include "../Utils/object/kroPipe_object.hpp"
 #include "window/kroPipe_windowSurface.hpp"
 #include "../Utils/imgui/kroPipe_imgui.hpp"
-#include "load/kroPipe_model.hpp"
 #include "window/kroPipe_windowSurface.hpp"
 #include "buffers/kroPipe_frameBuffer.hpp"
 #include "swapchain/kroPipe_swapchain.hpp"
 #include "queue/kroPipe_queuFamilies.hpp"
 #include "pipeline/kroPipe_pipeline.hpp"
 #include "instance/kroPipe_instance.hpp"
+#include "instance/kroPipe_instance.hpp"
 #include "texture/kroPipe_texture.hpp"
 #include "image/kroPipe_imageView.hpp"
 #include "command/kroPipe_command.hpp"
+#include "window/kroPipe_window.hpp"
 #include "window/kroPipe_window.hpp"
 #include "render/kroPipe_render.hpp"
 #include "device/kroPipe_device.hpp"
 #include "depth/kroPipe_depth.hpp"
 #include "debug/kroPipe_debug.hpp" 
+#include "load/kroPipe_model.hpp"
 
 Aplication OBJECT_aplication;
 
@@ -69,7 +70,9 @@ void Aplication::init(){
         KP::ENGINE::VK_renderPass
     );
     
-    
+    KP::ENGINE::createEntity(KP::ENGINE::cameraPlayer.Position + glm::vec3(1.0f,1.0f,1.0f), 0.0f, true);
+    //create
+    KP::ENGINE::loadObjects(KP::ENGINE::sortedID);
 
 }
 
@@ -85,7 +88,7 @@ void Aplication::run(){
 
         //for(uint16_t i = 0; i < allObjects.size(); i++){
         //    kroPipe::gravityForce(allObjects[sortedID[i]], deltaTime);
-        //}
+        //db}
         float currentTime = glfwGetTime();
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;

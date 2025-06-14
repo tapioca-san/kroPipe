@@ -4,11 +4,11 @@
 #include "../../kroPipe_depedence.hpp"
 #include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
 #include "../../Vulkan_Engine/load/kroPipe_model.hpp"
+#include <cstdint>
 
 namespace KP {
 namespace ENGINE {
 
-    uint16_t lastID = 0;
 
     struct ObjectData {
         glm::vec3 Position{};
@@ -53,22 +53,23 @@ namespace ENGINE {
 
         void DrawTransformUI(std::string &headerName);
 
-        void loadObjects(std::vector<int> &IDs);
-
-        std::vector<int> entityLoad(std::vector<KP::ENGINE::Object*> allObjects);
-
-        int createEntity(glm::vec3 position, float floorPos, bool is_myself);
-
+        
         ~Object() {
         }
     };
 
+    void loadObjects(std::vector<int> &IDs);    
+    std::vector<int> entityLoad(std::vector<KP::ENGINE::Object*> allObjects);
+    int createEntity(glm::vec3 position, float floorPos, bool is_myself);
+    
+    extern uint16_t lastID;
+    extern std::vector<KP::ENGINE::Object*> allObjects;
+    extern std::vector<int> sortedID;
+
     
 
-}
-} // namespace kroPipe
+} // namespace engine
+} // namespace KP
 
-extern std::vector<KP::ENGINE::Object*> allObjects;
-extern std::vector<int> sortedID;
 
 #endif //KROPIPE_OBJECT_H

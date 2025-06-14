@@ -80,7 +80,7 @@ void KP::ENGINE::Render::recordCommandBuffer(VkCommandBuffer commandBuffer, uint
     }
 
     //IMGUI RENDER 
-    //imguiInterface->render(commandBuffer);
+    imguiInterface->render(commandBuffer);
 
 
     vkCmdEndRenderPass(commandBuffer);

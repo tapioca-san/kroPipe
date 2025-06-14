@@ -4,7 +4,9 @@
 namespace KP {
 namespace ENGINE {
 
-//uint16_t lastID = 0;
+std::vector<KP::ENGINE::Object*> allObjects;
+std::vector<int> sortedID;
+uint16_t lastID = 0;
 
 float Object::calculateRaio(ObjectData& object) {
     float raio = 0.0f;
@@ -92,9 +94,8 @@ void Object::DrawTransformUI(std::string &headerName){
     }
 }
 
-
 // glm::vec3 position, float floorPos
-int Object::createEntity(glm::vec3 position, float floorPos, bool is_myself) {
+int createEntity(glm::vec3 position, float floorPos, bool is_myself) {
     KP::ENGINE::Object* player = new KP::ENGINE::Object(position, floorPos, is_myself);
     allObjects.push_back(player);
     // size_t numVertices = sizeof(vertices) / sizeof(vertices[0]) /2 8;
@@ -102,7 +103,7 @@ int Object::createEntity(glm::vec3 position, float floorPos, bool is_myself) {
     return lastID; 
 }
 
-std::vector<int> Object::entityLoad(std::vector<KP::ENGINE::Object*> allObjects) {
+std::vector<int> entityLoad(std::vector<KP::ENGINE::Object*> allObjects) {
     if (allObjects.empty()) {
         throw std::runtime_error("entityLoad error: no objects available");
     }
@@ -139,7 +140,8 @@ std::vector<int> Object::entityLoad(std::vector<KP::ENGINE::Object*> allObjects)
     return sortedIDs;
 }
 
-void Object::loadObjects(std::vector<int> &IDs) {
+
+void loadObjects(std::vector<int> &IDs) {
     IDs = entityLoad(allObjects);
 
     if (IDs.size() < 2) {
@@ -147,8 +149,7 @@ void Object::loadObjects(std::vector<int> &IDs) {
     }    
 }
 
-};
+
+}; // namespace engine
 } // namespace kroPipe
 
-extern std::vector<KP::ENGINE::Object*> allObjects;
-extern std::vector<int> sortedID;
