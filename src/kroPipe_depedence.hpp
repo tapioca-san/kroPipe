@@ -11,7 +11,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-// Seus includes para ImGui, stb_image, Assimp (ajuste os caminhos conforme necessário)
+// dependencias de imgui
 #include "include/imgui-master/backends/imgui_impl_vulkan.h"
 #include "include/imgui-master/backends/imgui_impl_glfw.h"
 #include "include/imgui-master/imgui.h"

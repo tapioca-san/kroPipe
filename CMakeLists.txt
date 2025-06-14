@@ -9,8 +9,8 @@ find_package(glfw3 REQUIRED)
 
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-#set(CMAKE_CXX_FLAGS_RELEASE "-O3") # compilação rapida
-set(CMAKE_CXX_FLAGS_DEBUG "-g") 
+set(CMAKE_CXX_FLAGS_RELEASE "-O3") # compilação rapida
+#set(CMAKE_CXX_FLAGS_DEBUG "-g") 
 
 # Caminho do ImGui
 set(IMGUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/include/imgui-master")
@@ -20,6 +20,7 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "GLFW lib only" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "GLFW lib only" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "GLFW lib only" FORCE)
 list(APPEND SOURCES src/include/imageSupport/stb_image.cpp)
+
 
 # Seus arquivos do projeto
 file(GLOB SOURCES 
@@ -40,7 +41,13 @@ file(GLOB SOURCES
     "src/Vulkan_Engine/load/*.cpp"
     "src/Vulkan_Engine/render/*.cpp"
     "src/Vulkan_Engine/texture/*.cpp"
+    
+    #utils
+    #"src/Utils/object/*.cpp"
+    "src/Utils/imgui/*.cpp"
+
 )
+
 file(GLOB HEADERS 
     "src/*.hpp"
     "src/Vulkan_Engine/*.hpp"
@@ -59,34 +66,43 @@ file(GLOB HEADERS
     "src/Vulkan_Engine/load/*.hpp"
     "src/Vulkan_Engine/render/*.hpp"
     "src/Vulkan_Engine/texture/*.hpp"
+    
+
+    #utils link
+    #"src/Utils/object/*.hpp"
+    "src/Utils/imgui/*.hpp"
+
+
+    #Imgui link
+    "src/include/imgui-master/backends/imgui_impl_vulkan.h"
+    "src/include/imgui-master/backends/imgui_impl_glfw.h"
+    "src/include/imgui-master/imgui.h"
+
 )
 
-# Bibliotecas do ImGui
-#add_library(imgui
-#    ${IMGUI_DIR}/imgui.cpp
-#    ${IMGUI_DIR}/imgui_draw.cpp
-#    ${IMGUI_DIR}/imgui_tables.cpp
-#    ${IMGUI_DIR}/imgui_widgets.cpp
-#    ${IMGUI_DIR}/imgui_demo.cpp
-#)
+#Bibliotecas do ImGui
+add_library(imgui
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+    ${IMGUI_DIR}/imgui_demo.cpp
+)
+target_include_directories(
+    imgui PUBLIC ${IMGUI_DIR}
+)
+add_library(imgui_backend
+    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_vulkan.cpp
+)
 
-#target_include_directories(
-#    imgui PUBLIC ${IMGUI_DIR}
-#    )
-#    
-#                                                           Só adicionar IMGUI quando for usar
-#add_library(imgui_backend
-#    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
-#    ${IMGUI_DIR}/backends/imgui_impl_vulkan.cpp
-#)
-#
-#target_include_directories(imgui_backend PUBLIC
-#    ${IMGUI_DIR}
-#    ${IMGUI_DIR}/backends
-#)
+target_include_directories(imgui_backend PUBLIC
+    ${IMGUI_DIR}
+    ${IMGUI_DIR}/backends
+)
 
 # Executável principal
-add_executable(nial ${SOURCES} ${HEADERS})
+add_executable(nial ${SOURCES} )
 
 # Include paths (além do Vulkan)
 target_include_directories(nial PRIVATE ${Vulkan_INCLUDE_DIRS})
@@ -97,6 +113,6 @@ target_link_libraries(nial
         Vulkan::Vulkan
         glfw
         assimp
-#        imgui
-#        imgui_backend
+        imgui
+        imgui_backend
 )

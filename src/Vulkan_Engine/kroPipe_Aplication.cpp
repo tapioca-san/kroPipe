@@ -1,10 +1,27 @@
-#include <vulkan/vulkan_core.h>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "kroPipe_Aplication.hpp"
+
 #include "debug/kroPipe_debug.hpp"
 #include "instance/kroPipe_instance.hpp"
 #include "window/kroPipe_window.hpp"
 #include "window/kroPipe_windowSurface.hpp"
+#include "../Utils/imgui/kroPipe_imgui.hpp"
+#include "load/kroPipe_model.hpp"
+#include "window/kroPipe_windowSurface.hpp"
+#include "buffers/kroPipe_frameBuffer.hpp"
+#include "swapchain/kroPipe_swapchain.hpp"
+#include "queue/kroPipe_queuFamilies.hpp"
+#include "pipeline/kroPipe_pipeline.hpp"
+#include "instance/kroPipe_instance.hpp"
+#include "texture/kroPipe_texture.hpp"
+#include "image/kroPipe_imageView.hpp"
+#include "command/kroPipe_command.hpp"
+#include "window/kroPipe_window.hpp"
+#include "render/kroPipe_render.hpp"
+#include "device/kroPipe_device.hpp"
+#include "depth/kroPipe_depth.hpp"
+#include "debug/kroPipe_debug.hpp" 
 
 Aplication OBJECT_aplication;
 
@@ -46,6 +63,12 @@ void Aplication::init(){
     KP::ENGINE::OBJECT_command.createCommandBuffers();
     KP::ENGINE::OBJECT_render.createSyncObjects();
     
+    KP::ENGINE::imguiInterface = new KP::ENGINE::Imgui(
+        KP::ENGINE::OBJECT_window.GLFW_window, KP::ENGINE::VK_instance, KP::ENGINE::OBJECT_device.VK_PhysicalDevice, KP::ENGINE::OBJECT_device.VK_Device,
+        KP::ENGINE::OBJECT_queuFamilies.presentQueue, KP::ENGINE::OBJECT_queuFamilies.graphicsIndex, KP::ENGINE::PipelineCache,
+        KP::ENGINE::VK_renderPass
+    );
+    
     while(!glfwWindowShouldClose(KP::ENGINE::OBJECT_window.GLFW_window)) {
         glfwPollEvents();
     
@@ -69,6 +92,7 @@ void Aplication::init(){
 
 void Aplication::clean() {
     vkDeviceWaitIdle(KP::ENGINE::OBJECT_device.VK_Device);
+    KP::ENGINE::imguiInterface->cleanup();
     vkDestroyImageView(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::depthImageView, KP::ENGINE::VK_Allocator);
     vkDestroyImage(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::depthImage, KP::ENGINE::VK_Allocator);
     vkFreeMemory(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::depthImageMemory, KP::ENGINE::VK_Allocator);

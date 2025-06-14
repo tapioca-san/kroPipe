@@ -55,7 +55,7 @@ void loadModel();
 
 void renderToBuffer();
 
-void draw(VkCommandBuffer commandBuffer);
+void draw(VkCommandBuffer &commandBuffer);
 
 void cleanupVao();
 

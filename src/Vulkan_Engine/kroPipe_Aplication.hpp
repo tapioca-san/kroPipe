@@ -1,27 +1,7 @@
-#ifndef APP_HPP
-#define APP_HPP
+#ifndef KROPIPE_APP_HPP
+#define KROPIPE_APP_HPP
 
-// Inclua todos os headers dos componentes que a Aplicação principal usa
-#include "window/kroPipe_windowSurface.hpp"
-#include "buffers/kroPipe_frameBuffer.hpp"
-#include "swapchain/kroPipe_swapchain.hpp"
-#include "queue/kroPipe_queuFamilies.hpp"
-#include "pipeline/kroPipe_pipeline.hpp"
-#include "instance/kroPipe_instance.hpp"
-#include "texture/kroPipe_texture.hpp"
-#include "image/kroPipe_imageView.hpp"
-#include "command/kroPipe_command.hpp"
-#include "window/kroPipe_window.hpp"
-#include "render/kroPipe_render.hpp"
-#include "device/kroPipe_device.hpp"
-#include "depth/kroPipe_depth.hpp"
-#include "debug/kroPipe_debug.hpp" // Necessário para debugMessenger e variáveis de debug
-#include "load/kroPipe_model.hpp"
-
-// Variáveis globais/namespace relacionadas a debug (já declaradas em kroPipe_debug.hpp)
-// extern bool debug;
-// extern std::vector<std::string> logError;
-// extern KP::ENGINE::Debugger OBJECT_debugger;
+#include "../kroPipe_depedence.hpp"
 
 
 // Classe principal da Aplicação
@@ -43,4 +23,4 @@ public:
 // Objeto da Aplicação (declarado extern) - Definição única em app.cpp
 extern Aplication OBJECT_aplication;
 
-#endif//APP_HPP
+#endif//#ifndef KROPIPE_APP_HPP

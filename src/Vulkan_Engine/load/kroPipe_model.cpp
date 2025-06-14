@@ -25,7 +25,7 @@ void KP::ENGINE::Model::renderToBuffer(){
     }
 }
 
-void KP::ENGINE::Model::draw(VkCommandBuffer commandBuffer){
+void KP::ENGINE::Model::draw(VkCommandBuffer &commandBuffer){
         
     VkDeviceSize offsets[] = {0};
     for(uint16_t i = 0; i < vao.meshes.size(); i++){
