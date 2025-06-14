@@ -71,9 +71,10 @@ void Aplication::init(){
     
     while(!glfwWindowShouldClose(KP::ENGINE::OBJECT_window.GLFW_window)) {
         glfwPollEvents();
-    
-        //ImGui::Render(); 
         
+        KP::ENGINE::imguiInterface->newFrame(); 
+        KP::ENGINE::imguiInterface->drawWindows();         
+        ImGui::Render(); 
 
 
         //for(uint16_t i = 0; i < allObjects.size(); i++){

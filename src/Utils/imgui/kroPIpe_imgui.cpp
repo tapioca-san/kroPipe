@@ -43,12 +43,12 @@ namespace ENGINE {
         ImGui::End(); 
 
         ImGui::Begin("Debug Window");
-        if(ImGui::CollapsingHeader("object")){
-            //ImGui::Checkbox("FreeView", &flyMode);
-            //ImGui::Checkbox("Show FPS", &framePerSecond);
-            //ImGui::DragFloat3("Clean Color", clearColor.float32, 0.01, 0.0, 1.0);
-            
-        }
+        //if(ImGui::CollapsingHeader("object")){
+        //    ImGui::Checkbox("FreeView", &flyMode);
+        //    ImGui::Checkbox("Show FPS", &framePerSecond);
+        //    ImGui::DragFloat3("Clean Color", clearColor.float32, 0.01, 0.0, 1.0);
+        //    
+        //}
         ImGui::End(); 
         
     }
@@ -89,7 +89,7 @@ namespace ENGINE {
             pool_info.maxSets = 1000;
             pool_info.poolSizeCount = (uint32_t)(sizeof(pool_sizes) / sizeof(pool_sizes[0]));
             pool_info.pPoolSizes = pool_sizes;
-            //check_vk_result(vkCreateDescriptorPool(device, &pool_info, nullptr, &imguiPool));
+            vkCreateDescriptorPool(device, &pool_info, nullptr, &imguiPool); 
         }
 
         
