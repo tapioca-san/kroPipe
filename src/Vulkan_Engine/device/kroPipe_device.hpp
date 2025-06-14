@@ -20,26 +20,31 @@ namespace ENGINE {
 
 class Device{
 
+private:
+
+VkPhysicalDeviceFeatures    supportedFeatures = {};
+VkPhysicalDeviceProperties  deviceProperties = {}; 
+VkPhysicalDeviceFeatures    deviceFeatures = {};   
+
+VkPhysicalDevice            VK_PhysicalDevice;
+VkDevice                    VK_Device;
+
 public:
-// Graphic cards informations
-VkPhysicalDeviceProperties  deviceProperties = {}; // Inicializado
-VkPhysicalDeviceFeatures    deviceFeatures = {};   // Inicializado
-VkPhysicalDeviceFeatures    supportedFeatures = {};// Inicializado
 
-VkPhysicalDevice            VK_PhysicalDevice = VK_NULL_HANDLE;
-VkDevice                    VK_Device         = VK_NULL_HANDLE;
+VkPhysicalDeviceProperties getDeviceProperties();
+VkPhysicalDeviceFeatures getPhysicalDeviceFeatures();
+VkPhysicalDeviceFeatures getSupportedFeatures();
+VkPhysicalDevice getPhysicalDevice();
+VkDevice getDevice();
 
-
-// Funções membro da classe Device
 bool checkDeviceExtensionSupport(VkPhysicalDevice &device);
 bool isDeviceSuitable(VkPhysicalDevice device);
 void pickPhysicalDevice(VkInstance& instance);
 void createLogicalDevice();
 
-}; //CLASS DEVICE
+}; 
 
-// Objeto Device (definido inline no header - ok para ODR)
-inline KP::ENGINE::Device OBJECT_device;
+extern KP::ENGINE::Device OBJECT_device;
 
 } // namespace ENGINE
 } // namespace KP

@@ -6,7 +6,7 @@
 
 uint32_t KP::ENGINE::Vertex::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
     
-    vkGetPhysicalDeviceMemoryProperties(KP::ENGINE::OBJECT_device.VK_PhysicalDevice, &memProperties);
+    vkGetPhysicalDeviceMemoryProperties(KP::ENGINE::OBJECT_device.getPhysicalDevice(), &memProperties);
 
     for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
         if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
@@ -26,7 +26,7 @@ VkCommandBuffer KP::ENGINE::Vertex::beginSingleTimeCommands() {
     allocInfo.commandBufferCount = 1;
 
     VkCommandBuffer commandBuffer;
-    err = vkAllocateCommandBuffers(KP::ENGINE::OBJECT_device.VK_Device, &allocInfo, &commandBuffer);
+    err = vkAllocateCommandBuffers(KP::ENGINE::OBJECT_device.getDevice(), &allocInfo, &commandBuffer);
     check_vk_result(err);
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -53,7 +53,7 @@ VkCommandBuffer KP::ENGINE::Vertex::beginSingleTimeCommands() {
     err = vkQueueWaitIdle(KP::ENGINE::OBJECT_queuFamilies.graphicsQueue);
     check_vk_result(err);
     
-    vkFreeCommandBuffers(KP::ENGINE::OBJECT_device.VK_Device, commandPool, 1, &commandBuffer);
+    vkFreeCommandBuffers(KP::ENGINE::OBJECT_device.getDevice(), commandPool, 1, &commandBuffer);
 }
 
 namespace KP {

@@ -44,7 +44,7 @@ VkShaderModule Pipeline::createShaderModule(const std::vector<char>& code) {
     createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
     VkShaderModule shaderModule;
-    KP::ENGINE::err = vkCreateShaderModule(KP::ENGINE::OBJECT_device.VK_Device, &createInfo, KP::ENGINE::VK_Allocator, &shaderModule);
+    KP::ENGINE::err = vkCreateShaderModule(KP::ENGINE::OBJECT_device.getDevice(), &createInfo, KP::ENGINE::VK_Allocator, &shaderModule);
     KP::ENGINE::check_vk_result(KP::ENGINE::err, "Failed to create shader module!");
 
     return shaderModule;
@@ -66,8 +66,8 @@ shaderModule Pipeline::UseShaders(const std::string& directoryPath, const std::s
 }
 
 void Pipeline::destroyGraphicsPipeline(VkShaderModule vertShaderModule, VkShaderModule fragShaderModule){
-    vkDestroyShaderModule(KP::ENGINE::OBJECT_device.VK_Device, fragShaderModule, KP::ENGINE::VK_Allocator);
-    vkDestroyShaderModule(KP::ENGINE::OBJECT_device.VK_Device, vertShaderModule, KP::ENGINE::VK_Allocator);
+    vkDestroyShaderModule(KP::ENGINE::OBJECT_device.getDevice(), fragShaderModule, KP::ENGINE::VK_Allocator);
+    vkDestroyShaderModule(KP::ENGINE::OBJECT_device.getDevice(), vertShaderModule, KP::ENGINE::VK_Allocator);
 }
 
 void Pipeline::createPipeline(shaderModule shader){
@@ -144,7 +144,7 @@ void Pipeline::createPipeline(shaderModule shader){
     pipelineLayoutInfo.setLayoutCount = 1;
     pipelineLayoutInfo.pSetLayouts = setLayout.data();
 
-    KP::ENGINE::err = vkCreatePipelineLayout(KP::ENGINE::OBJECT_device.VK_Device, &pipelineLayoutInfo, KP::ENGINE::VK_Allocator, &pipelineLayout);
+    KP::ENGINE::err = vkCreatePipelineLayout(KP::ENGINE::OBJECT_device.getDevice(), &pipelineLayoutInfo, KP::ENGINE::VK_Allocator, &pipelineLayout);
     KP::ENGINE::check_vk_result(err, "failed to create pipeline layout!");
 
     VkGraphicsPipelineCreateInfo pipelineInfo{};
@@ -165,7 +165,7 @@ void Pipeline::createPipeline(shaderModule shader){
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
     
-    KP::ENGINE::err = vkCreateGraphicsPipelines(KP::ENGINE::OBJECT_device.VK_Device, PipelineCache, 1, &pipelineInfo, KP::ENGINE::VK_Allocator, &graphicsPipeline); // Cria o membro graphicsPipeline
+    KP::ENGINE::err = vkCreateGraphicsPipelines(KP::ENGINE::OBJECT_device.getDevice(), PipelineCache, 1, &pipelineInfo, KP::ENGINE::VK_Allocator, &graphicsPipeline); // Cria o membro graphicsPipeline
     KP::ENGINE::check_vk_result(KP::ENGINE::err, "failed to create graphics pipeline!");
 
 }
@@ -175,8 +175,8 @@ void Pipeline::createGraphicsPipeline() {
 
     createPipeline(shader);
 
-    vkDestroyShaderModule(KP::ENGINE::OBJECT_device.VK_Device, shader.fragShaderModule, KP::ENGINE::VK_Allocator);
-    vkDestroyShaderModule(KP::ENGINE::OBJECT_device.VK_Device, shader.vertShaderModule, KP::ENGINE::VK_Allocator);
+    vkDestroyShaderModule(KP::ENGINE::OBJECT_device.getDevice(), shader.fragShaderModule, KP::ENGINE::VK_Allocator);
+    vkDestroyShaderModule(KP::ENGINE::OBJECT_device.getDevice(), shader.vertShaderModule, KP::ENGINE::VK_Allocator);
 
 
 }
@@ -234,16 +234,16 @@ void Pipeline::createRenderPass() {
     renderPassInfo.dependencyCount = 1;
     renderPassInfo.pDependencies = &dependency;
 
-    KP::ENGINE::err = vkCreateRenderPass(KP::ENGINE::OBJECT_device.VK_Device, &renderPassInfo, KP::ENGINE::VK_Allocator, &VK_renderPass); // Cria o membro VK_renderPass (que é extern)
+    KP::ENGINE::err = vkCreateRenderPass(KP::ENGINE::OBJECT_device.getDevice(), &renderPassInfo, KP::ENGINE::VK_Allocator, &VK_renderPass); // Cria o membro VK_renderPass (que é extern)
     check_vk_result(err, "failed to create render pass!");
 }
 
 void Pipeline::CleanUpPipeline(){
     // Usando membros da classe e OBJECT_device, VK_Allocator do namespace
-    vkDestroyPipeline(KP::ENGINE::OBJECT_device.VK_Device, graphicsPipeline, KP::ENGINE::VK_Allocator); 
-    vkDestroyPipelineCache(KP::ENGINE::OBJECT_device.VK_Device, PipelineCache, KP::ENGINE::VK_Allocator); 
-    vkDestroyPipelineLayout(KP::ENGINE::OBJECT_device.VK_Device, pipelineLayout, KP::ENGINE::VK_Allocator); 
-    vkDestroyRenderPass(KP::ENGINE::OBJECT_device.VK_Device, VK_renderPass, KP::ENGINE::VK_Allocator); 
+    vkDestroyPipeline(KP::ENGINE::OBJECT_device.getDevice(), graphicsPipeline, KP::ENGINE::VK_Allocator); 
+    vkDestroyPipelineCache(KP::ENGINE::OBJECT_device.getDevice(), PipelineCache, KP::ENGINE::VK_Allocator); 
+    vkDestroyPipelineLayout(KP::ENGINE::OBJECT_device.getDevice(), pipelineLayout, KP::ENGINE::VK_Allocator); 
+    vkDestroyRenderPass(KP::ENGINE::OBJECT_device.getDevice(), VK_renderPass, KP::ENGINE::VK_Allocator); 
 }
 
 } // namespace ENGINE

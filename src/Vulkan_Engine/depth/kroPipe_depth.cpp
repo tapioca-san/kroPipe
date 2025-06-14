@@ -21,7 +21,7 @@ VkFormat Depth::findSupportedFormat(const std::vector<VkFormat>& candidates, VkI
     // Usando OBJECT_device do namespace e fatalMessage do namespace
     for (VkFormat format : candidates) {
         VkFormatProperties props;
-        vkGetPhysicalDeviceFormatProperties(KP::ENGINE::OBJECT_device.VK_PhysicalDevice, format, &props);
+        vkGetPhysicalDeviceFormatProperties(KP::ENGINE::OBJECT_device.getPhysicalDevice(), format, &props);
 
         if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) {
             return format;

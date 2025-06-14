@@ -26,7 +26,7 @@ void FrameBuffer::createFrameBuffers() {
         framebufferInfo.height = swapChainExtent.height;
         framebufferInfo.layers = 1;
 
-        if (vkCreateFramebuffer(KP::ENGINE::OBJECT_device.VK_Device, &framebufferInfo, KP::ENGINE::VK_Allocator, &KP::ENGINE::swapChainFramebuffers[i]) != VK_SUCCESS) {
+        if (vkCreateFramebuffer(KP::ENGINE::OBJECT_device.getDevice(), &framebufferInfo, KP::ENGINE::VK_Allocator, &KP::ENGINE::swapChainFramebuffers[i]) != VK_SUCCESS) {
             throw std::runtime_error(KP::ENGINE::fatalMessage("failed to create framebuffer!"));
         }
     }
@@ -34,7 +34,7 @@ void FrameBuffer::createFrameBuffers() {
 
 void FrameBuffer::CleanUpFramerBuffer(){
     for (auto framebuffer : KP::ENGINE::swapChainFramebuffers) {
-        vkDestroyFramebuffer(KP::ENGINE::OBJECT_device.VK_Device, framebuffer, KP::ENGINE::VK_Allocator);
+        vkDestroyFramebuffer(KP::ENGINE::OBJECT_device.getDevice(), framebuffer, KP::ENGINE::VK_Allocator);
     }
     KP::ENGINE::swapChainFramebuffers.clear(); 
 }

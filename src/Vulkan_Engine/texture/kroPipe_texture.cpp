@@ -16,23 +16,23 @@ void KP::ENGINE::createImage(uint32_t width, uint32_t height, VkFormat format, V
     imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
     imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-    if (vkCreateImage(KP::ENGINE::OBJECT_device.VK_Device, &imageInfo, nullptr, &image) != VK_SUCCESS) {
+    if (vkCreateImage(KP::ENGINE::OBJECT_device.getDevice(), &imageInfo, nullptr, &image) != VK_SUCCESS) {
         throw std::runtime_error("failed to create image!");
     }
 
     VkMemoryRequirements memRequirements;
-    vkGetImageMemoryRequirements(KP::ENGINE::OBJECT_device.VK_Device, image, &memRequirements);
+    vkGetImageMemoryRequirements(KP::ENGINE::OBJECT_device.getDevice(), image, &memRequirements);
 
     VkMemoryAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocInfo.allocationSize = memRequirements.size;
     allocInfo.memoryTypeIndex = KP::ENGINE::OBJECT_vertex.findMemoryType(memRequirements.memoryTypeBits, properties);
 
-    if (vkAllocateMemory(KP::ENGINE::OBJECT_device.VK_Device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
+    if (vkAllocateMemory(KP::ENGINE::OBJECT_device.getDevice(), &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
         throw std::runtime_error("failed to allocate image memory!");
     }
 
-    vkBindImageMemory(KP::ENGINE::OBJECT_device.VK_Device, image, imageMemory, 0);
+    vkBindImageMemory(KP::ENGINE::OBJECT_device.getDevice(), image, imageMemory, 0);
 }
 
 
@@ -128,9 +128,9 @@ void KP::ENGINE::createTextureImage() {
     KP::ENGINE::createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
     void* data;
-    vkMapMemory(KP::ENGINE::OBJECT_device.VK_Device, stagingBufferMemory, 0, imageSize, 0, &data);
+    vkMapMemory(KP::ENGINE::OBJECT_device.getDevice(), stagingBufferMemory, 0, imageSize, 0, &data);
     memcpy(data, pixels, static_cast<size_t>(imageSize));
-    vkUnmapMemory(KP::ENGINE::OBJECT_device.VK_Device, stagingBufferMemory);
+    vkUnmapMemory(KP::ENGINE::OBJECT_device.getDevice(), stagingBufferMemory);
 
     stbi_image_free(pixels);
 
@@ -140,8 +140,8 @@ void KP::ENGINE::createTextureImage() {
     copyBufferToImage(stagingBuffer, textureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
     transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-    vkDestroyBuffer(KP::ENGINE::OBJECT_device.VK_Device, stagingBuffer, nullptr);
-    vkFreeMemory(KP::ENGINE::OBJECT_device.VK_Device, stagingBufferMemory, nullptr);
+    vkDestroyBuffer(KP::ENGINE::OBJECT_device.getDevice(), stagingBuffer, nullptr);
+    vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), stagingBufferMemory, nullptr);
 }
 
 
@@ -158,7 +158,7 @@ VkImageView KP::ENGINE::createImageView(VkImage image, VkFormat format, VkImageA
     viewInfo.subresourceRange.layerCount = 1;
 
     VkImageView imageView;
-    if (vkCreateImageView(KP::ENGINE::OBJECT_device.VK_Device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
+    if (vkCreateImageView(KP::ENGINE::OBJECT_device.getDevice(), &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
         throw std::runtime_error("failed to create texture image view!");
     }
 
@@ -177,7 +177,7 @@ void KP::ENGINE::createTextureImageView(){
 void KP::ENGINE::createTextureSampler() {
 
     VkPhysicalDeviceProperties properties{};
-    vkGetPhysicalDeviceProperties(KP::ENGINE::OBJECT_device.VK_PhysicalDevice, &properties);
+    vkGetPhysicalDeviceProperties(KP::ENGINE::OBJECT_device.getPhysicalDevice(), &properties);
     
     VkSamplerCreateInfo samplerInfo{};
     samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -199,7 +199,7 @@ void KP::ENGINE::createTextureSampler() {
     samplerInfo.anisotropyEnable = VK_FALSE;
     samplerInfo.maxAnisotropy = 1.0f;
 
-    if (vkCreateSampler(KP::ENGINE::OBJECT_device.VK_Device, &samplerInfo, nullptr, &textureSampler) != VK_SUCCESS) {
+    if (vkCreateSampler(KP::ENGINE::OBJECT_device.getDevice(), &samplerInfo, nullptr, &textureSampler) != VK_SUCCESS) {
         throw std::runtime_error("failed to create texture sampler!");
     }
 

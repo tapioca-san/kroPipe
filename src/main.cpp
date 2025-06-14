@@ -3,6 +3,7 @@
 int main() {
     try {
         OBJECT_aplication.init();
+        OBJECT_aplication.run();
 
     } catch (const std::exception& e) {
         std::cerr << "Fatal Error: " << e.what() << std::endl;

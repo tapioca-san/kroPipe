@@ -23,7 +23,7 @@ void ImageView::createImageViews() {
 void ImageView::DestroyImageview(){
     // Usando swapChainImageViews e OBJECT_device, VK_Allocator do namespace
     for (auto imageView : KP::ENGINE::swapChainImageViews) {
-        vkDestroyImageView(KP::ENGINE::OBJECT_device.VK_Device, imageView, KP::ENGINE::VK_Allocator);
+        vkDestroyImageView(KP::ENGINE::OBJECT_device.getDevice(), imageView, KP::ENGINE::VK_Allocator);
     }
     KP::ENGINE::swapChainImageViews.clear(); // Limpar o vector após destruir
 }

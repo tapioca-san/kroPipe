@@ -92,7 +92,7 @@ VkExtent2D SwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilit
 // Definição dos métodos de criação e limpeza do Swap Chain
 void SwapChain::createSwapChain() {
     // Usando membros da classe e objetos/funções do namespace KP::ENGINE
-    SwapChainSupportDetails swapChainSupport = querySwapChainSupport(KP::ENGINE::OBJECT_device.VK_PhysicalDevice);
+    SwapChainSupportDetails swapChainSupport = querySwapChainSupport(KP::ENGINE::OBJECT_device.getPhysicalDevice());
 
     VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats); // Chamando static member
     VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes); // Chamando static member
@@ -115,7 +115,7 @@ void SwapChain::createSwapChain() {
     createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
     // Usando objeto/funções do namespace
-    KP::ENGINE::QueueFamilyIndices indices = KP::ENGINE::OBJECT_queuFamilies.findQueuFamilies(KP::ENGINE::OBJECT_device.VK_PhysicalDevice);
+    KP::ENGINE::QueueFamilyIndices indices = KP::ENGINE::OBJECT_queuFamilies.findQueuFamilies(KP::ENGINE::OBJECT_device.getPhysicalDevice());
     uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
 
     if (indices.graphicsFamily != indices.presentFamily) {
@@ -141,13 +141,13 @@ void SwapChain::createSwapChain() {
     createInfo.oldSwapchain = VK_NULL_HANDLE; // Não recriando a partir de um antigo neste método
 
     // Usando err, VK_Allocator, check_vk_result do namespace
-    KP::ENGINE::err = vkCreateSwapchainKHR(KP::ENGINE::OBJECT_device.VK_Device, &createInfo, KP::ENGINE::VK_Allocator, &swapChain); // Cria o membro swapChain
+    KP::ENGINE::err = vkCreateSwapchainKHR(KP::ENGINE::OBJECT_device.getDevice(), &createInfo, KP::ENGINE::VK_Allocator, &swapChain); // Cria o membro swapChain
     KP::ENGINE::check_vk_result(KP::ENGINE::err, "failed to create swap chain!");
 
     // Obter imagens do swap chain (usando swapChainImages do namespace)
-    vkGetSwapchainImagesKHR(KP::ENGINE::OBJECT_device.VK_Device, swapChain, &imageCount, nullptr);
+    vkGetSwapchainImagesKHR(KP::ENGINE::OBJECT_device.getDevice(), swapChain, &imageCount, nullptr);
     KP::ENGINE::swapChainImages.resize(imageCount);
-    KP::ENGINE::err = vkGetSwapchainImagesKHR(KP::ENGINE::OBJECT_device.VK_Device, swapChain, &imageCount, KP::ENGINE::swapChainImages.data());
+    KP::ENGINE::err = vkGetSwapchainImagesKHR(KP::ENGINE::OBJECT_device.getDevice(), swapChain, &imageCount, KP::ENGINE::swapChainImages.data());
     KP::ENGINE::check_vk_result(KP::ENGINE::err, "Failed to get swap chain images"); // Adicionado mensagem de erro
 
     // Atualizar variáveis de formato e extent (usando swapChainImageFormat, swapChainExtent do namespace)
@@ -165,22 +165,22 @@ void SwapChain::createSwapChain() {
 
 void SwapChain::cleanupSwapChain(){
     // Usando objetos/variáveis/alocador do namespace KP::ENGINE
-    vkDestroyImageView(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::depthImageView, KP::ENGINE::VK_Allocator); // Usando depthImageView do namespace
-    vkDestroyImage(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::depthImage, KP::ENGINE::VK_Allocator);       // Usando depthImage do namespace
-    vkFreeMemory(KP::ENGINE::OBJECT_device.VK_Device, KP::ENGINE::depthImageMemory, KP::ENGINE::VK_Allocator); // Usando depthImageMemory do namespace
+    vkDestroyImageView(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::depthImageView, KP::ENGINE::VK_Allocator); // Usando depthImageView do namespace
+    vkDestroyImage(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::depthImage, KP::ENGINE::VK_Allocator);       // Usando depthImage do namespace
+    vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::depthImageMemory, KP::ENGINE::VK_Allocator); // Usando depthImageMemory do namespace
 
     // Usando swapChainFramebuffers do namespace
     for (auto framebuffer : KP::ENGINE::swapChainFramebuffers) {
-        vkDestroyFramebuffer(KP::ENGINE::OBJECT_device.VK_Device, framebuffer, KP::ENGINE::VK_Allocator);
+        vkDestroyFramebuffer(KP::ENGINE::OBJECT_device.getDevice(), framebuffer, KP::ENGINE::VK_Allocator);
     }
 
     // Usando swapChainImageViews do namespace
     for (auto imageView : KP::ENGINE::swapChainImageViews) {
-        vkDestroyImageView(KP::ENGINE::OBJECT_device.VK_Device, imageView, KP::ENGINE::VK_Allocator);
+        vkDestroyImageView(KP::ENGINE::OBJECT_device.getDevice(), imageView, KP::ENGINE::VK_Allocator);
     }
 
     // Destroi o membro swapChain
-    vkDestroySwapchainKHR(KP::ENGINE::OBJECT_device.VK_Device, swapChain, KP::ENGINE::VK_Allocator);
+    vkDestroySwapchainKHR(KP::ENGINE::OBJECT_device.getDevice(), swapChain, KP::ENGINE::VK_Allocator);
 }
 
 void SwapChain::recreateSwapChain(){
@@ -193,7 +193,7 @@ void SwapChain::recreateSwapChain(){
     }
 
     // Usando OBJECT_device do namespace
-    vkDeviceWaitIdle(KP::ENGINE::OBJECT_device.VK_Device);
+    vkDeviceWaitIdle(KP::ENGINE::OBJECT_device.getDevice());
 
     cleanupSwapChain(); // Chamando método da classe
 

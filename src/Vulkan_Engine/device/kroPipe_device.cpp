@@ -8,7 +8,24 @@
 namespace KP {
 namespace ENGINE {
 
-// Definição dos métodos da classe Device
+
+VkPhysicalDeviceProperties Device::getDeviceProperties(){
+    return deviceProperties;
+}
+VkPhysicalDeviceFeatures Device::getPhysicalDeviceFeatures(){
+    return deviceFeatures;
+}
+VkPhysicalDeviceFeatures Device::getSupportedFeatures(){
+    return supportedFeatures;
+}
+VkPhysicalDevice Device::getPhysicalDevice(){
+    return VK_PhysicalDevice;
+}
+VkDevice Device::getDevice(){
+    return VK_Device;
+}
+
+
 bool Device::checkDeviceExtensionSupport(VkPhysicalDevice &device) {
     uint32_t extensionCount;
     vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
@@ -102,13 +119,16 @@ void Device::createLogicalDevice() {
         createInfo.enabledLayerCount = 0;
     }
 
-    if (vkCreateDevice(VK_PhysicalDevice, &createInfo, KP::ENGINE::VK_Allocator, &VK_Device) != VK_SUCCESS) {
+    if (vkCreateDevice(VK_PhysicalDevice, &createInfo, KP::ENGINE::VK_Allocator, &KP::ENGINE::OBJECT_device.VK_Device) != VK_SUCCESS) {
         throw std::runtime_error(KP::ENGINE::fatalMessage("failed to create logical device!")); 
     }
 
     // queue gráfica guardada na queue families
-    vkGetDeviceQueue(VK_Device, indices.graphicsFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.graphicsQueue);
-    vkGetDeviceQueue(VK_Device, indices.presentFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.presentQueue); }
+    vkGetDeviceQueue(KP::ENGINE::OBJECT_device.getDevice(), indices.graphicsFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.graphicsQueue);
+    vkGetDeviceQueue(KP::ENGINE::OBJECT_device.getDevice(), indices.presentFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.presentQueue);
+}
+
+KP::ENGINE::Device OBJECT_device;
 
 } // namespace ENGINE
 } // namespace KP

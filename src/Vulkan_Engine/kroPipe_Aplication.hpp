@@ -15,8 +15,8 @@ public:
 
     void clean();
     // Métodos de limpeza e loop principal (adicione conforme necessário)
-    // void run();
-    // void cleanup();
+    
+    void run();
 
 };
 
