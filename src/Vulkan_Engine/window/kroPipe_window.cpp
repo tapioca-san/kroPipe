@@ -20,7 +20,7 @@ KP::ENGINE::Window::Window(int width, int height, const std::string& name)
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); 
     GLFW_window = glfwCreateWindow(this->width, this->height, name.c_str(), nullptr, nullptr);
     glfwSetWindowUserPointer(GLFW_window, this); // Associa este objeto Window à janela GLFW para callbacks
-
+    glfwSetInputMode(GLFW_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 // Definição do destrutor da classe Window

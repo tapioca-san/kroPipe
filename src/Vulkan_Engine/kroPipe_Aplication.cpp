@@ -5,6 +5,7 @@
 #include "../Utils/camera/kroPipe_camera.hpp"
 #include "../Utils/object/kroPipe_object.hpp"
 #include "window/kroPipe_windowSurface.hpp"
+#include "../Utils/input/kroPipe_input.hpp"
 #include "../Utils/imgui/kroPipe_imgui.hpp"
 #include "window/kroPipe_windowSurface.hpp"
 #include "buffers/kroPipe_frameBuffer.hpp"
@@ -70,16 +71,21 @@ void Aplication::init(){
         KP::ENGINE::VK_renderPass
     );
     
-    KP::ENGINE::createEntity(KP::ENGINE::cameraPlayer.Position + glm::vec3(1.0f,1.0f,1.0f), 0.0f, true);
+    KP::UTILS::createEntity(KP::ENGINE::cameraPlayer.Position + glm::vec3(1.0f,1.0f,1.0f), 0.0f, true);
+    KP::UTILS::loadObjects(KP::UTILS::sortedID);
     //create
-    KP::ENGINE::loadObjects(KP::ENGINE::sortedID);
 
 }
 
 
 void Aplication::run(){
     while(!glfwWindowShouldClose(KP::ENGINE::OBJECT_window.GLFW_window)) {
+        float currentTime = glfwGetTime();
+        deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+        
         glfwPollEvents();
+        KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), *KP::UTILS::allObjects[KP::UTILS::sortedID[0]], deltaTime);
         
         KP::ENGINE::imguiInterface->newFrame(); 
         KP::ENGINE::imguiInterface->drawWindows();         
@@ -89,12 +95,8 @@ void Aplication::run(){
         //for(uint16_t i = 0; i < allObjects.size(); i++){
         //    kroPipe::gravityForce(allObjects[sortedID[i]], deltaTime);
         //db}
-        float currentTime = glfwGetTime();
-        deltaTime = currentTime - lastTime;
-        lastTime = currentTime;
 
         KP::ENGINE::OBJECT_render.drawFrame();
-        glfwPollEvents();
     }
 }
 

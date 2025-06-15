@@ -4,10 +4,9 @@
 #include "../../kroPipe_depedence.hpp"
 #include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
 #include "../../Vulkan_Engine/load/kroPipe_model.hpp"
-#include <cstdint>
 
 namespace KP {
-namespace ENGINE {
+namespace UTILS {
 
 
     struct ObjectData {
@@ -17,7 +16,7 @@ namespace ENGINE {
         glm::vec3 Scale{};
         glm::vec3 velocity{};
         
-        VAO *vao;
+        KP::ENGINE::VAO *vao;
 
         std::string modelPath;
 
@@ -49,7 +48,7 @@ namespace ENGINE {
     public:
         ObjectData data;
 
-        Object(glm::vec3 position, float floorPos, bool is_myself, VAO *vao = nullptr);
+        Object(glm::vec3 position, float floorPos, bool is_myself, KP::ENGINE::VAO *vao = nullptr);
 
         void DrawTransformUI(std::string &headerName);
 
@@ -59,11 +58,11 @@ namespace ENGINE {
     };
 
     void loadObjects(std::vector<int> &IDs);    
-    std::vector<int> entityLoad(std::vector<KP::ENGINE::Object*> allObjects);
+    std::vector<int> entityLoad(std::vector<KP::UTILS::Object*> allObjects);
     int createEntity(glm::vec3 position, float floorPos, bool is_myself);
     
     extern uint16_t lastID;
-    extern std::vector<KP::ENGINE::Object*> allObjects;
+    extern std::vector<KP::UTILS::Object*> allObjects;
     extern std::vector<int> sortedID;
 
     

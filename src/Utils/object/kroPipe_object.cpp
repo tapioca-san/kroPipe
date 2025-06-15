@@ -2,9 +2,9 @@
 
 
 namespace KP {
-namespace ENGINE {
+namespace UTILS {
 
-std::vector<KP::ENGINE::Object*> allObjects;
+std::vector<KP::UTILS::Object*> allObjects;
 std::vector<int> sortedID;
 uint16_t lastID = 0;
 
@@ -64,7 +64,7 @@ void Object::calculateAABB(ObjectData& object) {
     }
 }
 ObjectData data;
-Object::Object(glm::vec3 position, float floorPos, bool is_myself, VAO *vao) {
+Object::Object(glm::vec3 position, float floorPos, bool is_myself, KP::ENGINE::VAO *vao) {
     data.Position = position;
     data.floorPos = floorPos;
     data.floorPoslowest = floorPos;
@@ -96,14 +96,14 @@ void Object::DrawTransformUI(std::string &headerName){
 
 // glm::vec3 position, float floorPos
 int createEntity(glm::vec3 position, float floorPos, bool is_myself) {
-    KP::ENGINE::Object* player = new KP::ENGINE::Object(position, floorPos, is_myself);
+    KP::UTILS::Object* player = new KP::UTILS::Object(position, floorPos, is_myself);
     allObjects.push_back(player);
     // size_t numVertices = sizeof(vertices) / sizeof(vertices[0]) /2 8;
     // calculateAABB(player, vertices, numVertices);
     return lastID; 
 }
 
-std::vector<int> entityLoad(std::vector<KP::ENGINE::Object*> allObjects) {
+std::vector<int> entityLoad(std::vector<KP::UTILS::Object*> allObjects) {
     if (allObjects.empty()) {
         throw std::runtime_error("entityLoad error: no objects available");
     }
@@ -112,12 +112,12 @@ std::vector<int> entityLoad(std::vector<KP::ENGINE::Object*> allObjects) {
     // sorted[1+] = other objects
 
     int mainPlayerCount = 0;
-    KP::ENGINE::Object *mainPlayer = allObjects[0];
+    KP::UTILS::Object *mainPlayer = allObjects[0];
 
     std::vector<int> sortedIDs;
     std::vector<int> otherIDs;
 
-    for (KP::ENGINE::Object *object : allObjects) {
+    for (KP::UTILS::Object *object : allObjects) {
         if (object->data.is_myself && mainPlayerCount == 0) {
             mainPlayer = object;
             mainPlayerCount++;

@@ -31,7 +31,7 @@ void KP::ENGINE::Model::draw(VkCommandBuffer &commandBuffer){
     for(uint16_t i = 0; i < vao.meshes.size(); i++){
         VkBuffer vertexBuffers[] = {vao.vertexBuffers[i]};
         
-        //UboShader(currentFrame);
+        UboShader(currentFrame);
 
         vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
         vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0, VK_INDEX_TYPE_UINT16);
@@ -167,7 +167,7 @@ KP::ENGINE::Mesh KP::ENGINE::Model::processMesh(aiMesh* mesh, const aiScene* sce
                 //vector.x = mesh->mTangents[i].x;
                 //vector.y = mesh->mTangents[i].y;
                 //vector.z = mesh->mTangents[i].z;
-                //vertex.Tangent = vector;              Não funcionando e nã sei porquê. da segmant fault. 
+                //vertex.Tangent = vector;              Não funcionando e não sei porquê. da segmant fault. 
                 //// bitangent
                 //vector.x = mesh->mBitangents[i].x;
                 //vector.y = mesh->mBitangents[i].y;
