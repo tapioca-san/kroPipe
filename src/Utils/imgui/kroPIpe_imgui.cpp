@@ -106,6 +106,12 @@ namespace ENGINE {
         }
 
         {   // CONFIGURATION
+            ImFont* terminalFont = io->Fonts->AddFontFromFileTTF("assets/fonts/Terminus.ttf", 18.0f);
+            if (!terminalFont) {
+                std::cerr << "[ERROR] Falha ao carregar fonte do terminal." << std::endl;
+            } else {
+                io->FontDefault = terminalFont;
+            }
             ImGui::StyleColorsDark();
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
