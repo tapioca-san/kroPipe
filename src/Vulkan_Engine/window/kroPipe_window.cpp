@@ -1,5 +1,6 @@
 #include "../../Utils/camera/kroPipe_camera.hpp"
 #include "../instance/kroPipe_instance.hpp"
+#include "../render/kroPipe_render.hpp"
 #include "../debug/kroPipe_debug.hpp" 
 #include "kroPipe_windowSurface.hpp"
 #include "kroPipe_window.hpp"
@@ -13,6 +14,8 @@ KP::ENGINE::Window OBJECT_window(800, 600, "KroPipe Window");
 } // namespace ENGINE
 } // namespace KP
 
+void framebufferResizeCallback(GLFWwindow* window, int width, int height);
+
 KP::ENGINE::Window::Window(int width, int height, const std::string& name)
     : width(width), height(height), name(name) {
 
@@ -22,6 +25,7 @@ KP::ENGINE::Window::Window(int width, int height, const std::string& name)
     GLFW_window = glfwCreateWindow(this->width, this->height, name.c_str(), nullptr, nullptr);
     glfwSetWindowUserPointer(GLFW_window, this); // Associa este objeto Window à janela GLFW para callbacks
     //glfwSetInputMode(GLFW_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetFramebufferSizeCallback(KP::ENGINE::OBJECT_window.getGlfwWindow(), framebufferResizeCallback);
 }
 
 // Definição do destrutor da classe Window
@@ -57,4 +61,8 @@ void KP::ENGINE::Window::mouse_callback(GLFWwindow* window, double xposIn, doubl
 void KP::ENGINE::Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     KP::UTILS::cameraPlayer.ProcessMouseScroll(static_cast<float>(yoffset));
+}
+
+void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
+    KP::ENGINE::framebufferResized = true;
 }

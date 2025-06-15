@@ -28,6 +28,7 @@
 Aplication OBJECT_aplication;
 
 
+
 float deltaTime;
 float lastTime = glfwGetTime();
 
@@ -64,6 +65,7 @@ void Aplication::init(){
     
     KP::ENGINE::OBJECT_command.createCommandBuffers();
     KP::ENGINE::OBJECT_render.createSyncObjects();
+
     
     KP::ENGINE::OBJECT_imguiInterface = new KP::ENGINE::Imgui(
         KP::ENGINE::OBJECT_window.GLFW_window, KP::ENGINE::VK_instance, KP::ENGINE::OBJECT_device.getPhysicalDevice(), KP::ENGINE::OBJECT_device.getDevice(),
@@ -83,7 +85,8 @@ void Aplication::run(){
         float currentTime = glfwGetTime();
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
-        
+
+
         glfwPollEvents();
         KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), *KP::UTILS::allObjects[KP::UTILS::sortedID[0]], deltaTime);
         
