@@ -32,7 +32,6 @@ void KP::ENGINE::Model::draw(VkCommandBuffer &commandBuffer){
         VkBuffer vertexBuffers[] = {vao.vertexBuffers[i]};
         
         UboShader(currentFrame);
-
         vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
         vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0, VK_INDEX_TYPE_UINT16);
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, KP::ENGINE::pipelineLayout, 0, 1, &UBO.uniformBuffers.descriptorSets[KP::ENGINE::currentFrame], 0, nullptr);

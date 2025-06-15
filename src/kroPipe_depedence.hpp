@@ -37,5 +37,12 @@
 #include <array>
 #include <chrono>
 #include <memory>
+#include <pty.h>
+#include <sys/wait.h>
+#include <poll.h>
+#include <thread>
+#include <atomic>
+#include <mutex>
+#include <pwd.h>
 
 #endif//KROPIPE_DEPEDENCE_HPP

@@ -7,7 +7,7 @@
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
 
 namespace KP {
-namespace ENGINE {
+namespace UTILS {
 
 
 enum Camera_Movement {
@@ -48,7 +48,7 @@ public:
     // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
     void ProcessKeyboard(Camera_Movement direction, float deltaTime);
     // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
-    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch);
+    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
     // processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
     void ProcessMouseScroll(float yoffset);
 private:
@@ -56,9 +56,9 @@ private:
     void updateCameraVectors();
 };
 
-extern Camera cameraPlayer;
+extern KP::UTILS::Camera cameraPlayer;
 
-} // namespace ENGINE
+} // namespace UTILS
 } // namespace KP
 
 #endif

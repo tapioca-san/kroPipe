@@ -1,4 +1,5 @@
 #include "../../Utils/object/kroPipe_object.hpp"
+#include "../../Utils/camera/kroPipe_camera.hpp"
 #include "../texture/kroPipe_texture.hpp"
 #include "../command/kroPipe_command.hpp"
 #include "../device/kroPipe_device.hpp"
@@ -6,7 +7,6 @@
 #include "../render/kroPipe_render.hpp"
 #include "../debug/kroPipe_debug.hpp"
 #include "kroPipe_buffer.hpp"
-#include "../camera/kroPipe_camera.hpp"
 
 namespace KP {
 namespace ENGINE {
@@ -119,12 +119,12 @@ void KP::ENGINE::UboStorage::updateUniformBuffer(KP::ENGINE::UniformBuffers &uni
     ubo.model = glm::rotate(ubo.model, glm::radians(KP::UTILS::allObjects[KP::UTILS::sortedID[objectId]]->data.Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f)); // rotation for Z
     ubo.model = glm::scale(ubo.model, glm::vec3(KP::UTILS::allObjects[KP::UTILS::sortedID[objectId]]->data.Scale));
     if (false) {
-        ubo.view = cameraPlayer.GetViewMatrix();
+        ubo.view = KP::UTILS::cameraPlayer.GetViewMatrix();
     }
     else{
-        ubo.view = glm::lookAt(glm::vec3(KP::UTILS::allObjects[KP::UTILS::sortedID[0]]->data.Position.x, KP::UTILS::allObjects[KP::UTILS::sortedID[0]]->data.Position.y, KP::UTILS::allObjects[KP::UTILS::sortedID[0]]->data.Position.z), glm::vec3(KP::UTILS::allObjects[KP::UTILS::sortedID[0]]->data.Position.x, KP::UTILS::allObjects[KP::UTILS::sortedID[0]]->data.Position.y, KP::UTILS::allObjects[KP::UTILS::sortedID[0]]->data.Position.z) + cameraPlayer.Front, cameraPlayer.Up);
+        ubo.view = glm::lookAt(glm::vec3(KP::UTILS::allObjects[KP::UTILS::sortedID[0]]->data.Position.x, KP::UTILS::allObjects[KP::UTILS::sortedID[0]]->data.Position.y, KP::UTILS::allObjects[KP::UTILS::sortedID[0]]->data.Position.z), glm::vec3(KP::UTILS::allObjects[KP::UTILS::sortedID[0]]->data.Position.x, KP::UTILS::allObjects[KP::UTILS::sortedID[0]]->data.Position.y, KP::UTILS::allObjects[KP::UTILS::sortedID[0]]->data.Position.z) + KP::UTILS::cameraPlayer.Front, KP::UTILS::cameraPlayer.Up);
     }
-    ubo.proj = glm::perspective(glm::radians(cameraPlayer.Zoom), (float)swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 100.0f);
+    ubo.proj = glm::perspective(glm::radians(KP::UTILS::cameraPlayer.Zoom), (float)swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 100.0f);
     ubo.proj[1][1] *= -1;
     
     memcpy(uniformBuffers.uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));

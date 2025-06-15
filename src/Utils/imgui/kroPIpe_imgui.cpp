@@ -4,6 +4,7 @@
 #include "../../Vulkan_Engine/instance/kroPipe_instance.hpp"
 #include "../../Vulkan_Engine/window/kroPipe_window.hpp"
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
+#include "../terminal/kroPipe_terminal.hpp"
 
 namespace KP {
 namespace ENGINE {
@@ -30,26 +31,29 @@ namespace ENGINE {
     }
 
     void Imgui::drawWindows(){ // Use to draw in the while loop and see on the app
-       
+        
+        KP::UTILS::OBJECT_terminal.ShowTerminal();
+        /*
         ImGui::Begin("Objects Configuration Window");
-        //for(uint32_t i = 0; i < allObjects.size(); i++){
-        //    ImGui::PushID(i);
-        //    std::string headerName = "Object " + std::to_string(i);
-        //    ImGui::PushID(i);
-        //    allObjects[sortedID[i]]->DrawTransformUI(headerName);
-        //    ImGui::PopID();
-        //    ImGui::PopID();
-        //}
+        for(uint32_t i = 0; i < allObjects.size(); i++){
+            ImGui::PushID(i);
+            std::string headerName = "Object " + std::to_string(i);
+            ImGui::PushID(i);
+            allObjects[sortedID[i]]->DrawTransformUI(headerName);
+            ImGui::PopID();
+            ImGui::PopID();
+        }
         ImGui::End(); 
 
         ImGui::Begin("Debug Window");
-        //if(ImGui::CollapsingHeader("object")){
-        //    ImGui::Checkbox("FreeView", &flyMode);
-        //    ImGui::Checkbox("Show FPS", &framePerSecond);
-        //    ImGui::DragFloat3("Clean Color", clearColor.float32, 0.01, 0.0, 1.0);
-        //    
-        //}
+        if(ImGui::CollapsingHeader("object")){
+            ImGui::Checkbox("FreeView", &flyMode);
+            ImGui::Checkbox("Show FPS", &framePerSecond);
+            ImGui::DragFloat3("Clean Color", clearColor.float32, 0.01, 0.0, 1.0);
+            
+        }
         ImGui::End(); 
+        */
         
     }
 
@@ -131,7 +135,7 @@ namespace ENGINE {
     VkCommandBuffer beginSingleTimeCommands();
     void endSingleTimeCommands(VkCommandBuffer cmd);
     
-    KP::ENGINE::Imgui* imguiInterface = nullptr;
+    KP::ENGINE::Imgui* OBJECT_imguiInterface = nullptr;
     
 
 

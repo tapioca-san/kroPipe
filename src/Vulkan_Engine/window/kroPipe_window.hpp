@@ -1,6 +1,7 @@
 #ifndef KROPIPE_WINDOW_HPP
 #define KROPIPE_WINDOW_HPP
 
+//#include "../swapchain/kroPipe_swapchain.hpp"
 #include "../../kroPipe_depedence.hpp"
 
 namespace KP {
@@ -13,6 +14,10 @@ private:
     int width;
     int height;
     std::string name; 
+
+    float lastX = 0;
+    float lastY = 0;
+    bool firstMouse = true;
 
 public:
  
@@ -27,6 +32,10 @@ public:
     int getHeight() const { return height; }
     const std::string& getName() const { return name; }
     GLFWwindow* getGlfwWindow() const { return GLFW_window; }
+
+    void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
+
+    void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 };
 

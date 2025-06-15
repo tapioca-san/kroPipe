@@ -1,4 +1,7 @@
 #include "kroPipe_input.hpp"
+#include "../../Vulkan_Engine/load/kroPipe_model.hpp"
+#include "../../Utils/camera/kroPipe_camera.hpp"
+
 
 namespace KP {
 namespace UTILS {
@@ -23,10 +26,10 @@ void processInput(GLFWwindow *window, KP::UTILS::Object& obj, float deltaTime, f
         if (glm::length(inputDir) > 0.0f) {
             inputDir = glm::normalize(inputDir);
 
-            glm::vec3 forward = KP::ENGINE::cameraPlayer.Front;
+            glm::vec3 forward = KP::UTILS::cameraPlayer.Front;
             forward.y = 0.0f;
             forward = glm::normalize(forward);
-            glm::vec3 right = glm::normalize(glm::cross(forward, KP::ENGINE::cameraPlayer.Up));
+            glm::vec3 right = glm::normalize(glm::cross(forward, KP::UTILS::cameraPlayer.Up));
 
             glm::vec3 moveDir = inputDir.z * forward + inputDir.x * right;
 

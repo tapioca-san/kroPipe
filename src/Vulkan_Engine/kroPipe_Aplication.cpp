@@ -65,13 +65,13 @@ void Aplication::init(){
     KP::ENGINE::OBJECT_command.createCommandBuffers();
     KP::ENGINE::OBJECT_render.createSyncObjects();
     
-    KP::ENGINE::imguiInterface = new KP::ENGINE::Imgui(
+    KP::ENGINE::OBJECT_imguiInterface = new KP::ENGINE::Imgui(
         KP::ENGINE::OBJECT_window.GLFW_window, KP::ENGINE::VK_instance, KP::ENGINE::OBJECT_device.getPhysicalDevice(), KP::ENGINE::OBJECT_device.getDevice(),
         KP::ENGINE::OBJECT_queuFamilies.presentQueue, KP::ENGINE::OBJECT_queuFamilies.graphicsIndex, KP::ENGINE::PipelineCache,
         KP::ENGINE::VK_renderPass
     );
     
-    KP::UTILS::createEntity(KP::ENGINE::cameraPlayer.Position + glm::vec3(1.0f,1.0f,1.0f), 0.0f, true);
+    KP::UTILS::createEntity(KP::UTILS::cameraPlayer.Position + glm::vec3(1.0f,1.0f,1.0f), 0.0f, true);
     KP::UTILS::loadObjects(KP::UTILS::sortedID);
     //create
 
@@ -87,8 +87,8 @@ void Aplication::run(){
         glfwPollEvents();
         KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), *KP::UTILS::allObjects[KP::UTILS::sortedID[0]], deltaTime);
         
-        KP::ENGINE::imguiInterface->newFrame(); 
-        KP::ENGINE::imguiInterface->drawWindows();         
+        KP::ENGINE::OBJECT_imguiInterface->newFrame(); 
+        KP::ENGINE::OBJECT_imguiInterface->drawWindows();         
         ImGui::Render(); 
 
 
@@ -102,7 +102,7 @@ void Aplication::run(){
 
 void Aplication::clean() {
     vkDeviceWaitIdle(KP::ENGINE::OBJECT_device.getDevice());
-    KP::ENGINE::imguiInterface->cleanup();
+    KP::ENGINE::OBJECT_imguiInterface->cleanup();
     vkDestroyImageView(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::depthImageView, KP::ENGINE::VK_Allocator);
     vkDestroyImage(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::depthImage, KP::ENGINE::VK_Allocator);
     vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::depthImageMemory, KP::ENGINE::VK_Allocator);

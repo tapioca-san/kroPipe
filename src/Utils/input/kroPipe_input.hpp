@@ -1,9 +1,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include "../../Vulkan_Engine/load/kroPipe_model.hpp"
 #include "../object/kroPipe_object.hpp"
-#include "../camera/kroPipe_camera.hpp"
 #include "../../kroPipe_depedence.hpp"
 
 namespace KP {

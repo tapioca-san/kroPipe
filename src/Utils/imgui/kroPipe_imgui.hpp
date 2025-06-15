@@ -50,7 +50,7 @@ private:
     void endSingleTimeCommands(VkCommandBuffer cmd);
 };
 
-extern KP::ENGINE::Imgui* imguiInterface;
+extern KP::ENGINE::Imgui* OBJECT_imguiInterface;
 
 
 } // namespace ENGINE
