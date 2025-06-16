@@ -62,9 +62,10 @@ void KP::ENGINE::Model::cleanupVao(){
     }
 }
 
-KP::ENGINE::Model::Model(std::string modelPath){
+KP::ENGINE::Model::Model(std::vector<Model*> allModel, std::string modelPath){
     
     this->modelPath = modelPath;
+    this->allModel = &allModel;
 
 }
 
@@ -195,8 +196,8 @@ void KP::ENGINE::Model::processNode(aiNode* node, const aiScene* scene) {
     }
 }
 
-KP::ENGINE::Model* KP::ENGINE::createModel(std::string modelPath){ 
-    KP::ENGINE::Model* model = new KP::ENGINE::Model(modelPath);
+KP::ENGINE::Model* KP::ENGINE::createModel(std::vector<Model*> t_allModel, std::string modelPath){ 
+    KP::ENGINE::Model* model = new KP::ENGINE::Model(allModel, modelPath);
     KP::ENGINE::allModel.push_back(model);
     return model;
 }
@@ -212,7 +213,7 @@ namespace KP {
 namespace ENGINE {
 
 std::vector<Model*> allModel; 
-KP::ENGINE::Model* glock = KP::ENGINE::createModel("/home/pipebomb/Downloads/jane_doe_blender_release.glb");
+KP::ENGINE::Model* glock = KP::ENGINE::createModel(allModel, "/home/pipebomb/Downloads/jane_doe_blender_release.glb");
 
 }//ENGINE
 }//KP

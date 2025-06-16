@@ -34,7 +34,6 @@ struct VAO {
     
     std::vector<Mesh> meshes;
     
-    
     UniformBufferObject UBO;
     
 };
@@ -48,6 +47,8 @@ public:
     VAO vao;
     KP::ENGINE::UboStorage UBO;
     
+    std::vector<Model*> *allModel;
+    
 //void renderModel(Vertex &InfoModel, VertexVulkan handle)
 
 
@@ -59,7 +60,7 @@ void draw(VkCommandBuffer &commandBuffer);
 
 void cleanupVao();
 
-Model(std::string modelPath);
+Model(std::vector<Model*> allModel, std::string modelPath);
 
 private:
     
@@ -72,7 +73,7 @@ void processNode(aiNode* node, const aiScene* scene);
 };
 
     
-Model* createModel(std::string modelPath);
+Model* createModel(std::vector<Model*> allModel, std::string modelPath);
 
 void loadAllModels();
 

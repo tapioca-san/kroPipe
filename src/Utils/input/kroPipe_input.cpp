@@ -59,10 +59,6 @@ void processInput(GLFWwindow *window, KP::UTILS::Object& obj, float deltaTime, f
         obj.data.Position = glm::vec3(10.0f, 10.0f, 0.0f);
     }
 
-    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS){
-        KP::UTILS::allObjects[KP::UTILS::sortedID[KP::ENGINE::glock->UBO.objectId]]->data.Position = glm::vec3(10.0f, 10.0f, 0.0f);
-    }
-
      if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         ImguiMode = true;
         mouseMode = true;
