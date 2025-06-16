@@ -32,7 +32,7 @@ namespace ENGINE {
 
     void Imgui::drawWindows(){ // Use to draw in the while loop and see on the app
         
-        KP::UTILS::OBJECT_terminal.ShowTerminal();
+        KP::UTILS::OBJECT_terminal.showTerminal();
         /*
         ImGui::Begin("Objects Configuration Window");
         for(uint32_t i = 0; i < allObjects.size(); i++){

@@ -2,6 +2,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "kroPipe_Aplication.hpp"
 
+#include "../Utils/terminal/kroPipe_terminal.hpp"
 #include "../Utils/camera/kroPipe_camera.hpp"
 #include "../Utils/object/kroPipe_object.hpp"
 #include "window/kroPipe_windowSurface.hpp"

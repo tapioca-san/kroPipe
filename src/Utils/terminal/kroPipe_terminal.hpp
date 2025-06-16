@@ -6,17 +6,29 @@
 namespace KP {
 namespace UTILS {
 
+
+struct AnsiFragment {
+    ImVec4 color;
+    std::string text;
+};
+
 class Terminal {
 public:
-    void Start();                      // Inicia o shell
-    void Shutdown();                   // Encerra o shell
-    void ShowTerminal();              // Desenha o terminal no ImGui
+    void Terminalsystem(std::string &command);
+    void restartTerminal();
+    void showTerminal();
 
 private:
-    void ReaderThread();              // Loop de leitura do PTY
+    ImVec4 ansiColor(int code);
+    std::vector<AnsiFragment> parseAnsiLine(const std::string& line);
+    void handleAnsiSequences(const std::string& rawLine);
 
     std::string inputBuffer;
     std::vector<std::string> commandHistory;
+    std::vector<std::string> rawOutputBuffer;
+    std::vector<std::string> titleHistory;
+    std::string lastWindowTitle;
+
     std::mutex historyMutex;
 
     bool scrollToBottom = false;
