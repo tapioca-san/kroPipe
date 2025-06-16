@@ -5,9 +5,10 @@
 #include "../../Vulkan_Engine/window/kroPipe_window.hpp"
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
 #include "../terminal/kroPipe_terminal.hpp"
+#include "../object/kroPipe_object.hpp"
 
 namespace KP {
-namespace ENGINE {
+namespace UTILS {
 
 
     Imgui::Imgui(GLFWwindow* window,const VkInstance& inst, const VkPhysicalDevice& physDevice, const VkDevice& dev,
@@ -33,7 +34,6 @@ namespace ENGINE {
     void Imgui::drawWindows(){ // Use to draw in the while loop and see on the app
         
         KP::UTILS::OBJECT_terminal.showTerminal();
-        /*
         ImGui::Begin("Objects Configuration Window");
         for(uint32_t i = 0; i < allObjects.size(); i++){
             ImGui::PushID(i);
@@ -44,7 +44,8 @@ namespace ENGINE {
             ImGui::PopID();
         }
         ImGui::End(); 
-
+        
+        /*
         ImGui::Begin("Debug Window");
         if(ImGui::CollapsingHeader("object")){
             ImGui::Checkbox("FreeView", &flyMode);
@@ -141,10 +142,10 @@ namespace ENGINE {
     VkCommandBuffer beginSingleTimeCommands();
     void endSingleTimeCommands(VkCommandBuffer cmd);
     
-    KP::ENGINE::Imgui* OBJECT_imguiInterface = nullptr;
+    KP::UTILS::Imgui* OBJECT_imguiInterface = nullptr;
     
 
 
-} // namespace ENGINE
+} // namespace UTILS
 } // namespace KP
 

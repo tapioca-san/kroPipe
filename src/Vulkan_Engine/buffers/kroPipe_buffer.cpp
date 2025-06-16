@@ -178,6 +178,7 @@ void KP::ENGINE::UboStorage::cleanupBuffer(KP::ENGINE::UniformBuffers &uniformBu
 }
 
 
+KP::ENGINE::UboStorage OBJECT_UboStorage;
 
 }//ENGINE
 }//KP

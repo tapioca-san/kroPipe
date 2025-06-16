@@ -34,8 +34,6 @@ struct VAO {
     
     std::vector<Mesh> meshes;
     
-    UniformBufferObject UBO;
-    
 };
 
 class Model {
@@ -44,7 +42,7 @@ public:
     std::string modelPath;
     std::string directory;
     
-    VAO vao;
+    KP::ENGINE::VAO vao;
     KP::ENGINE::UboStorage UBO;
     
     std::vector<Model*> *allModel;
@@ -73,7 +71,7 @@ void processNode(aiNode* node, const aiScene* scene);
 };
 
     
-Model* createModel(std::vector<Model*> allModel, std::string modelPath);
+Model* createModel(std::vector<Model*> &Temporary_allModel, std::string modelPath);
 
 void loadAllModels();
 

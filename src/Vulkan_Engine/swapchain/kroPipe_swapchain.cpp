@@ -131,7 +131,7 @@ void SwapChain::createSwapChain() {
 
     // Usando a variável vsync do namespace
     if(KP::ENGINE::vsync){
-        createInfo.presentMode = presentMode;
+        createInfo.presentMode = VK_PRESENT_MODE_FIFO_KHR;
     }
     else{
         createInfo.presentMode = VK_PRESENT_MODE_IMMEDIATE_KHR; // Modo sem VSync

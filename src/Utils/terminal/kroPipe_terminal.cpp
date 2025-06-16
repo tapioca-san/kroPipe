@@ -1,3 +1,4 @@
+#include "../../Vulkan_Engine/load/kroPipe_model.hpp"
 #include "kroPipe_terminal.hpp"
 
 namespace KP {
@@ -88,14 +89,25 @@ void Terminal::Terminalsystem(std::string &command) {
     if (master_fd < 0) return;
 
     std::string cmd = command + "\n";
-    write(master_fd, cmd.c_str(), cmd.size());
-
-    {
-        std::lock_guard<std::mutex> lock(historyMutex);
-        commandHistory.push_back("$ " + command);
+    if(command == "load"){ // todo: está dando break em entrar em memoria invalidade
+        KP::ENGINE::Model* glock = KP::ENGINE::createModel(KP::ENGINE::allModel, "/home/pipebomb/Downloads/emilia-rezero.glb");
+    }
+    if(command == "restart"){
+        restartTerminal();
     }
 
-    scrollToBottom = true;
+    else{
+        
+        write(master_fd, cmd.c_str(), cmd.size());
+
+        {
+            std::lock_guard<std::mutex> lock(historyMutex);
+            commandHistory.push_back("$ " + command);
+        }
+
+        scrollToBottom = true;
+
+    }
 }
 
 // Fecha terminal, mata processo e reinicia o shell, já rodando 'cd ~' no começo
@@ -233,9 +245,6 @@ void Terminal::showTerminal() {
         keepFocus = true;
     }
 
-    if (ImGui::Button("Reiniciar Terminal")){
-        restartTerminal();
-    }
     ImGui::End();
 }
 

@@ -7,7 +7,7 @@
 inline VkClearColorValue clearColor = {{0.0f, 0.0f, 0.0f, 1.0f}};
 
 namespace KP {
-namespace ENGINE {
+namespace UTILS {
 
 class Imgui {
 public:
@@ -50,10 +50,10 @@ private:
     void endSingleTimeCommands(VkCommandBuffer cmd);
 };
 
-extern KP::ENGINE::Imgui* OBJECT_imguiInterface;
+extern KP::UTILS::Imgui* OBJECT_imguiInterface;
 
 
-} // namespace ENGINE
+} // namespace UTILS
 } // namespace KP
 
 

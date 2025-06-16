@@ -72,6 +72,7 @@ struct UboStorage{
         void cleanupBuffer(KP::ENGINE::UniformBuffers &uniformBuffers);
 };
 
+extern KP::ENGINE::UboStorage OBJECT_UboStorage;
 
 } //BUFFER
 } //KP

@@ -196,8 +196,8 @@ void KP::ENGINE::Model::processNode(aiNode* node, const aiScene* scene) {
     }
 }
 
-KP::ENGINE::Model* KP::ENGINE::createModel(std::vector<Model*> t_allModel, std::string modelPath){ 
-    KP::ENGINE::Model* model = new KP::ENGINE::Model(allModel, modelPath);
+KP::ENGINE::Model* KP::ENGINE::createModel(std::vector<Model*> &Temporary_allModel, std::string modelPath){ 
+    KP::ENGINE::Model* model = new KP::ENGINE::Model(Temporary_allModel, modelPath);
     KP::ENGINE::allModel.push_back(model);
     return model;
 }

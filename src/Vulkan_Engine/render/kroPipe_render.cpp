@@ -82,7 +82,7 @@ void KP::ENGINE::Render::recordCommandBuffer(VkCommandBuffer commandBuffer, uint
     //IMGUI RENDER 
     if(KP::UTILS::ImguiMode){
 
-        OBJECT_imguiInterface->render(commandBuffer);
+        KP::UTILS::OBJECT_imguiInterface->render(commandBuffer);
     }
 
 
