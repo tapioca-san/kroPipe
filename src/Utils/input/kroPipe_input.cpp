@@ -1,6 +1,7 @@
 #include "kroPipe_input.hpp"
 #include "../../Vulkan_Engine/load/kroPipe_model.hpp"
 #include "../../Utils/camera/kroPipe_camera.hpp"
+#include <GLFW/glfw3.h>
 
 
 namespace KP {
@@ -61,8 +62,22 @@ void processInput(GLFWwindow *window, KP::UTILS::Object& obj, float deltaTime, f
     if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS){
         KP::UTILS::allObjects[KP::UTILS::sortedID[KP::ENGINE::glock->UBO.objectId]]->data.Position = glm::vec3(10.0f, 10.0f, 0.0f);
     }
+
+     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+        ImguiMode = true;
+        mouseMode = true;
+        glfwSetInputMode(KP::ENGINE::OBJECT_window.getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+     }
+     if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS){
+        ImguiMode = false;
+        mouseMode = false;
+        glfwSetInputMode(KP::ENGINE::OBJECT_window.getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+     }
+
 }
 
+bool ImguiMode = false; // stander
+bool mouseMode = false; // stander
 
 }// namespace UTILS
 }// namespsace KP

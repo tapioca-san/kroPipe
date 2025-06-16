@@ -1,4 +1,5 @@
 #include "../../Utils/camera/kroPipe_camera.hpp"
+#include "../../Utils/input/kroPipe_input.hpp"
 #include "../instance/kroPipe_instance.hpp"
 #include "../render/kroPipe_render.hpp"
 #include "../debug/kroPipe_debug.hpp" 
@@ -50,28 +51,32 @@ KP::ENGINE::Window::~Window() {
 
 void KP::ENGINE::mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
-    float xpos = static_cast<float>(xposIn);
-    float ypos = static_cast<float>(yposIn);
+    if(!KP::UTILS::mouseMode){
+        float xpos = static_cast<float>(xposIn);
+        float ypos = static_cast<float>(yposIn);
 
-    if (KP::ENGINE::firstMouse)
-    {
+        if (KP::ENGINE::firstMouse)
+        {
+            KP::ENGINE::lastX = xpos;
+            KP::ENGINE::lastY = ypos;
+            KP::ENGINE::firstMouse = false;
+        }
+
+        float xoffset = xpos - KP::ENGINE::lastX;
+        float yoffset = KP::ENGINE::lastY - ypos; // reversed since y-coordinates go from bottom to top
+
         KP::ENGINE::lastX = xpos;
         KP::ENGINE::lastY = ypos;
-        KP::ENGINE::firstMouse = false;
+
+        KP::UTILS::cameraPlayer.ProcessMouseMovement(xoffset, yoffset);
     }
-
-    float xoffset = xpos - KP::ENGINE::lastX;
-    float yoffset = KP::ENGINE::lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-    KP::ENGINE::lastX = xpos;
-    KP::ENGINE::lastY = ypos;
-
-    KP::UTILS::cameraPlayer.ProcessMouseMovement(xoffset, yoffset);
 }
 
 void KP::ENGINE::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    KP::UTILS::cameraPlayer.ProcessMouseScroll(static_cast<float>(yoffset));
+    if(!KP::UTILS::mouseMode){
+        KP::UTILS::cameraPlayer.ProcessMouseScroll(static_cast<float>(yoffset));
+    }
 }
 
 void KP::ENGINE::framebufferResizeCallback(GLFWwindow* window, int width, int height) {

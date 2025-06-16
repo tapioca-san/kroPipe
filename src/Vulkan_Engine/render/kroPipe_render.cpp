@@ -1,6 +1,6 @@
 #include "../../Utils/imgui/kroPipe_imgui.hpp"
+#include "../../Utils/input/kroPipe_input.hpp"
 #include "kroPipe_render.hpp"
-
 namespace KP {
 namespace ENGINE {
 
@@ -80,7 +80,10 @@ void KP::ENGINE::Render::recordCommandBuffer(VkCommandBuffer commandBuffer, uint
     }
 
     //IMGUI RENDER 
-    OBJECT_imguiInterface->render(commandBuffer);
+    if(KP::UTILS::ImguiMode){
+
+        OBJECT_imguiInterface->render(commandBuffer);
+    }
 
 
     vkCmdEndRenderPass(commandBuffer);

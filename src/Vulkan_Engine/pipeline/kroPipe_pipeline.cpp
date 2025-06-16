@@ -177,8 +177,7 @@ void Pipeline::createGraphicsPipeline() {
 
     vkDestroyShaderModule(KP::ENGINE::OBJECT_device.getDevice(), shader.fragShaderModule, KP::ENGINE::VK_Allocator);
     vkDestroyShaderModule(KP::ENGINE::OBJECT_device.getDevice(), shader.vertShaderModule, KP::ENGINE::VK_Allocator);
-
-
+    
 }
 
 void Pipeline::createRenderPass() {
@@ -193,8 +192,8 @@ void Pipeline::createRenderPass() {
     colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     VkAttachmentDescription depthAttachment{};
-    depthAttachment.format = KP::ENGINE::OBJECT_depth.findDepthFormat(); // está em cima nesse mesmo arquivo
-    depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT; // deixa bem mais realista o depth, pelo o que lembro
+    depthAttachment.format = KP::ENGINE::OBJECT_depth.findDepthFormat();
+    depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -239,7 +238,6 @@ void Pipeline::createRenderPass() {
 }
 
 void Pipeline::CleanUpPipeline(){
-    // Usando membros da classe e OBJECT_device, VK_Allocator do namespace
     vkDestroyPipeline(KP::ENGINE::OBJECT_device.getDevice(), graphicsPipeline, KP::ENGINE::VK_Allocator); 
     vkDestroyPipelineCache(KP::ENGINE::OBJECT_device.getDevice(), PipelineCache, KP::ENGINE::VK_Allocator); 
     vkDestroyPipelineLayout(KP::ENGINE::OBJECT_device.getDevice(), pipelineLayout, KP::ENGINE::VK_Allocator); 

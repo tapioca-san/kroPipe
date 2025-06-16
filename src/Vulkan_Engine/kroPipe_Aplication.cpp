@@ -86,7 +86,6 @@ void Aplication::run(){
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
 
-        std::cerr << KP::ENGINE::lastX  <<  KP::ENGINE::lastY << "\n";
         glfwPollEvents();
         KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), *KP::UTILS::allObjects[KP::UTILS::sortedID[0]], deltaTime);
         
@@ -96,8 +95,8 @@ void Aplication::run(){
 
 
         //for(uint16_t i = 0; i < allObjects.size(); i++){
-        //    kroPipe::gravityForce(allObjects[sortedID[i]], deltaTime);
-        //db}
+        //    kroPipe::gravityForce(allObjects[sortedID[i]], deltaTime); gravity force
+        //}
 
         KP::ENGINE::OBJECT_render.drawFrame();
     }

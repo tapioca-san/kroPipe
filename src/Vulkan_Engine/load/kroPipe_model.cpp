@@ -26,12 +26,13 @@ void KP::ENGINE::Model::renderToBuffer(){
 }
 
 void KP::ENGINE::Model::draw(VkCommandBuffer &commandBuffer){
-        
+    
     VkDeviceSize offsets[] = {0};
     for(uint16_t i = 0; i < vao.meshes.size(); i++){
         VkBuffer vertexBuffers[] = {vao.vertexBuffers[i]};
         
-        UboShader(currentFrame);
+        //UboShader(currentFrame);
+
         vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
         vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0, VK_INDEX_TYPE_UINT16);
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, KP::ENGINE::pipelineLayout, 0, 1, &UBO.uniformBuffers.descriptorSets[KP::ENGINE::currentFrame], 0, nullptr);
@@ -67,13 +68,7 @@ KP::ENGINE::Model::Model(std::string modelPath){
 
 }
 
-void KP::ENGINE::Model::UboShader(uint32_t currentImage) {
-    static auto startTime = std::chrono::high_resolution_clock::now();
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-        
-    memcpy(UBO.uniformBuffers.uniformBuffersMapped[currentImage], &vao.UBO, sizeof(vao.UBO));
-}
+
 
 void KP::ENGINE::Model::createVertexBuffer(const std::vector<VertexVulkan> &vertices, VAO &vao) {
     VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
@@ -217,7 +212,7 @@ namespace KP {
 namespace ENGINE {
 
 std::vector<Model*> allModel; 
-KP::ENGINE::Model* glock = KP::ENGINE::createModel("/home/pipebomb/Downloads/base.fbx");
+KP::ENGINE::Model* glock = KP::ENGINE::createModel("/home/pipebomb/Downloads/jane_doe_blender_release.glb");
 
 }//ENGINE
 }//KP

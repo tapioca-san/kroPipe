@@ -16,7 +16,6 @@ std::vector<VkDescriptorSetLayout> setLayout;
 uint32_t currentFrame = 0;
 
 KP::ENGINE::UboStorage::UboStorage(){
-    //this->objectId = createEntity(glm::vec3(0), 0.0f, false);
 }
 
 
