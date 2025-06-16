@@ -15,9 +15,6 @@ private:
     int height;
     std::string name; 
 
-    float lastX = 0;
-    float lastY = 0;
-    bool firstMouse = true;
 
 public:
  
@@ -33,13 +30,13 @@ public:
     const std::string& getName() const { return name; }
     GLFWwindow* getGlfwWindow() const { return GLFW_window; }
 
-    void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
-
-    void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-
 };
 
 extern KP::ENGINE::Window OBJECT_window;
+
+extern float lastX;
+extern float lastY;
+extern bool firstMouse;
 
 } // namespace ENGINE
 } // namespace KP

@@ -3,6 +3,8 @@
 namespace KP {
 namespace UTILS {
 
+
+
 // Retorna cor ImGui para código ANSI
 ImVec4 Terminal::ansiColor(int code) {
     switch (code) {
@@ -231,6 +233,9 @@ void Terminal::showTerminal() {
         keepFocus = true;
     }
 
+    if (ImGui::Button("Reiniciar Terminal")){
+        restartTerminal();
+    }
     ImGui::End();
 }
 

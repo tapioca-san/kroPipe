@@ -15,9 +15,8 @@ struct AnsiFragment {
 class Terminal {
 public:
     void Terminalsystem(std::string &command);
-    void restartTerminal();
     void showTerminal();
-
+    void restartTerminal();
 private:
     ImVec4 ansiColor(int code);
     std::vector<AnsiFragment> parseAnsiLine(const std::string& line);

@@ -19,7 +19,6 @@
 #include "image/kroPipe_imageView.hpp"
 #include "command/kroPipe_command.hpp"
 #include "window/kroPipe_window.hpp"
-#include "window/kroPipe_window.hpp"
 #include "render/kroPipe_render.hpp"
 #include "device/kroPipe_device.hpp"
 #include "depth/kroPipe_depth.hpp"
@@ -87,7 +86,7 @@ void Aplication::run(){
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
 
-
+        std::cerr << KP::ENGINE::lastX  <<  KP::ENGINE::lastY << "\n";
         glfwPollEvents();
         KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), *KP::UTILS::allObjects[KP::UTILS::sortedID[0]], deltaTime);
         
