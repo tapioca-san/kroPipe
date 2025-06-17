@@ -1,8 +1,8 @@
 #ifndef KROPIPE_RENDER_HPP
 #define KROPIPE_RENDER_HPP
 
+#include "../../Utils/load/kroPipe_model.hpp"
 #include "../command/kroPipe_command.hpp"
-#include "../load/kroPipe_model.hpp"
 
 
 namespace KP {

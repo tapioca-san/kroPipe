@@ -1,9 +1,9 @@
 #ifndef KROPIPE_OBJECT_H
 #define KROPIPE_OBJECT_H
 
-#include "../../kroPipe_depedence.hpp"
 #include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
-#include "../../Vulkan_Engine/load/kroPipe_model.hpp"
+#include "../../kroPipe_depedence.hpp"
+#include "../load/kroPipe_model.hpp"
 
 namespace KP {
 namespace UTILS {

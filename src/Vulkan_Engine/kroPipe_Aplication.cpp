@@ -10,6 +10,7 @@
 #include "../Utils/imgui/kroPipe_imgui.hpp"
 #include "window/kroPipe_windowSurface.hpp"
 #include "buffers/kroPipe_frameBuffer.hpp"
+#include "../Utils/load/kroPipe_model.hpp"
 #include "swapchain/kroPipe_swapchain.hpp"
 #include "queue/kroPipe_queuFamilies.hpp"
 #include "pipeline/kroPipe_pipeline.hpp"
@@ -23,7 +24,6 @@
 #include "device/kroPipe_device.hpp"
 #include "depth/kroPipe_depth.hpp"
 #include "debug/kroPipe_debug.hpp" 
-#include "load/kroPipe_model.hpp"
 
 Aplication OBJECT_aplication;
 

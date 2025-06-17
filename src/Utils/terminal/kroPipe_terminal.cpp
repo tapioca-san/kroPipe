@@ -1,4 +1,4 @@
-#include "../../Vulkan_Engine/load/kroPipe_model.hpp"
+#include "../load/kroPipe_model.hpp"
 #include "kroPipe_terminal.hpp"
 
 namespace KP {
@@ -194,6 +194,7 @@ void Terminal::showTerminal() {
         restartTerminal();
     }
 
+    
     ImGui::Begin(("Terminal - " + lastWindowTitle).c_str());
 
     ImVec2 size = ImGui::GetIO().DisplaySize;

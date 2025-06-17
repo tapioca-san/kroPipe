@@ -1,7 +1,6 @@
-#include "kroPipe_input.hpp"
-#include "../../Vulkan_Engine/load/kroPipe_model.hpp"
 #include "../../Utils/camera/kroPipe_camera.hpp"
-#include <GLFW/glfw3.h>
+#include "../load/kroPipe_model.hpp"
+#include "kroPipe_input.hpp"
 
 
 namespace KP {

@@ -1,8 +1,8 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include "../buffers/kroPipe_buffer.hpp"
-#include "../pipeline/kroPipe_pipeline.hpp"
+#include "../../Vulkan_Engine/pipeline/kroPipe_pipeline.hpp"
+#include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
 
 
 
