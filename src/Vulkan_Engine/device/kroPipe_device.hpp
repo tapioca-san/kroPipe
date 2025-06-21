@@ -15,8 +15,13 @@ const std::vector<const char*> validationLayers = {
 };
 
 
+
+
+
 namespace KP {
 namespace ENGINE {
+
+extern std::vector<const char*> extensionAvailable;
 
 class Device{
 

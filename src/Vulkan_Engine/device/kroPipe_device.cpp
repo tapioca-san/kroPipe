@@ -8,6 +8,7 @@
 namespace KP {
 namespace ENGINE {
 
+std::vector<const char*> extensionAvailable;
 
 VkPhysicalDeviceProperties Device::getDeviceProperties(){
     return deviceProperties;

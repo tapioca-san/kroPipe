@@ -25,7 +25,7 @@ public:
     // Variáveis membro da classe (validationLayers pode ser membro ou global/namespace)
     // Mantido como membro da classe Instance como no original
     const std::vector<const char*> validationLayers = {
-        "VK_LAYER_KHRONOS_validation"
+        "VK_LAYER_KHRONOS_validation",
     };
 
     // Métodos da classe Instance

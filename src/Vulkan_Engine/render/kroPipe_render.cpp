@@ -75,7 +75,8 @@ void KP::ENGINE::Render::recordCommandBuffer(VkCommandBuffer commandBuffer, uint
 
     vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-    for(KP::ENGINE::Model* model : KP::ENGINE::allModel){
+    
+    for(KP::UTILS::Model* model : KP::UTILS::allModel){
         model->draw(commandBuffer);
     }
 
@@ -109,7 +110,7 @@ void KP::ENGINE::Render::drawFrame() {
     err = acquireNextImage();
     check_vk_result(err);
 
-    for(KP::ENGINE::Model* model : KP::ENGINE::allModel){
+    for(KP::UTILS::Model* model : KP::UTILS::allModel){
         model->UBO.update();    
     }  
     

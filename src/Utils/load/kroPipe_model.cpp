@@ -1,7 +1,7 @@
 #include "kroPipe_model.hpp"
 
 
-void KP::ENGINE::Model::loadModel() {
+void KP::UTILS::Model::loadModel() {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
@@ -18,14 +18,14 @@ void KP::ENGINE::Model::loadModel() {
     
 }
 
-void KP::ENGINE::Model::renderToBuffer(){
+void KP::UTILS::Model::renderToBuffer(){
     for(uint16_t i = 0; i < vao.meshes.size(); i++){
         createVertexBuffer(vao.meshes[i].vertices, vao);
         createIndexBuffer(vao.meshes[i].indices, vao);
     }
 }
 
-void KP::ENGINE::Model::draw(VkCommandBuffer &commandBuffer){
+void KP::UTILS::Model::draw(VkCommandBuffer &commandBuffer){
     
     VkDeviceSize offsets[] = {0};
     for(uint16_t i = 0; i < vao.meshes.size(); i++){
@@ -40,7 +40,7 @@ void KP::ENGINE::Model::draw(VkCommandBuffer &commandBuffer){
     }
 }
 
-void KP::ENGINE::Model::cleanupVao(){
+void KP::UTILS::Model::cleanupVao(){
     /*
     vkDestroyBuffer(device, vao.indexBuffer, nullptr);
     vkFreeMemory(device, vao.indexBufferMemory, nullptr);
@@ -62,7 +62,7 @@ void KP::ENGINE::Model::cleanupVao(){
     }
 }
 
-KP::ENGINE::Model::Model(std::vector<Model*> allModel, std::string modelPath){
+KP::UTILS::Model::Model(std::vector<Model*> allModel, std::string modelPath){
     
     this->modelPath = modelPath;
     this->allModel = &allModel;
@@ -71,7 +71,7 @@ KP::ENGINE::Model::Model(std::vector<Model*> allModel, std::string modelPath){
 
 
 
-void KP::ENGINE::Model::createVertexBuffer(const std::vector<VertexVulkan> &vertices, VAO &vao) {
+void KP::UTILS::Model::createVertexBuffer(const std::vector<KP::ENGINE::VertexVulkan> &vertices, VAO &vao) {
     VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
     VkBuffer stagingBuffer;
@@ -100,7 +100,7 @@ void KP::ENGINE::Model::createVertexBuffer(const std::vector<VertexVulkan> &vert
     vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), stagingBufferMemory, nullptr);
 }
 
-void KP::ENGINE::Model::createIndexBuffer(const std::vector<uint16_t> &indices, VAO &vao) {
+void KP::UTILS::Model::createIndexBuffer(const std::vector<uint16_t> &indices, VAO &vao) {
     VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
 
     VkBuffer stagingBuffer;
@@ -131,11 +131,11 @@ void KP::ENGINE::Model::createIndexBuffer(const std::vector<uint16_t> &indices, 
     vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), stagingBufferMemory, nullptr);
 }
 
-KP::ENGINE::Mesh KP::ENGINE::Model::processMesh(aiMesh* mesh, const aiScene* scene) {
-    std::vector<VertexVulkan> vertices;
+KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh* mesh, const aiScene* scene) {
+    std::vector<KP::ENGINE::VertexVulkan> vertices;
     std::vector<uint16_t> indices;
 
-    VertexVulkan vertex{};
+    KP::ENGINE::VertexVulkan vertex{};
     for(unsigned int i = 0; i < mesh->mNumVertices; i++)
         {
             glm::vec3 vector;
@@ -185,7 +185,7 @@ KP::ENGINE::Mesh KP::ENGINE::Model::processMesh(aiMesh* mesh, const aiScene* sce
     return Mesh(vertices, indices);
 }
 
-void KP::ENGINE::Model::processNode(aiNode* node, const aiScene* scene) {
+void KP::UTILS::Model::processNode(aiNode* node, const aiScene* scene) {
     for (uint16_t i = 0; i < node->mNumMeshes; i++) {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         vao.meshes.push_back(processMesh(mesh, scene));
@@ -196,13 +196,13 @@ void KP::ENGINE::Model::processNode(aiNode* node, const aiScene* scene) {
     }
 }
 
-KP::ENGINE::Model* KP::ENGINE::createModel(std::vector<Model*> &Temporary_allModel, std::string modelPath){ 
-    KP::ENGINE::Model* model = new KP::ENGINE::Model(Temporary_allModel, modelPath);
-    KP::ENGINE::allModel.push_back(model);
+KP::UTILS::Model* KP::UTILS::createModel(std::vector<KP::UTILS::Model*> &Temporary_allModel, std::string modelPath){ 
+    KP::UTILS::Model* model = new KP::UTILS::Model(Temporary_allModel, modelPath);
+    KP::UTILS::allModel.push_back(model);
     return model;
 }
 
-void KP::ENGINE::loadAllModels(){
+void KP::UTILS::loadAllModels(){
     for(auto model : allModel){
         model->loadModel();
     }
@@ -210,10 +210,10 @@ void KP::ENGINE::loadAllModels(){
 
 
 namespace KP {
-namespace ENGINE {
+namespace UTILS {
 
 std::vector<Model*> allModel; 
-KP::ENGINE::Model* glock = KP::ENGINE::createModel(allModel, "/home/pipebomb/Downloads/jane_doe_blender_release.glb");
+KP::UTILS::Model* glock = KP::UTILS::createModel(allModel, "/home/pipebomb/Downloads/jane_doe_blender_release.glb");
 
 }//ENGINE
 }//KP

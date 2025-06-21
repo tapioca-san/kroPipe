@@ -90,7 +90,6 @@ void Terminal::Terminalsystem(std::string &command) {
 
     std::string cmd = command + "\n";
     if(command == "load"){ // todo: está dando break em entrar em memoria invalidade
-        KP::ENGINE::Model* glock = KP::ENGINE::createModel(KP::ENGINE::allModel, "/home/pipebomb/Downloads/emilia-rezero.glb");
     }
     if(command == "restart"){
         restartTerminal();

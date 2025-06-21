@@ -27,6 +27,9 @@
 
 Aplication OBJECT_aplication;
 
+#define APP_DEBUG_ENABLE
+
+#
 
 
 float deltaTime;
@@ -44,22 +47,25 @@ void Aplication::init(){
     KP::ENGINE::OBJECT_swapChain.createSwapChain();
     KP::ENGINE::OBJECT_imageView.createImageViews();
     KP::ENGINE::OBJECT_pipeline.createRenderPass();    
-    {
-        for(KP::ENGINE::Model* model : KP::ENGINE::allModel){
+    {   
+        KP::ENGINE::OBJECT_sceneUBO.createDescriptorLayout(); // scenes
+
+        for(KP::UTILS::Model* model : KP::UTILS::allModel){
             model->UBO.createDescriptorLayout();
             }  
     }
     
+    KP::ENGINE::OBJECT_depth.createDepthResources();
     KP::ENGINE::OBJECT_pipeline.createGraphicsPipeline();  
     KP::ENGINE::OBJECT_command.createCommandPool();
-    KP::ENGINE::OBJECT_depth.createDepthResources();
-    KP::ENGINE::loadAllModels();
     KP::ENGINE::OBJECT_frameBuffer.createFrameBuffers();
     KP::ENGINE::createTextureImage();
     KP::ENGINE::createTextureImageView();
     KP::ENGINE::createTextureSampler();
+    KP::UTILS::loadAllModels();
     
-    for(KP::ENGINE::Model* model : KP::ENGINE::allModel){
+    KP::ENGINE::OBJECT_sceneUBO.create();
+    for(KP::UTILS::Model* model : KP::UTILS::allModel){
         model->UBO.create();    
     }  
     
@@ -112,7 +118,9 @@ void Aplication::clean() {
     vkDestroyImageView(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::textureImageView, KP::ENGINE::VK_Allocator);
     vkDestroyImage(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::textureImage, KP::ENGINE::VK_Allocator);
     vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::textureImageMemory, KP::ENGINE::VK_Allocator);
-    for (KP::ENGINE::Model *&model: KP::ENGINE::allModel) {
+
+    KP::ENGINE::OBJECT_sceneUBO.cleanUp();
+    for (KP::UTILS::Model *&model: KP::UTILS::allModel) {
         model->UBO.cleanUp();
         model->cleanupVao();
     }

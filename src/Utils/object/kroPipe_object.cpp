@@ -1,3 +1,4 @@
+#include "../load/kroPipe_model.hpp"
 #include "kroPipe_object.hpp"
 
 
@@ -64,7 +65,7 @@ void Object::calculateAABB(ObjectData& object) {
     }
 }
 ObjectData data;
-Object::Object(glm::vec3 position, float floorPos, bool is_myself, KP::ENGINE::VAO *vao) {
+Object::Object(glm::vec3 position, float floorPos, bool is_myself, KP::UTILS::VAO *vao) {
     data.Position = position;
     data.floorPos = floorPos;
     data.floorPoslowest = floorPos;
@@ -101,6 +102,7 @@ int createEntity(glm::vec3 position, float floorPos, bool is_myself) {
     // size_t numVertices = sizeof(vertices) / sizeof(vertices[0]) /2 8;
     // calculateAABB(player, vertices, numVertices);
     return lastID; 
+    //KP::UTILS::Model* glock = KP::UTILS::createModel(KP::UTILS::allModel, "/home/pipebomb/Downloads/jane_doe_blender_release.glb");
 }
 
 std::vector<int> entityLoad(std::vector<KP::UTILS::Object*> allObjects) {

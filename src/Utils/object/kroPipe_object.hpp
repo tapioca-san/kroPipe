@@ -16,7 +16,7 @@ namespace UTILS {
         glm::vec3 Scale{};
         glm::vec3 velocity{};
         
-        KP::ENGINE::VAO *vao;
+        KP::UTILS::VAO *vao;
 
         std::string modelPath;
 
@@ -48,7 +48,7 @@ namespace UTILS {
     public:
         ObjectData data;
 
-        Object(glm::vec3 position, float floorPos, bool is_myself, KP::ENGINE::VAO *vao = nullptr);
+        Object(glm::vec3 position, float floorPos, bool is_myself, KP::UTILS::VAO *vao = nullptr);
 
         void DrawTransformUI(std::string &headerName);
 

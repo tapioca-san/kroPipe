@@ -30,6 +30,8 @@ struct UniformBuffers{
 void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory); // enviar dados para a gpu atravez da CPU
 
     
+void createDescriptorSetLayout(KP::ENGINE::UniformBuffers &uniformBuffers);
+
 void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
 struct UboStorage{
@@ -59,7 +61,6 @@ struct UboStorage{
     private: ////////////////////////////////////////////////////////////////
 
 
-        void createDescriptorSetLayout(KP::ENGINE::UniformBuffers &uniformBuffers);
 
         void createUniformBuffers(KP::ENGINE::UniformBuffers &uniformBuffers);
 
@@ -72,7 +73,8 @@ struct UboStorage{
         void cleanupBuffer(KP::ENGINE::UniformBuffers &uniformBuffers);
 };
 
-extern KP::ENGINE::UboStorage OBJECT_UboStorage;
+
+extern KP::ENGINE::UboStorage OBJECT_sceneUBO;
 
 } //BUFFER
 } //KP

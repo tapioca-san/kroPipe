@@ -3,16 +3,17 @@
 #include "../debug/kroPipe_debug.hpp"   
 #include "../depth/kroPipe_depth.hpp"   
 #include "../../kroPipe_depedence.hpp"
+#include <stdexcept>
 #include "kroPipe_pipeline.hpp"
 
 
 namespace KP {
 namespace ENGINE {
 
-VkPipelineCache                                 PipelineCache = VK_NULL_HANDLE; // Definição
-VkPipelineLayout                                pipelineLayout = VK_NULL_HANDLE; // Definição
-VkPipeline                                      graphicsPipeline = VK_NULL_HANDLE; // Definição
-std::string                                     directoryProject = "/home/pipebomb/dev/cpp/vulkan/teste/src"; // Definição
+VkPipelineCache                                 PipelineCache = VK_NULL_HANDLE;
+VkPipelineLayout                                pipelineLayout = VK_NULL_HANDLE;
+VkPipeline                                      graphicsPipeline = VK_NULL_HANDLE;
+std::string                                     directoryProject = "/home/pipebomb/dev/cpp/vulkan/teste/src"; 
 std::string                                     directoryShader = "/Vulkan_Engine/shader/";
 
 
@@ -142,6 +143,13 @@ void Pipeline::createPipeline(shaderModule shader){
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.setLayoutCount = 1;
+
+    if(setLayout.data() == nullptr){
+        throw std::runtime_error(fatalMessage("Erro setLayout has no values"));
+    }
+    else{
+        std::cerr << setLayout.data() << "\n";
+    }
     pipelineLayoutInfo.pSetLayouts = setLayout.data();
 
     KP::ENGINE::err = vkCreatePipelineLayout(KP::ENGINE::OBJECT_device.getDevice(), &pipelineLayoutInfo, KP::ENGINE::VK_Allocator, &pipelineLayout);
