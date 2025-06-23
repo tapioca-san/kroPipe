@@ -50,9 +50,6 @@ void Aplication::init(){
     {   
         KP::ENGINE::OBJECT_sceneUBO.createDescriptorLayout(); // scenes
 
-        for(KP::UTILS::Model* model : KP::UTILS::allModel){
-            model->UBO.createDescriptorLayout();
-            }  
     }
     
     KP::ENGINE::OBJECT_depth.createDepthResources();
@@ -65,10 +62,6 @@ void Aplication::init(){
     KP::UTILS::loadAllModels();
     
     KP::ENGINE::OBJECT_sceneUBO.create();
-    for(KP::UTILS::Model* model : KP::UTILS::allModel){
-        model->UBO.create();    
-    }  
-    
     KP::ENGINE::OBJECT_command.createCommandBuffers();
     KP::ENGINE::OBJECT_render.createSyncObjects();
 
@@ -105,6 +98,10 @@ void Aplication::run(){
         //}
 
         KP::ENGINE::OBJECT_render.drawFrame();
+        if (glfwGetKey(KP::ENGINE::OBJECT_window.getGlfwWindow(), GLFW_KEY_Z) == GLFW_PRESS){
+            break;
+        }
+
     }
 }
 
@@ -121,7 +118,7 @@ void Aplication::clean() {
 
     KP::ENGINE::OBJECT_sceneUBO.cleanUp();
     for (KP::UTILS::Model *&model: KP::UTILS::allModel) {
-        model->UBO.cleanUp();
+        
         model->cleanupVao();
     }
     KP::ENGINE::OBJECT_render.destroyRender();

@@ -42,13 +42,13 @@ struct UboStorage{
         UniformBufferObject UBO;
 
         
-        int objectId;    
+        uint16_t objectId;    
 
         size_t bufferSize = sizeof(UniformBufferObject);
         
         /*
         */
-        UboStorage();
+        UboStorage(uint16_t &objectID);
 
         void create();
         

@@ -1,73 +1,181 @@
 #ifndef KROPIPE_OBJECT_H
 #define KROPIPE_OBJECT_H
 
+#include "../../Vulkan_Engine/pipeline/kroPipe_vertex_data.hpp"
 #include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
-#include "../../kroPipe_depedence.hpp"
-#include "../load/kroPipe_model.hpp"
+#include <cstdint>
+
+#define MAX_BONE_INFLUENCE 4
 
 namespace KP {
 namespace UTILS {
 
 
-    struct ObjectData {
-        glm::vec3 Position{};
-        glm::vec3 lastPosition{};
-        glm::vec3 Rotation{};
-        glm::vec3 Scale{};
-        glm::vec3 velocity{};
-        
-        KP::UTILS::VAO *vao;
+struct Mesh {
+    std::vector<KP::ENGINE::VertexVulkan> vertices;
+    std::vector<uint16_t> indices;
+    
+    VkImage diffuseTextureImage = VK_NULL_HANDLE;
+    VkDeviceMemory diffuseTextureMemory = VK_NULL_HANDLE;
+    VkImageView diffuseTextureView = VK_NULL_HANDLE;
+    
+    Mesh(std::vector<KP::ENGINE::VertexVulkan> v, std::vector<uint16_t> i) 
+    : vertices(std::move(v)), indices(std::move(i)) {}
+};
 
-        std::string modelPath;
 
-        float raio = 0.0f;
-        float width = 0.0f, height = 0.0f, depth = 0.0f;
-        float* vertices = nullptr;
-        size_t numVertices = 0;
 
-        float floorPos = 0.0f;
-        float floorPoslowest = 0.0f;
+struct VAO {
+    std::vector<VkBuffer> vertexBuffers;
+    std::vector<VkDeviceMemory> vertexBufferMemorys;
+    
+    std::vector<VkBuffer> indexBuffers;
+    std::vector<VkDeviceMemory> indexBufferMemorys;
+    
+    std::vector<Mesh> meshes;
+    
+};
 
-        bool is_touchingX = false;
-        bool is_touchingY = false;
-        bool is_touchingZ = false;
-        bool is_onCollition = false;
-        bool is_onObject = false;
-        bool is_myself = false;
-        bool is_OnAir = true;
+struct createInfo_model{
 
-        int ID = -1;
-    };
+    std::string modelPath;
+    uint16_t* ObjectID;
+};
 
-    class Object {
+class Model {
+ 
+public:
+    std::string modelPath;
+    std::string directory;
+    
+    KP::UTILS::VAO vao;
+    KP::ENGINE::UboStorage UBO;
+    
+    std::vector<Model*> *allModel;
+    
+    uint16_t* objectID;
+
+//void renderModel(Vertex &InfoModel, VertexVulkan handle)
+
+
+void loadModel();
+
+void renderToBuffer();
+
+void draw(VkCommandBuffer &commandBuffer);
+
+void cleanupVao();
+
+Model(createInfo_model& info,std::vector<Model*> &allModel);
+
+private:
+    
+void UboShader(uint32_t currentImage);
+void createVertexBuffer(const std::vector<KP::ENGINE::VertexVulkan> &vertices, VAO &vao);
+void createIndexBuffer(const std::vector<uint16_t> &indices, VAO &vao);
+Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+void processNode(aiNode* node, const aiScene* scene);
+
+};
+
+
+    
+struct ObjectData {
+    glm::vec3 Position{};
+    glm::vec3 Rotation{};
+    glm::vec3 Scale{};
+    glm::vec3 velocity{};
+    
+    KP::UTILS::VAO *vao;
+    std::string modelPath;
+    KP::UTILS::Model* model = nullptr; // NOVO
+
+    float raio = 0.0f;
+    float width = 0.0f, height = 0.0f, depth = 0.0f;
+    float* vertices = nullptr;
+    size_t numVertices = 0;
+    float floorPos = 0.0f;
+    float floorPoslowest = 0.0f;
+    bool is_touchingX = false;
+    bool is_touchingY = false;
+    bool is_touchingZ = false;
+    bool is_onCollition = false;
+    bool is_onObject = false;
+    bool is_camera = false;
+    bool is_player = false;
+    bool is_object = false;
+    bool is_OnAir = true;
+    uint16_t ID = 0;
+};
+
+
+struct ObjectsManager{
     private:
-        float calculateRaio(ObjectData& object);
-        
-        void calculateAABB(ObjectData& object);
-
+    
+    std::vector<Model*> allModel;
+    
     public:
-        ObjectData data;
+    std::vector<uint16_t> playersID;
+    std::vector<uint16_t> camerasID;
+    std::vector<uint16_t> objectsID;
+    std::vector<uint16_t> ID;
 
-        Object(glm::vec3 position, float floorPos, bool is_myself, KP::UTILS::VAO *vao = nullptr);
-
-        void DrawTransformUI(std::string &headerName);
-
-        
-        ~Object() {
-        }
-    };
-
-    void loadObjects(std::vector<int> &IDs);    
-    std::vector<int> entityLoad(std::vector<KP::UTILS::Object*> allObjects);
-    int createEntity(glm::vec3 position, float floorPos, bool is_myself);
+    uint16_t lastID = -1;
+    void addObject(ObjectData& ObjectData);
+    int getLastId();
     
-    extern uint16_t lastID;
-    extern std::vector<KP::UTILS::Object*> allObjects;
-    extern std::vector<int> sortedID;
+    Model* callModel(uint32_t ID);
+    std::vector<Model*>* getAllModel();
 
+};
+
+struct createInfo_object{
+
+    glm::vec3 position;
+    float floorPos;
+    bool is_myself; 
+    KP::UTILS::Model* model; 
+    ObjectsManager& ObjectsManager;
+};
+
+class Object {
+private:
+
+    float calculateRaio(ObjectData& object);
     
+    void calculateAABB(ObjectData& object);
+    
+    ObjectData data;
+public:
 
-} // namespace engine
+    ObjectData getData();
+    Object(createInfo_object &Info);
+    void DrawTransformUI(std::string &headerName);
+    
+    void draw(VkCommandBuffer& commandBuffer);
+
+   ~Object();
+};
+
+/*
+-------------------------
+Documentação
+
+struct createInfo_object {
+    glm::vec3 position;
+    float floorPos;
+    bool is_myself;
+    KP::UTILS::Model* model; // só passamos para ter o caminho
+    ObjectsManager& ObjectsManager;
+};
+
+-------------------------
+
+*/
+
+extern ObjectsManager OBJECT_objectsManager;
+
+} // namespace Utils
 } // namespace KP
 
 

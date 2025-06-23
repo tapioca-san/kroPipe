@@ -76,9 +76,7 @@ void KP::ENGINE::Render::recordCommandBuffer(VkCommandBuffer commandBuffer, uint
     vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
     
-    for(KP::UTILS::Model* model : KP::UTILS::allModel){
-        model->draw(commandBuffer);
-    }
+    
 
     //IMGUI RENDER 
     if(KP::UTILS::ImguiMode){
@@ -111,7 +109,7 @@ void KP::ENGINE::Render::drawFrame() {
     check_vk_result(err);
 
     for(KP::UTILS::Model* model : KP::UTILS::allModel){
-        model->UBO.update();    
+        //model->UBO.update();    
     }  
     
     vkResetFences(KP::ENGINE::OBJECT_device.getDevice(), 1, &inFlightFences[currentFrame]);

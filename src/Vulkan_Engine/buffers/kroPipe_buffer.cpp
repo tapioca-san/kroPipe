@@ -6,6 +6,7 @@
 #include "../vertex/kroPipe_vertex.hpp"
 #include "../render/kroPipe_render.hpp"
 #include "../debug/kroPipe_debug.hpp"
+#include <cstdint>
 #include "kroPipe_buffer.hpp"
 
 namespace KP {
@@ -15,7 +16,8 @@ std::vector<VkDescriptorSetLayout> setLayout;
 
 uint32_t currentFrame = 0;
 
-KP::ENGINE::UboStorage::UboStorage(){
+KP::ENGINE::UboStorage::UboStorage(uint16_t &objectID){
+    this->objectId = objectID;    
 }
 
 void createDescriptorSetLayout(KP::ENGINE::UniformBuffers &uniformBuffers) {
@@ -111,7 +113,7 @@ void KP::ENGINE::UboStorage::updateUniformBuffer(KP::ENGINE::UniformBuffers &uni
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
     ubo.model = glm::mat4(1.0f);
-    ubo.model = glm::translate(ubo.model, glm::vec3(KP::UTILS::allObjects[KP::UTILS::sortedID[objectId]]->data.Position.x, KP::UTILS::allObjects[KP::UTILS::sortedID[objectId]]->data.Position.y, KP::UTILS::allObjects[KP::UTILS::sortedID[objectId]]->data.Position.z));
+    ubo.model = glm::translate(ubo.model, glm::vec3(KP::UTILS::OBJECT_objectsManager.callModel(objectId)->Position.x, KP::UTILS::allObjects[KP::UTILS::sortedID[objectId]]->data.Position.y, KP::UTILS::allObjects[KP::UTILS::sortedID[objectId]]->data.Position.z));
     ubo.model = glm::rotate(ubo.model, glm::radians(KP::UTILS::allObjects[KP::UTILS::sortedID[objectId]]->data.Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)); // rotation for X
     ubo.model = glm::rotate(ubo.model, glm::radians(KP::UTILS::allObjects[KP::UTILS::sortedID[objectId]]->data.Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f)); // rotation for Y
     ubo.model = glm::rotate(ubo.model, glm::radians(KP::UTILS::allObjects[KP::UTILS::sortedID[objectId]]->data.Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f)); // rotation for Z
