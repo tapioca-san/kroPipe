@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include "kroPipe_pipeline.hpp"
 
+// TODO: make GPGPU
 
 namespace KP {
 namespace ENGINE {
@@ -16,11 +17,9 @@ VkPipeline                                      graphicsPipeline = VK_NULL_HANDL
 std::string                                     directoryProject = "/home/pipebomb/dev/cpp/vulkan/teste/src"; 
 std::string                                     directoryShader = "/Vulkan_Engine/shader/";
 
-
 VkRenderPass VK_renderPass = VK_NULL_HANDLE; 
 
 KP::ENGINE::Pipeline OBJECT_pipeline;
-
 
 std::vector<char> Pipeline::readFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
