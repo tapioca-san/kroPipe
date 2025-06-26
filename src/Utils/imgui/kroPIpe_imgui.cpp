@@ -35,17 +35,17 @@ namespace UTILS {
         
         KP::UTILS::OBJECT_terminal.showTerminal();
         ImGui::Begin("Objects Configuration Window");
-        for(uint32_t i = 0; i < allObjects.size(); i++){
+        for(uint32_t i = 0; i < KP::UTILS::OBJECT_objectsManager.getAllObject()->size(); i++){
             ImGui::PushID(i);
             std::string headerName = "Object " + std::to_string(i);
             ImGui::PushID(i);
-            allObjects[sortedID[i]]->DrawTransformUI(headerName);
+            KP::UTILS::OBJECT_objectsManager.callObject(i)->DrawTransformUI(headerName);
             ImGui::PopID();
             ImGui::PopID();
         }
         ImGui::End(); 
-        
         /*
+        
         ImGui::Begin("Debug Window");
         if(ImGui::CollapsingHeader("object")){
             ImGui::Checkbox("FreeView", &flyMode);

@@ -10,7 +10,6 @@
 #include "../Utils/imgui/kroPipe_imgui.hpp"
 #include "window/kroPipe_windowSurface.hpp"
 #include "buffers/kroPipe_frameBuffer.hpp"
-#include "../Utils/load/kroPipe_model.hpp"
 #include "swapchain/kroPipe_swapchain.hpp"
 #include "queue/kroPipe_queuFamilies.hpp"
 #include "pipeline/kroPipe_pipeline.hpp"
@@ -59,7 +58,7 @@ void Aplication::init(){
     KP::ENGINE::createTextureImage();
     KP::ENGINE::createTextureImageView();
     KP::ENGINE::createTextureSampler();
-    KP::UTILS::loadAllModels();
+    //KP::UTILS::loadAllModels();
     
     KP::ENGINE::OBJECT_sceneUBO.create();
     KP::ENGINE::OBJECT_command.createCommandBuffers();
@@ -72,9 +71,11 @@ void Aplication::init(){
         KP::ENGINE::VK_renderPass
     );
     
+    /*
     KP::UTILS::createEntity(KP::UTILS::cameraPlayer.Position + glm::vec3(1.0f,1.0f,1.0f), 0.0f, true);
     KP::UTILS::loadObjects(KP::UTILS::sortedID);
     //create
+    */
 
 }
 
@@ -86,7 +87,7 @@ void Aplication::run(){
         lastTime = currentTime;
 
         glfwPollEvents();
-        KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), *KP::UTILS::allObjects[KP::UTILS::sortedID[0]], deltaTime);
+        //KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), *KP::UTILS::OBJECT_objectsManager.callObject(0), deltaTime); // ??????????????
         
         KP::UTILS::OBJECT_imguiInterface->newFrame(); 
         KP::UTILS::OBJECT_imguiInterface->drawWindows();         
@@ -117,10 +118,13 @@ void Aplication::clean() {
     vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::textureImageMemory, KP::ENGINE::VK_Allocator);
 
     KP::ENGINE::OBJECT_sceneUBO.cleanUp();
+    
+    /* nah for now
     for (KP::UTILS::Model *&model: KP::UTILS::allModel) {
         
         model->cleanupVao();
     }
+    */
     KP::ENGINE::OBJECT_render.destroyRender();
         
     //KP::LIGHT::OBJECT_light.cleanUp();

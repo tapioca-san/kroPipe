@@ -1,7 +1,6 @@
 #ifndef KROPIPE_RENDER_HPP
 #define KROPIPE_RENDER_HPP
 
-#include "../../Utils/load/kroPipe_model.hpp"
 #include "../command/kroPipe_command.hpp"
 
 
@@ -12,7 +11,6 @@ extern const int MAX_FRAMES_IN_FLIGHT;
 extern std::vector<VkSemaphore> imageAvailableSemaphores;
 extern std::vector<VkSemaphore> renderFinishedSemaphores;
 extern std::vector<VkFence> inFlightFences;
-extern VkRenderPass renderPass;
 extern uint32_t imageIndex;
 extern bool framebufferResized;
 

@@ -23,13 +23,21 @@ int ObjectsManager::getLastId(){
     return lastID;
 }
 
-Model* ObjectsManager::callModel(uint32_t ID){ // this should be callObject, not callModel
+Model* ObjectsManager::callModel(uint32_t ID){ 
     return allModel[ID];
+}
+Object* ObjectsManager::callObject(uint32_t ID){
+    return allObejct[ID]; 
 }
 
 std::vector<Model*>* ObjectsManager::getAllModel(){
     return &allModel;
 }
+
+std::vector<Object*>* ObjectsManager::getAllObject(){
+    return &allObejct;
+}
+
 
 float Object::calculateRaio(ObjectData& object) {
     float raio = 0.0f;
@@ -89,7 +97,7 @@ void Object::calculateAABB(ObjectData& object) {
 
 ObjectData data;
 
-Object::Object(createInfo_object &Info) {
+Object::Object(createInfo_object &Info, std::vector<Object*> &allObject) {
     data.Position = Info.position;
     data.floorPos = Info.floorPos;
     data.floorPoslowest = Info.floorPos;
@@ -98,14 +106,9 @@ Object::Object(createInfo_object &Info) {
     data.is_object = !Info.is_myself;
     data.velocity = glm::vec3(0.0f);
     data.Scale = glm::vec3(1.0f);
-
-    // Criação e carregamento do modelo
    
-
-   
-
-    Info.ObjectsManager.addObject(data);
-    data.ID = Info.ObjectsManager.getLastId();
+    Info.ptr_ObjectsManager->addObject(data);
+    data.ID = Info.ptr_ObjectsManager->getLastId();
     
     createInfo_model modelInfo;
     modelInfo.modelPath = Info.model->modelPath;
@@ -126,9 +129,10 @@ Object::Object(createInfo_object &Info) {
     }
 }
 
-ObjectData Object::getData(){
+ObjectData& Object::getData(){
     return data;
 };
+
 
 void Object::DrawTransformUI(std::string &headerName){
     if(ImGui::CollapsingHeader(headerName.c_str())){
@@ -223,7 +227,7 @@ void KP::UTILS::Model::cleanupVao(){
 
 KP::UTILS::Model::Model(createInfo_model& info, std::vector<Model*> &allModel) : objectID(info.ObjectID), UBO(*info.ObjectID){
     
-    this->modelPath = modelPath;
+    this->modelPath = info.modelPath;
     this->allModel = &allModel;
 
 }

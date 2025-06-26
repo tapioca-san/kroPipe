@@ -1,9 +1,12 @@
+#include "../../Utils/object/kroPipe_object.hpp"
 #include "../../Utils/imgui/kroPipe_imgui.hpp"
 #include "../../Utils/input/kroPipe_input.hpp"
+#include "../swapchain/kroPipe_swapchain.hpp"
+#include "../pipeline/kroPipe_pipeline.hpp"
 #include "kroPipe_render.hpp"
+
 namespace KP {
 namespace ENGINE {
-
 
 const int MAX_FRAMES_IN_FLIGHT = 2; // quando crescer, adiiconar 3 aqui e gerenciar isso
 
@@ -58,7 +61,7 @@ void KP::ENGINE::Render::recordCommandBuffer(VkCommandBuffer commandBuffer, uint
 
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, KP::ENGINE::graphicsPipeline);
     VkViewport viewport{};
     viewport.x = 0.0f;
     viewport.y = 0.0f;
@@ -108,9 +111,12 @@ void KP::ENGINE::Render::drawFrame() {
     err = acquireNextImage();
     check_vk_result(err);
 
-    for(KP::UTILS::Model* model : KP::UTILS::allModel){
+    /*
+
+    for(KP::UTILS::Model* model : KP::UTILS::OBJECT_objectsManager.getAllModel()){
         //model->UBO.update();    
     }  
+    */
     
     vkResetFences(KP::ENGINE::OBJECT_device.getDevice(), 1, &inFlightFences[currentFrame]);
 

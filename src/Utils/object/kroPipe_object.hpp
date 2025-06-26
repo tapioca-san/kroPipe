@@ -4,12 +4,14 @@
 #include "../../Vulkan_Engine/pipeline/kroPipe_vertex_data.hpp"
 #include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
 #include <cstdint>
+#include <vector>
 
 #define MAX_BONE_INFLUENCE 4
 
 namespace KP {
 namespace UTILS {
 
+struct ObjectsManager; // redefinition below
 
 struct Mesh {
     std::vector<KP::ENGINE::VertexVulkan> vertices;
@@ -51,7 +53,7 @@ public:
     KP::UTILS::VAO vao;
     KP::ENGINE::UboStorage UBO;
     
-    std::vector<Model*> *allModel;
+    std::vector<Model*> *allModel; // it's a pointer that grab from somewhere
     
     uint16_t* objectID;
 
@@ -66,7 +68,7 @@ void draw(VkCommandBuffer &commandBuffer);
 
 void cleanupVao();
 
-Model(createInfo_model& info,std::vector<Model*> &allModel);
+Model(createInfo_model& info, std::vector<Model*> &allModel);
 
 private:
     
@@ -108,34 +110,13 @@ struct ObjectData {
     uint16_t ID = 0;
 };
 
-
-struct ObjectsManager{
-    private:
-    
-    std::vector<Model*> allModel;
-    
-    public:
-    std::vector<uint16_t> playersID;
-    std::vector<uint16_t> camerasID;
-    std::vector<uint16_t> objectsID;
-    std::vector<uint16_t> ID;
-
-    uint16_t lastID = -1;
-    void addObject(ObjectData& ObjectData);
-    int getLastId();
-    
-    Model* callModel(uint32_t ID);
-    std::vector<Model*>* getAllModel();
-
-};
-
 struct createInfo_object{
 
     glm::vec3 position;
     float floorPos;
     bool is_myself; 
     KP::UTILS::Model* model; 
-    ObjectsManager& ObjectsManager;
+    ObjectsManager* ptr_ObjectsManager;
 };
 
 class Object {
@@ -148,8 +129,8 @@ private:
     ObjectData data;
 public:
 
-    ObjectData getData();
-    Object(createInfo_object &Info);
+    ObjectData& getData();
+    Object(createInfo_object &Info, std::vector<Object*> &allObject);
     void DrawTransformUI(std::string &headerName);
     
     void draw(VkCommandBuffer& commandBuffer);
@@ -173,7 +154,30 @@ struct createInfo_object {
 
 */
 
-extern ObjectsManager OBJECT_objectsManager;
+struct ObjectsManager{
+    private:
+    
+    std::vector<Model*> allModel;
+    std::vector<Object*> allObejct;
+    
+    public:
+    std::vector<uint16_t> playersID;
+    std::vector<uint16_t> camerasID;
+    std::vector<uint16_t> objectsID;
+    std::vector<uint16_t> ID;
+    
+    uint16_t lastID = -1;
+    void addObject(ObjectData& ObjectData);
+    int getLastId();
+    
+    Model* callModel(uint32_t ID);
+    Object* callObject(uint32_t ID);
+    std::vector<Model*>* getAllModel();
+    std::vector<Object*>* getAllObject();
+
+};
+
+extern KP::UTILS::ObjectsManager OBJECT_objectsManager;
 
 } // namespace Utils
 } // namespace KP
