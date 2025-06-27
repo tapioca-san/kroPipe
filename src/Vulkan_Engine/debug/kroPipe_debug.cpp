@@ -39,12 +39,6 @@ void errorMessage(const std::string& message) {
     defaultMessage("ERROR", message);
 }
 
-std::string fatalMessage(const std::string& message) {
-    std::cerr << "[ FATAL ] : " << message << "\n";
-    logError.push_back(message);
-    return message;
-}
-
 void infoMessage(const std::string& message) {
     defaultMessage("INFO", message);
 }

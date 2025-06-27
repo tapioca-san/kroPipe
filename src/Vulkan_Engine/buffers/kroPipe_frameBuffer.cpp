@@ -27,7 +27,7 @@ void FrameBuffer::createFrameBuffers() {
         framebufferInfo.layers = 1;
 
         if (vkCreateFramebuffer(KP::ENGINE::OBJECT_device.getDevice(), &framebufferInfo, KP::ENGINE::VK_Allocator, &KP::ENGINE::swapChainFramebuffers[i]) != VK_SUCCESS) {
-            throw std::runtime_error(KP::ENGINE::fatalMessage("failed to create framebuffer!"));
+            throw std::runtime_error(fatalMessage("failed to create framebuffer!"));
         }
     }
 }

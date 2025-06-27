@@ -30,7 +30,7 @@ VkFormat Depth::findSupportedFormat(const std::vector<VkFormat>& candidates, VkI
         }
     }
 
-    throw std::runtime_error(KP::ENGINE::fatalMessage("failed to find supported format!"));
+    throw std::runtime_error(fatalMessage("failed to find supported format!"));
 }
 
 

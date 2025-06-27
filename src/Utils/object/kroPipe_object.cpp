@@ -3,6 +3,12 @@
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
 #include "kroPipe_object.hpp"
 
+
+#define FATAL_MSG(msg) ENGINE::fatalMessage( \
+    std::string(msg) + " [ " + __FILE__ + ":" + std::to_string(__LINE__) + " | " + __func__ + " ]")
+
+
+
 namespace KP {
 namespace UTILS {
 
@@ -27,27 +33,37 @@ int ObjectsManager::getLastId(){
 
 Model* ObjectsManager::callModel(uint32_t ID){ 
     if(allModel.data() == nullptr){
-        throw std::runtime_error(ENGINE::fatalMessage("AllObject is null"));
+        throw std::runtime_error(fatalMessage("AllModel is null"));
     }
     return allModel[ID];
 }
 
 Object* ObjectsManager::callObject(uint32_t ID){
     if(allObejct.data() == nullptr){
-        throw std::runtime_error(ENGINE::fatalMessage("AllObject is null"));
+        throw std::runtime_error(fatalMessage("AllObject is null"));
     }
     return allObejct[ID]; 
 }
 
 std::vector<Model*>* ObjectsManager::getAllModel(){
+    if(allModel.data() == nullptr){
+        throw std::runtime_error(fatalMessage("AllModel is null"));
+    }
     return &allModel;
 }
 
 std::vector<Object*>* ObjectsManager::getAllObject(){
+    if(allObejct.data() == nullptr){
+        throw std::runtime_error(fatalMessage("AllObject is null"));
+    }
     return &allObejct;
 }
 
-
+void ObjectsManager::render(){
+    for(uint16_t i = 0; i < getAllModel()->size(); i++){
+        allModel[i]->UBO.update();
+    }
+}
 
 float Object::calculateRaio(ObjectData& object) {
     float raio = 0.0f;

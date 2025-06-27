@@ -111,6 +111,7 @@ void KP::ENGINE::Render::drawFrame() {
     err = acquireNextImage();
     check_vk_result(err);
 
+    KP::UTILS::OBJECT_objectsManager.render();
     /*
 
     for(KP::UTILS::Model* model : KP::UTILS::OBJECT_objectsManager.getAllModel()){

@@ -174,6 +174,7 @@ struct ObjectsManager{
     std::vector<Model*>* getAllModel();
     std::vector<Object*>* getAllObject();
 
+    void render();
 
 };
 

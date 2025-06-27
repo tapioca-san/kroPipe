@@ -13,7 +13,7 @@ void Instance::framebufferResizeCallback(GLFWwindow* window, int width, int heig
 
 void Instance::createInstance() {
     if (KP::ENGINE::debug && !checkValidationLayerSupport()) { 
-        throw std::runtime_error(KP::ENGINE::fatalMessage("Debug requested, but validation layers not available!"));
+        throw std::runtime_error(fatalMessage("Debug requested, but validation layers not available!"));
     }
 
     VkApplicationInfo appInfo{};
@@ -45,7 +45,7 @@ void Instance::createInstance() {
     }
 
     if (vkCreateInstance(&createInfo, nullptr, &VK_instance) != VK_SUCCESS) {
-        throw std::runtime_error(KP::ENGINE::fatalMessage("Failed to create instance!")); 
+        throw std::runtime_error(fatalMessage("Failed to create instance!")); 
     }
 }
 

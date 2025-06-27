@@ -66,7 +66,7 @@ void Device::pickPhysicalDevice(VkInstance& instance) {
     vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
     if (deviceCount == 0) {
-        throw std::runtime_error(KP::ENGINE::fatalMessage("failed to find GPUs with Vulkan support!"));
+        throw std::runtime_error(fatalMessage("failed to find GPUs with Vulkan support!"));
     }
 
     std::vector<VkPhysicalDevice> devices(deviceCount);
@@ -80,7 +80,7 @@ void Device::pickPhysicalDevice(VkInstance& instance) {
     }
 
     if (VK_PhysicalDevice == VK_NULL_HANDLE) {
-        throw std::runtime_error(KP::ENGINE::fatalMessage("failed to find a suitable GPU!")); 
+        throw std::runtime_error(fatalMessage("failed to find a suitable GPU!")); 
     }
 }
 
@@ -121,7 +121,7 @@ void Device::createLogicalDevice() {
     }
 
     if (vkCreateDevice(VK_PhysicalDevice, &createInfo, KP::ENGINE::VK_Allocator, &KP::ENGINE::OBJECT_device.VK_Device) != VK_SUCCESS) {
-        throw std::runtime_error(KP::ENGINE::fatalMessage("failed to create logical device!")); 
+        throw std::runtime_error(fatalMessage("failed to create logical device!")); 
     }
 
     // queue gráfica guardada na queue families

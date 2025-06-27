@@ -3,7 +3,6 @@
 
 #include "../../kroPipe_depedence.hpp"
 
-
 namespace KP {
 namespace ENGINE {
 
@@ -20,9 +19,10 @@ void defaultMessage(const std::string& type, const std::string& message);
 
 void warnMessage(const std::string& message);
 void errorMessage(const std::string& message);
-std::string fatalMessage(const std::string& message); // Retorna string
 void infoMessage(const std::string& message);
 void debugMessage(const std::string& message);
+#define fatalMessage(msg) ( "\n///////////////////////////////////////////////////////////////////////\n [ DEBUGGER FOUND ERROR ]\nMessage: " + std::string(msg) + " \nFile: " + __FILE__ + ":" + std::to_string(__LINE__) + " \nFunction Error: " + __func__ )
+
 void deviceMessage(const std::string& message);
 void validationLayersMessage(const std::string& message);
 void modelMessage(const std::string& message);
