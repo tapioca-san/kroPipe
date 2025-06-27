@@ -115,7 +115,7 @@ struct createInfo_object{
     glm::vec3 position;
     float floorPos;
     bool is_myself; 
-    KP::UTILS::Model* model; 
+    std::string modelPath; 
     ObjectsManager* ptr_ObjectsManager;
 };
 
@@ -130,12 +130,12 @@ private:
 public:
 
     ObjectData& getData();
-    Object(createInfo_object &Info, std::vector<Object*> &allObject);
+    Object(createInfo_object &Info);
     void DrawTransformUI(std::string &headerName);
     
     void draw(VkCommandBuffer& commandBuffer);
 
-   ~Object();
+    ~Object();
 };
 
 /*
@@ -147,7 +147,6 @@ struct createInfo_object {
     float floorPos;
     bool is_myself;
     KP::UTILS::Model* model; // só passamos para ter o caminho
-    ObjectsManager& ObjectsManager;
 };
 
 -------------------------
@@ -167,13 +166,14 @@ struct ObjectsManager{
     std::vector<uint16_t> ID;
     
     uint16_t lastID = -1;
-    void addObject(ObjectData& ObjectData);
+    void addObject(Object& ObjectData);
     int getLastId();
     
     Model* callModel(uint32_t ID);
     Object* callObject(uint32_t ID);
     std::vector<Model*>* getAllModel();
     std::vector<Object*>* getAllObject();
+
 
 };
 

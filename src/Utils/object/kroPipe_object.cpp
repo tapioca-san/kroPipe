@@ -1,21 +1,23 @@
 #include "../../Vulkan_Engine/pipeline/kroPipe_pipeline.hpp"
 #include "../../Vulkan_Engine/device/kroPipe_device.hpp"
+#include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
 #include "kroPipe_object.hpp"
 
 namespace KP {
 namespace UTILS {
 
-void ObjectsManager::addObject(ObjectData& ObjectData){
+void ObjectsManager::addObject(Object& Object){
     lastID++;
     ID.push_back(lastID);
+    allObejct.push_back(&Object);
 
-    if(ObjectData.is_player == true){
+    if(Object.getData().is_player == true){
         playersID.push_back(lastID);
     }
-    else if(ObjectData.is_camera == true){
+    else if(Object.getData().is_camera == true){
         camerasID.push_back(lastID);
     }
-    else if(ObjectData.is_object == true){
+    else if(Object.getData().is_object == true){
         objectsID.push_back(lastID);
     }
 }
@@ -24,9 +26,16 @@ int ObjectsManager::getLastId(){
 }
 
 Model* ObjectsManager::callModel(uint32_t ID){ 
+    if(allModel.data() == nullptr){
+        throw std::runtime_error(ENGINE::fatalMessage("AllObject is null"));
+    }
     return allModel[ID];
 }
+
 Object* ObjectsManager::callObject(uint32_t ID){
+    if(allObejct.data() == nullptr){
+        throw std::runtime_error(ENGINE::fatalMessage("AllObject is null"));
+    }
     return allObejct[ID]; 
 }
 
@@ -37,6 +46,7 @@ std::vector<Model*>* ObjectsManager::getAllModel(){
 std::vector<Object*>* ObjectsManager::getAllObject(){
     return &allObejct;
 }
+
 
 
 float Object::calculateRaio(ObjectData& object) {
@@ -97,7 +107,7 @@ void Object::calculateAABB(ObjectData& object) {
 
 ObjectData data;
 
-Object::Object(createInfo_object &Info, std::vector<Object*> &allObject) {
+Object::Object(createInfo_object &Info) {
     data.Position = Info.position;
     data.floorPos = Info.floorPos;
     data.floorPoslowest = Info.floorPos;
@@ -107,11 +117,10 @@ Object::Object(createInfo_object &Info, std::vector<Object*> &allObject) {
     data.velocity = glm::vec3(0.0f);
     data.Scale = glm::vec3(1.0f);
    
-    Info.ptr_ObjectsManager->addObject(data);
     data.ID = Info.ptr_ObjectsManager->getLastId();
     
     createInfo_model modelInfo;
-    modelInfo.modelPath = Info.model->modelPath;
+    modelInfo.modelPath = Info.modelPath;
     modelInfo.ObjectID = &data.ID;
 
     KP::UTILS::Model* model = new KP::UTILS::Model(modelInfo, *KP::UTILS::OBJECT_objectsManager.getAllModel());
@@ -119,14 +128,21 @@ Object::Object(createInfo_object &Info, std::vector<Object*> &allObject) {
     model->UBO.create();
     model->loadModel();
     KP::UTILS::OBJECT_objectsManager.getAllModel()->push_back(model);
-
+    
     data.model = model;
     data.vao = &model->vao;
+    
+    //if (data.vao) {
+    //    data.raio = calculateRaio(data);
+    //    calculateAABB(data);
+    //}
 
-    if (data.vao) {
-        data.raio = calculateRaio(data);
-        calculateAABB(data);
-    }
+    KP::UTILS::OBJECT_objectsManager.addObject(*this);
+}
+
+Object::~Object(){
+    data.model->UBO.cleanUp();
+    data.model->cleanupVao();
 }
 
 ObjectData& Object::getData(){
@@ -204,12 +220,6 @@ void KP::UTILS::Model::draw(VkCommandBuffer &commandBuffer){
 }
 
 void KP::UTILS::Model::cleanupVao(){
-    /*
-    vkDestroyBuffer(device, vao.indexBuffer, nullptr);
-    vkFreeMemory(device, vao.indexBufferMemory, nullptr);
-    vkDestroyBuffer(device, vao.vertexBuffer, nullptr);
-    vkFreeMemory(device, vao.vertexBufferMemory, nullptr);
-    */
     
     for(VkBuffer indexBuffer : vao.indexBuffers){
         vkDestroyBuffer(KP::ENGINE::OBJECT_device.getDevice(),indexBuffer, KP::ENGINE::VK_Allocator);

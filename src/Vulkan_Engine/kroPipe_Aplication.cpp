@@ -1,9 +1,9 @@
 
+#include <glm/ext/vector_float3.hpp>
 #define STB_IMAGE_IMPLEMENTATION
 #include "kroPipe_Aplication.hpp"
 
 #include "../Utils/terminal/kroPipe_terminal.hpp"
-#include "../Utils/camera/kroPipe_camera.hpp"
 #include "../Utils/object/kroPipe_object.hpp"
 #include "window/kroPipe_windowSurface.hpp"
 #include "../Utils/input/kroPipe_input.hpp"
@@ -71,11 +71,13 @@ void Aplication::init(){
         KP::ENGINE::VK_renderPass
     );
     
-    /*
-    KP::UTILS::createEntity(KP::UTILS::cameraPlayer.Position + glm::vec3(1.0f,1.0f,1.0f), 0.0f, true);
-    KP::UTILS::loadObjects(KP::UTILS::sortedID);
+    KP::UTILS::createInfo_object obj1;
+    obj1.position = glm::vec3(0.0f, 0.0f, 0.0f);
+    obj1.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
+    obj1.modelPath = "/home/pipebomb/Downloads/M4a1/M4a1.fbx";
+    KP::UTILS::Object a(obj1);
     //create
-    */
+    
 
 }
 
@@ -87,7 +89,7 @@ void Aplication::run(){
         lastTime = currentTime;
 
         glfwPollEvents();
-        //KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), *KP::UTILS::OBJECT_objectsManager.callObject(0), deltaTime); // ??????????????
+        KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), *KP::UTILS::OBJECT_objectsManager.callObject(0), deltaTime); // ??????????????
         
         KP::UTILS::OBJECT_imguiInterface->newFrame(); 
         KP::UTILS::OBJECT_imguiInterface->drawWindows();         
