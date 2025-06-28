@@ -60,7 +60,7 @@ struct UboStorage{
 
     private: ////////////////////////////////////////////////////////////////
 
-
+        bool cleaned;
 
         void createUniformBuffers(KP::ENGINE::UniformBuffers &uniformBuffers);
 

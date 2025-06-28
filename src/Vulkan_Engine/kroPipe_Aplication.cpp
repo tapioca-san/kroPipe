@@ -28,8 +28,6 @@ Aplication OBJECT_aplication;
 
 #define APP_DEBUG_ENABLE
 
-#
-
 
 float deltaTime;
 float lastTime = glfwGetTime();
@@ -58,7 +56,9 @@ void Aplication::init(){
     KP::ENGINE::createTextureImage();
     KP::ENGINE::createTextureImageView();
     KP::ENGINE::createTextureSampler();
-    //KP::UTILS::loadAllModels();
+    for(KP::UTILS::Model *model : *KP::UTILS::OBJECT_objectsManager.getAllModel()){
+        model->loadModel();
+    }
     
     KP::ENGINE::OBJECT_sceneUBO.create();
     KP::ENGINE::OBJECT_command.createCommandBuffers();
@@ -75,7 +75,7 @@ void Aplication::init(){
     obj1.position = glm::vec3(0.0f, 0.0f, 0.0f);
     obj1.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
     obj1.modelPath = "/home/pipebomb/Downloads/M4a1/M4a1.fbx";
-    KP::UTILS::Object a(obj1);
+    KP::UTILS::Object* a = new KP::UTILS::Object(obj1);
     //create
     
 
@@ -118,15 +118,16 @@ void Aplication::clean() {
     vkDestroyImageView(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::textureImageView, KP::ENGINE::VK_Allocator);
     vkDestroyImage(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::textureImage, KP::ENGINE::VK_Allocator);
     vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::textureImageMemory, KP::ENGINE::VK_Allocator);
+    
+
 
     KP::ENGINE::OBJECT_sceneUBO.cleanUp();
-    
-    /* nah for now
-    for (KP::UTILS::Model *&model: KP::UTILS::allModel) {
-        
-        model->cleanupVao();
+
+    for(auto object : *KP::UTILS::OBJECT_objectsManager.getAllObject()){
+        object->clean();
     }
-    */
+    
+    
     KP::ENGINE::OBJECT_render.destroyRender();
         
     //KP::LIGHT::OBJECT_light.cleanUp();

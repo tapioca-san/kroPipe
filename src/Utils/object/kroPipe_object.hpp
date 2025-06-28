@@ -3,8 +3,6 @@
 
 #include "../../Vulkan_Engine/pipeline/kroPipe_vertex_data.hpp"
 #include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
-#include <cstdint>
-#include <vector>
 
 #define MAX_BONE_INFLUENCE 4
 
@@ -24,7 +22,6 @@ struct Mesh {
     Mesh(std::vector<KP::ENGINE::VertexVulkan> v, std::vector<uint16_t> i) 
     : vertices(std::move(v)), indices(std::move(i)) {}
 };
-
 
 
 struct VAO {
@@ -56,7 +53,10 @@ public:
     std::vector<Model*> *allModel; // it's a pointer that grab from somewhere
     
     uint16_t* objectID;
-
+    
+    ~Model(){
+        std::cerr << "destruio Model\n";
+    }
 //void renderModel(Vertex &InfoModel, VertexVulkan handle)
 
 
@@ -127,6 +127,7 @@ private:
     void calculateAABB(ObjectData& object);
     
     ObjectData data;
+
 public:
 
     ObjectData& getData();
@@ -135,7 +136,12 @@ public:
     
     void draw(VkCommandBuffer& commandBuffer);
 
-    ~Object();
+    void clean();
+
+    ~Object() {
+    std::cerr << "destruio OBJECT \n";
+}
+
 };
 
 /*
@@ -157,16 +163,20 @@ struct ObjectsManager{
     private:
     
     std::vector<Model*> allModel;
-    std::vector<Object*> allObejct;
+    std::vector<Object*> allObject;
     
     public:
+
+
+    ~ObjectsManager();
+
     std::vector<uint16_t> playersID;
     std::vector<uint16_t> camerasID;
     std::vector<uint16_t> objectsID;
     std::vector<uint16_t> ID;
     
     uint16_t lastID = -1;
-    void addObject(Object& ObjectData);
+    void addObject(Object* ObjectData);
     int getLastId();
     
     Model* callModel(uint32_t ID);
@@ -174,7 +184,6 @@ struct ObjectsManager{
     std::vector<Model*>* getAllModel();
     std::vector<Object*>* getAllObject();
 
-    void render();
 
 };
 

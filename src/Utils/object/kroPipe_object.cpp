@@ -3,67 +3,59 @@
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
 #include "kroPipe_object.hpp"
 
-
-#define FATAL_MSG(msg) ENGINE::fatalMessage( \
-    std::string(msg) + " [ " + __FILE__ + ":" + std::to_string(__LINE__) + " | " + __func__ + " ]")
-
-
-
 namespace KP {
 namespace UTILS {
 
-void ObjectsManager::addObject(Object& Object){
+void ObjectsManager::addObject(Object* Object){
     lastID++;
     ID.push_back(lastID);
-    allObejct.push_back(&Object);
+    allObject.push_back(Object);
 
-    if(Object.getData().is_player == true){
+    if(Object->getData().is_player == true){
         playersID.push_back(lastID);
     }
-    else if(Object.getData().is_camera == true){
+    else if(Object->getData().is_camera == true){
         camerasID.push_back(lastID);
     }
-    else if(Object.getData().is_object == true){
+    else if(Object->getData().is_object == true){
         objectsID.push_back(lastID);
     }
 }
+
+ObjectsManager::~ObjectsManager() {
+    for(Object* obj : allObject){
+        delete obj;
+    }
+    allObject.clear();
+}
+
 int ObjectsManager::getLastId(){
     return lastID;
 }
 
 Model* ObjectsManager::callModel(uint32_t ID){ 
     if(allModel.data() == nullptr){
-        throw std::runtime_error(fatalMessage("AllModel is null"));
+        throw std::runtime_error(fatalMessage("AllObject is null"));
     }
     return allModel[ID];
 }
 
 Object* ObjectsManager::callObject(uint32_t ID){
-    if(allObejct.data() == nullptr){
+    if(allObject.data() == nullptr){
         throw std::runtime_error(fatalMessage("AllObject is null"));
     }
-    return allObejct[ID]; 
+    return allObject[ID]; 
 }
 
 std::vector<Model*>* ObjectsManager::getAllModel(){
-    if(allModel.data() == nullptr){
-        throw std::runtime_error(fatalMessage("AllModel is null"));
-    }
     return &allModel;
 }
 
 std::vector<Object*>* ObjectsManager::getAllObject(){
-    if(allObejct.data() == nullptr){
-        throw std::runtime_error(fatalMessage("AllObject is null"));
-    }
-    return &allObejct;
+    return &allObject;
 }
 
-void ObjectsManager::render(){
-    for(uint16_t i = 0; i < getAllModel()->size(); i++){
-        allModel[i]->UBO.update();
-    }
-}
+
 
 float Object::calculateRaio(ObjectData& object) {
     float raio = 0.0f;
@@ -132,31 +124,32 @@ Object::Object(createInfo_object &Info) {
     data.is_object = !Info.is_myself;
     data.velocity = glm::vec3(0.0f);
     data.Scale = glm::vec3(1.0f);
-   
+
+    KP::UTILS::OBJECT_objectsManager.addObject(this);
+
     data.ID = Info.ptr_ObjectsManager->getLastId();
-    
+
     createInfo_model modelInfo;
     modelInfo.modelPath = Info.modelPath;
     modelInfo.ObjectID = &data.ID;
 
     KP::UTILS::Model* model = new KP::UTILS::Model(modelInfo, *KP::UTILS::OBJECT_objectsManager.getAllModel());
+
     model->UBO.createDescriptorLayout();
     model->UBO.create();
     model->loadModel();
+
     KP::UTILS::OBJECT_objectsManager.getAllModel()->push_back(model);
-    
+
     data.model = model;
     data.vao = &model->vao;
-    
-    //if (data.vao) {
-    //    data.raio = calculateRaio(data);
-    //    calculateAABB(data);
-    //}
 
-    KP::UTILS::OBJECT_objectsManager.addObject(*this);
+    // (Opcional) Calcular bounding box e raio, se quiser:
+    // data.raio = calculateRaio(data);
+    // calculateAABB(data);
 }
 
-Object::~Object(){
+void Object::clean(){
     data.model->UBO.cleanUp();
     data.model->cleanupVao();
 }

@@ -111,7 +111,9 @@ void KP::ENGINE::Render::drawFrame() {
     err = acquireNextImage();
     check_vk_result(err);
 
-    KP::UTILS::OBJECT_objectsManager.render();
+    for(uint16_t i = 0; i < KP::UTILS::OBJECT_objectsManager.getAllObject()->size(); i++){
+        KP::UTILS::OBJECT_objectsManager.callModel(i)->UBO.update();
+    }
     /*
 
     for(KP::UTILS::Model* model : KP::UTILS::OBJECT_objectsManager.getAllModel()){
