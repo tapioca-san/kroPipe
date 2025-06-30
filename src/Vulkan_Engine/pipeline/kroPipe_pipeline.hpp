@@ -34,7 +34,7 @@ class Pipeline{
 
 public:
     VkVertexInputBindingDescription bindingDescription = KP::ENGINE::VertexVulkan::getBindingDescription();
-    std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions = KP::ENGINE::VertexVulkan::getAttributeDescriptions();
+    std::array<VkVertexInputAttributeDescription, 4> attributeDescriptions = KP::ENGINE::VertexVulkan::getAttributeDescriptions();
 
     static std::vector<char> readFile(const std::string& filename);
     static VkShaderModule createShaderModule(const std::vector<char>& code);

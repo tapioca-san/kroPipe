@@ -13,6 +13,7 @@ struct VertexVulkan {
     glm::vec3 Position;
     glm::vec3 Normal;
     glm::vec3 color;
+    glm::vec4 vertexColors;
     
     glm::vec2 TexCoords;
     glm::vec3 Tangent;
@@ -27,8 +28,8 @@ struct VertexVulkan {
         return bindingDescription;
     }
 
-    static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions() {
-        std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
+    static std::array<VkVertexInputAttributeDescription, 4> getAttributeDescriptions() {
+        std::array<VkVertexInputAttributeDescription, 4> attributeDescriptions{};
 
         attributeDescriptions[0].binding = 0;
         attributeDescriptions[0].location = 0;
@@ -44,7 +45,12 @@ struct VertexVulkan {
         attributeDescriptions[2].location = 2;
         attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
         attributeDescriptions[2].offset = offsetof(VertexVulkan, TexCoords);
-
+        
+        attributeDescriptions[3].binding = 0;
+        attributeDescriptions[3].location = 3;
+        attributeDescriptions[3].format = VK_FORMAT_R32G32B32_SFLOAT;;
+        attributeDescriptions[3].offset = offsetof(VertexVulkan, vertexColors);
+        
         return attributeDescriptions;
     }
     

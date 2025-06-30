@@ -144,6 +144,9 @@ Object::Object(createInfo_object &Info) {
     data.model = model;
     data.vao = &model->vao;
 
+    if(data.is_player){
+
+    }
     // (Opcional) Calcular bounding box e raio, se quiser:
     // data.raio = calculateRaio(data);
     // calculateAABB(data);
@@ -336,23 +339,30 @@ KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh* mesh, const aiScene* scene
             }
             if(mesh->mTextureCoords[0]) 
             {
+                //text Coords
                 glm::vec2 vec;
                 vec.x = mesh->mTextureCoords[0][i].x; 
                 vec.y = mesh->mTextureCoords[0][i].y;
                 vertex.TexCoords = vec;
-                ////tangent
-                //vector.x = mesh->mTangents[i].x;
-                //vector.y = mesh->mTangents[i].y;
-                //vector.z = mesh->mTangents[i].z;
-                //vertex.Tangent = vector;              Não funcionando e não sei porquê. da segmant fault. 
-                //// bitangent
-                //vector.x = mesh->mBitangents[i].x;
-                //vector.y = mesh->mBitangents[i].y;
-                //vector.z = mesh->mBitangents[i].z;
-                //vertex.Bitangent = vector;
+                //tangent
+                vector.x = mesh->mTangents[i].x;
+                vector.y = mesh->mTangents[i].y;
+                vector.z = mesh->mTangents[i].z;
+                vertex.Tangent = vector;              
+                // bitangent
+                vector.x = mesh->mBitangents[i].x;
+                vector.y = mesh->mBitangents[i].y;
+                vector.z = mesh->mBitangents[i].z;
+                vertex.Bitangent = vector;
             }
             else{
                 vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+            }
+            if (mesh->HasVertexColors(0)){
+               for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+                    aiColor4D color = mesh->mColors[0][i]; // Canal 0
+                    vertex.vertexColors = glm::vec4(color.r, color.g, color.b, color.a);
+                }
             }
             
             vertices.push_back(vertex);
@@ -386,5 +396,6 @@ namespace UTILS {
 
 
 ObjectsManager OBJECT_objectsManager;
+
 }//UTILS
 }//KP

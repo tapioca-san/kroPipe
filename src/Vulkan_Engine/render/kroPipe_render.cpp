@@ -78,8 +78,9 @@ void KP::ENGINE::Render::recordCommandBuffer(VkCommandBuffer commandBuffer, uint
 
     vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-    
-    
+    for(KP::UTILS::Object* obj : *KP::UTILS::OBJECT_objectsManager.getAllObject()){
+        obj->getData().model->draw(commandBuffer);
+    }
 
     //IMGUI RENDER 
     if(KP::UTILS::ImguiMode){

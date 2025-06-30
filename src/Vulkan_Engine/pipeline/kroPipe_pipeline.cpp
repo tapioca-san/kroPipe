@@ -10,11 +10,11 @@
 namespace KP {
 namespace ENGINE {
 
-VkPipelineCache                                 PipelineCache = VK_NULL_HANDLE;
-VkPipelineLayout                                pipelineLayout = VK_NULL_HANDLE;
-VkPipeline                                      graphicsPipeline = VK_NULL_HANDLE;
-std::string                                     directoryProject = "/home/pipebomb/dev/cpp/vulkan/teste/src"; 
-std::string                                     directoryShader = "/Vulkan_Engine/shader/";
+VkPipelineCache  PipelineCache = VK_NULL_HANDLE;
+VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
+VkPipeline       graphicsPipeline = VK_NULL_HANDLE;
+std::string      directoryProject = "/home/pipebomb/dev/cpp/vulkan/teste/src"; 
+std::string      directoryShader = "/Vulkan_Engine/shader/";
 
 
 VkRenderPass VK_renderPass = VK_NULL_HANDLE; 
@@ -147,9 +147,6 @@ void Pipeline::createPipeline(shaderModule shader){
     if(setLayout.data() == nullptr){
         throw std::runtime_error(fatalMessage("Erro setLayout has no values"));
     }
-    else{
-        std::cerr << setLayout.data() << "\n";
-    }
     pipelineLayoutInfo.pSetLayouts = setLayout.data();
 
     KP::ENGINE::err = vkCreatePipelineLayout(KP::ENGINE::OBJECT_device.getDevice(), &pipelineLayoutInfo, KP::ENGINE::VK_Allocator, &pipelineLayout);
@@ -189,7 +186,7 @@ void Pipeline::createGraphicsPipeline() {
 }
 
 void Pipeline::createRenderPass() {
-   VkAttachmentDescription colorAttachment{};
+    VkAttachmentDescription colorAttachment{};
     colorAttachment.format = swapChainImageFormat;
     colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;

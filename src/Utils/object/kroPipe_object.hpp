@@ -54,9 +54,6 @@ public:
     
     uint16_t* objectID;
     
-    ~Model(){
-        std::cerr << "destruio Model\n";
-    }
 //void renderModel(Vertex &InfoModel, VertexVulkan handle)
 
 
@@ -90,7 +87,9 @@ struct ObjectData {
     
     KP::UTILS::VAO *vao;
     std::string modelPath;
-    KP::UTILS::Model* model = nullptr; // NOVO
+    KP::UTILS::Model* model = nullptr; 
+
+    uint32_t playerID = -1;
 
     float raio = 0.0f;
     float width = 0.0f, height = 0.0f, depth = 0.0f;
@@ -138,9 +137,6 @@ public:
 
     void clean();
 
-    ~Object() {
-    std::cerr << "destruio OBJECT \n";
-}
 
 };
 
@@ -183,6 +179,7 @@ struct ObjectsManager{
     Object* callObject(uint32_t ID);
     std::vector<Model*>* getAllModel();
     std::vector<Object*>* getAllObject();
+    std::vector<uint16_t*>* getAllPlayersID();
 
 
 };
