@@ -3,6 +3,8 @@
 
 #include "../../Vulkan_Engine/pipeline/kroPipe_vertex_data.hpp"
 #include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
+#include "../camera/kroPipe_camera.hpp"
+#include <cstdint>
 
 #define MAX_BONE_INFLUENCE 4
 
@@ -10,6 +12,7 @@ namespace KP {
 namespace UTILS {
 
 struct ObjectsManager; // redefinition below
+class player; // redefinition below
 
 struct Mesh {
     std::vector<KP::ENGINE::VertexVulkan> vertices;
@@ -113,7 +116,9 @@ struct createInfo_object{
 
     glm::vec3 position;
     float floorPos;
-    bool is_myself; 
+    bool is_camera;
+    bool is_player;
+    bool is_object; 
     std::string modelPath; 
     ObjectsManager* ptr_ObjectsManager;
 };
@@ -126,6 +131,8 @@ private:
     void calculateAABB(ObjectData& object);
     
     ObjectData data;
+    
+    KP::UTILS::player* model;
 
 public:
 
@@ -166,20 +173,52 @@ struct ObjectsManager{
 
     ~ObjectsManager();
 
-    std::vector<uint32_t> playersID;
-    std::vector<uint32_t> camerasID;
-    std::vector<uint32_t> objectsID;
+    std::vector<uint32_t*> playersID;
+    std::vector<uint32_t*> camerasID;
+    std::vector<uint32_t*> objectsID;
+    std::vector<uint32_t*> nullID;
     std::vector<uint32_t> ID;
     
     uint32_t lastID = -1;
     void addObject(Object* ObjectData);
     int getLastId();
+    void logID();
     
     Model* callModel(uint32_t ID);
     Object* callObject(uint32_t ID);
     std::vector<Model*>* getAllModel();
     std::vector<Object*>* getAllObject();
     std::vector<uint32_t*>* getAllPlayersID();
+
+    uint32_t* getPlayersID(uint32_t index);
+    uint32_t* getCamerasID(uint32_t index);
+    uint32_t* getObjectsID(uint32_t index);
+    uint32_t* getnullID(uint32_t index);
+
+
+};
+
+
+struct createInfo_player{
+
+    uint32_t* ObjectID;
+    KP::UTILS::Camera camera;
+
+};
+
+
+class player{
+
+    public:
+
+    player(KP::UTILS::createInfo_player& info);
+    ~player();
+
+    KP::UTILS::createInfo_player* getData();
+
+    private:
+
+    createInfo_player data;
 
 
 };

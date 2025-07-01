@@ -75,7 +75,8 @@ void Aplication::init(){
     KP::UTILS::createInfo_object obj1;
     obj1.position = glm::vec3(0.0f, 0.0f, 0.0f);
     obj1.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
-    obj1.modelPath = "/home/pipebomb/Downloads/organizado/model3D/emilia-rezero.glb";
+    obj1.is_player = true; // necessary
+    obj1.modelPath = "/home/pipebomb/Downloads/M4a1/M4a1.obj";
     KP::UTILS::Object* a = new KP::UTILS::Object(obj1);
     //create
     

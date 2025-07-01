@@ -1,7 +1,7 @@
 #include "../../Vulkan_Engine/pipeline/kroPipe_pipeline.hpp"
 #include "../../Vulkan_Engine/device/kroPipe_device.hpp"
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
-#include "kroPipe_player.hpp"
+#include <cstdint>
 #include "kroPipe_object.hpp"
 
 namespace KP {
@@ -13,14 +13,34 @@ void ObjectsManager::addObject(Object* Object){
     allObject.push_back(Object);
 
     if(Object->getData().is_player == true){
-        playersID.push_back(lastID);
+        std::cerr << "player ID:" << lastID << "\n" ;
+        playersID.push_back(&lastID);
     }
     else if(Object->getData().is_camera == true){
-        camerasID.push_back(lastID);
+        std::cerr << "camera ID:" << lastID << "\n" ;
+        camerasID.push_back(&lastID);
     }
     else if(Object->getData().is_object == true){
-        objectsID.push_back(lastID);
+        std::cerr << "object ID:" << lastID << "\n" ;
+        objectsID.push_back(&lastID);
     }
+    else {
+        std::cerr << "null ID:" << lastID << "\n" ;
+        nullID.push_back(&lastID);
+    }
+}
+
+uint32_t* ObjectsManager::getPlayersID(uint32_t index){
+    return playersID[index];
+}
+uint32_t* ObjectsManager::getCamerasID(uint32_t index){
+    return camerasID[index];
+}
+uint32_t* ObjectsManager::getObjectsID(uint32_t index){
+    return objectsID[index];
+}
+uint32_t* ObjectsManager::getnullID(uint32_t index){
+    return nullID[index];
 }
 
 ObjectsManager::~ObjectsManager() {
@@ -35,15 +55,15 @@ int ObjectsManager::getLastId(){
 }
 
 Model* ObjectsManager::callModel(uint32_t ID){ 
-    if(allModel.data() == nullptr){
-        throw std::runtime_error(fatalMessage("AllObject is null"));
+    if (ID >= allModel.size()) {
+        throw std::runtime_error("allModel ID out of range");
     }
     return allModel[ID];
 }
 
 Object* ObjectsManager::callObject(uint32_t ID){
-    if(allObject.data() == nullptr){
-        throw std::runtime_error(fatalMessage("AllObject is null"));
+    if (ID >= allObject.size()) {
+        throw std::runtime_error("allObject ID out of range");
     }
     return allObject[ID]; 
 }
@@ -56,7 +76,20 @@ std::vector<Object*>* ObjectsManager::getAllObject(){
     return &allObject;
 }
 
+void ObjectsManager::logID(){
+    
+ImGui::Begin("LOG ID");
+if (ImGui::CollapsingHeader("IDs")) {
+    for (uint32_t i = 0; i < KP::UTILS::OBJECT_objectsManager.getAllObject()->size(); i++) {
+        std::string text = "ID: " + std::to_string(i);
+        ImGui::Text(text.c_str());  
+        text = "Path: " + KP::UTILS::OBJECT_objectsManager.callObject(i)->getData().modelPath;
+        ImGui::Text(text.c_str());  
+    }
+}
+ImGui::End();
 
+}
 
 float Object::calculateRaio(ObjectData& object) {
     float raio = 0.0f;
@@ -114,15 +147,13 @@ void Object::calculateAABB(ObjectData& object) {
     }
 }
 
-ObjectData data;
-
 Object::Object(createInfo_object &Info) {
     data.Position = Info.position;
     data.floorPos = Info.floorPos;
     data.floorPoslowest = Info.floorPos;
-    data.is_camera = false;
-    data.is_player = Info.is_myself;
-    data.is_object = !Info.is_myself;
+    data.is_camera = Info.is_camera;
+    data.is_player = Info.is_player;
+    data.is_object = Info.is_object;
     data.velocity = glm::vec3(0.0f);
     data.Scale = glm::vec3(1.0f);
 
@@ -347,27 +378,30 @@ KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh* mesh, const aiScene* scene
                 vec.x = mesh->mTextureCoords[0][i].x; 
                 vec.y = mesh->mTextureCoords[0][i].y;
                 vertex.TexCoords = vec;
-                //tangent
-                vector.x = mesh->mTangents[i].x;
-                vector.y = mesh->mTangents[i].y;
-                vector.z = mesh->mTangents[i].z;
-                vertex.Tangent = vector;              
-                // bitangent
-                vector.x = mesh->mBitangents[i].x;
-                vector.y = mesh->mBitangents[i].y;
-                vector.z = mesh->mBitangents[i].z;
-                vertex.Bitangent = vector;
+                if (mesh->HasTangentsAndBitangents()) {
+                    //tangent
+                    vector.x = mesh->mTangents[i].x;
+                    vector.y = mesh->mTangents[i].y;
+                    vector.z = mesh->mTangents[i].z;
+                    vertex.Tangent = vector;              
+                    // bitangent
+                    vector.x = mesh->mBitangents[i].x;
+                    vector.y = mesh->mBitangents[i].y;
+                    vector.z = mesh->mBitangents[i].z;
+                    vertex.Bitangent = vector;
+                }
+                else{
+                    vertex.Tangent = glm::vec3(0,0,0);
+                    vertex.Bitangent = glm::vec3(0,0,0);
+                }
             }
             else{
                 vertex.TexCoords = glm::vec2(0.0f, 0.0f);
             }
-            if (mesh->HasVertexColors(0)){
-               for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
-                    aiColor4D color = mesh->mColors[0][i]; // Canal 0
-                    vertex.vertexColors = glm::vec4(1, color.g, color.b, color.a);
-                }
+            if (mesh->HasVertexColors(0)) {
+                aiColor4D color = mesh->mColors[0][i];
+                vertex.vertexColors = glm::vec4(color.r, color.g, color.b, color.a);
             }
-            
             vertices.push_back(vertex);
         }
         for(unsigned int i = 0; i < mesh->mNumFaces; i++)
@@ -389,6 +423,16 @@ void KP::UTILS::Model::processNode(aiNode* node, const aiScene* scene) {
     for (uint16_t i = 0; i < node->mNumChildren; i++) {
         processNode(node->mChildren[i], scene);
     }
+}
+
+KP::UTILS::createInfo_player* KP::UTILS::player::getData(){
+    return &data;
+}
+
+
+KP::UTILS::player::player(KP::UTILS::createInfo_player& info) {
+    
+    KP::UTILS::OBJECT_objectsManager.callObject(*info.ObjectID)->getData().is_player = true; // necessary to turn the objet to the player
 }
 
 namespace KP {

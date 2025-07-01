@@ -1,4 +1,3 @@
-#include "../../Utils/object/kroPipe_player.hpp"
 #include "../../Utils/object/kroPipe_object.hpp"
 #include "../../Utils/camera/kroPipe_camera.hpp"
 #include "../swapchain/kroPipe_swapchain.hpp"
@@ -116,7 +115,7 @@ void KP::ENGINE::UboStorage::updateUniformBuffer(KP::ENGINE::UniformBuffers &uni
     if(KP::UTILS::OBJECT_objectsManager.getAllObject()->data() != nullptr){
 
         ubo.model = glm::mat4(1.0f);
-        ubo.model = glm::translate(ubo.model, glm::vec3((float)KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.x, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.z));
+        ubo.model = glm::translate(ubo.model, glm::vec3(11, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.z));
         ubo.model = glm::rotate(ubo.model, glm::radians(KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)); // rotation for X
         ubo.model = glm::rotate(ubo.model, glm::radians(KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f)); // rotation for Y
         ubo.model = glm::rotate(ubo.model, glm::radians(KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f)); // rotation for Z
