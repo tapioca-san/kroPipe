@@ -11,7 +11,7 @@ namespace ENGINE {
 
 // Struct para armazenar índices das famílias de queues
 struct QueueFamilyIndices {
-    std::optional<uint32_t> graphicsFamily;
+    std::optional<uint32_t> graphicsAndComputeFamily;
     std::optional<uint32_t> presentFamily;
 
     bool isComplete(); // Método para verificar se ambos os índices foram encontrados

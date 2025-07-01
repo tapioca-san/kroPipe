@@ -7,7 +7,7 @@
 namespace KP {
 namespace UTILS {
 
-struct playerInfo{
+struct createInfo_player{
 
     uint32_t* ObjectID;
     KP::UTILS::Camera camera;
@@ -20,17 +20,14 @@ class player{
 
     public:
 
-
-    player(KP::UTILS::playerInfo& info);
+    player(KP::UTILS::createInfo_player& info);
     ~player();
 
-    KP::UTILS::playerInfo* getData();
-
-
+    KP::UTILS::createInfo_player* getData();
 
     private:
 
-    playerInfo data;
+    createInfo_player data;
 
 
 };

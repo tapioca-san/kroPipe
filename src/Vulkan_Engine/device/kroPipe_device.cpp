@@ -1,9 +1,9 @@
+#include "../queue/kroPipe_queuFamilies.hpp" 
+#include "../swapchain/kroPipe_swapchain.hpp"
+#include "../pipeline/kroPipe_GPGPU.hpp"
+#include "../debug/kroPipe_debug.hpp" 
 #include "kroPipe_device.hpp"
-#include "../queue/kroPipe_queuFamilies.hpp" // Incluído para OBJECT_queuFamilies
-#include "../swapchain/kroPipe_swapchain.hpp" // Incluído para OBJECT_swapChain
-#include "../debug/kroPipe_debug.hpp" // Incluído para fatalMessage, debug, VK_Allocator
 
-// Não há definição para OBJECT_device aqui porque ele é inline no header
 
 namespace KP {
 namespace ENGINE {
@@ -88,7 +88,7 @@ void Device::createLogicalDevice() {
     KP::ENGINE::QueueFamilyIndices indices = KP::ENGINE::OBJECT_queuFamilies.findQueuFamilies(VK_PhysicalDevice);
 
     std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-    std::set<uint32_t> uniqueQueueFamilies = {indices.graphicsFamily.value(), indices.presentFamily.value()};
+    std::set<uint32_t> uniqueQueueFamilies = {indices.graphicsAndComputeFamily.value(), indices.presentFamily.value()};
 
     float queuePriority = 1.0f;
     for (uint32_t queueFamily : uniqueQueueFamilies) {
@@ -125,7 +125,8 @@ void Device::createLogicalDevice() {
     }
 
     // queue gráfica guardada na queue families
-    vkGetDeviceQueue(KP::ENGINE::OBJECT_device.getDevice(), indices.graphicsFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.graphicsQueue);
+    vkGetDeviceQueue(KP::ENGINE::OBJECT_device.getDevice(), indices.graphicsAndComputeFamily.value(), 0, OBJECT_GPGPU.getComputeQueue());
+    vkGetDeviceQueue(KP::ENGINE::OBJECT_device.getDevice(), indices.graphicsAndComputeFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.graphicsQueue);
     vkGetDeviceQueue(KP::ENGINE::OBJECT_device.getDevice(), indices.presentFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.presentQueue);
 }
 

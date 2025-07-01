@@ -18,6 +18,7 @@
 #include "texture/kroPipe_texture.hpp"
 #include "image/kroPipe_imageView.hpp"
 #include "command/kroPipe_command.hpp"
+#include "pipeline/kroPipe_GPGPU.hpp"
 #include "window/kroPipe_window.hpp"
 #include "render/kroPipe_render.hpp"
 #include "device/kroPipe_device.hpp"
@@ -48,7 +49,7 @@ void Aplication::init(){
         KP::ENGINE::OBJECT_sceneUBO.createDescriptorLayout(); // scenes
 
     }
-    
+    //KP::ENGINE::OBJECT_GPGPU              --GPGPU ain't including
     KP::ENGINE::OBJECT_depth.createDepthResources();
     KP::ENGINE::OBJECT_pipeline.createGraphicsPipeline();  
     KP::ENGINE::OBJECT_command.createCommandPool();
@@ -74,7 +75,7 @@ void Aplication::init(){
     KP::UTILS::createInfo_object obj1;
     obj1.position = glm::vec3(0.0f, 0.0f, 0.0f);
     obj1.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
-    obj1.modelPath = "/home/pipebomb/Downloads/M4a1/M4a1.fbx";
+    obj1.modelPath = "/home/pipebomb/Downloads/organizado/model3D/emilia-rezero.glb";
     KP::UTILS::Object* a = new KP::UTILS::Object(obj1);
     //create
     

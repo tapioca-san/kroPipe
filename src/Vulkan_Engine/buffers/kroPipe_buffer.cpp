@@ -16,7 +16,7 @@ std::vector<VkDescriptorSetLayout> setLayout;
 
 uint32_t currentFrame = 0;
 
-KP::ENGINE::UboStorage::UboStorage(uint16_t &objectID){
+KP::ENGINE::UboStorage::UboStorage(uint32_t &objectID){
     this->objectId = objectID;    
 }
 
@@ -183,7 +183,7 @@ void KP::ENGINE::UboStorage::cleanupBuffer(KP::ENGINE::UniformBuffers &uniformBu
     vkDestroyDescriptorSetLayout(KP::ENGINE::OBJECT_device.getDevice(), uniformBuffers.descriptorSetLayout, KP::ENGINE::VK_Allocator);
 }
 
-uint16_t aa = 0;
+uint32_t aa = 0;
 KP::ENGINE::UboStorage OBJECT_sceneUBO(aa);
 
 }//ENGINE

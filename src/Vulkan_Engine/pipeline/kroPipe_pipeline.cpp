@@ -1,9 +1,9 @@
+#include "../swapchain/kroPipe_swapchain.hpp" 
 #include "../buffers/kroPipe_buffer.hpp"
 #include "../device/kroPipe_device.hpp" 
+#include "../device/kroPipe_device.hpp" 
+#include "../depth/kroPipe_depth.hpp" 
 #include "../debug/kroPipe_debug.hpp"   
-#include "../depth/kroPipe_depth.hpp"   
-#include "../../kroPipe_depedence.hpp"
-#include <stdexcept>
 #include "kroPipe_pipeline.hpp"
 
 
@@ -12,9 +12,9 @@ namespace ENGINE {
 
 VkPipelineCache  PipelineCache = VK_NULL_HANDLE;
 VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
-VkPipeline       graphicsPipeline = VK_NULL_HANDLE;
 std::string      directoryProject = "/home/pipebomb/dev/cpp/vulkan/teste/src"; 
 std::string      directoryShader = "/Vulkan_Engine/shader/";
+VkPipeline       graphicsPipeline = VK_NULL_HANDLE;
 
 
 VkRenderPass VK_renderPass = VK_NULL_HANDLE; 
@@ -22,11 +22,11 @@ VkRenderPass VK_renderPass = VK_NULL_HANDLE;
 KP::ENGINE::Pipeline OBJECT_pipeline;
 
 
-std::vector<char> Pipeline::readFile(const std::string& filename) {
+std::vector<char> readFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
     
     if (!file.is_open()) {
-        throw std::runtime_error("failed to open file!"); // Se não tiver shaders, da erro
+        throw std::runtime_error("failed to open file!");
     }
 
     size_t fileSize = (size_t) file.tellg();
@@ -38,7 +38,7 @@ std::vector<char> Pipeline::readFile(const std::string& filename) {
     return buffer;
 }
 
-VkShaderModule Pipeline::createShaderModule(const std::vector<char>& code) {
+VkShaderModule createShaderModule(const std::vector<char>& code) {
     VkShaderModuleCreateInfo createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
     createInfo.codeSize = code.size();

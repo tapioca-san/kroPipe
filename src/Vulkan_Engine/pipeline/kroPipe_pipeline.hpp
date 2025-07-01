@@ -2,25 +2,22 @@
 #define KROPIPE_PIPELINE_HPP
 
 #include "../../kroPipe_depedence.hpp"
-// Incluir headers para objetos e variáveis usados (agora que definições estão em .cpp)
 #include "../buffers/kroPipe_buffer.hpp"
-#include "../device/kroPipe_device.hpp" // OBJECT_device
-#include "../debug/kroPipe_debug.hpp"   // check_vk_result, err, VK_Allocator, fatalMessage
-#include "../depth/kroPipe_depth.hpp"   // OBJECT_depth (para findDepthFormat)
-#include "../swapchain/kroPipe_swapchain.hpp" // swapChainImageFormat (já declarado extern aqui)
-#include "kroPipe_vertex_data.hpp"      // VertexVulkan
+#include "kroPipe_vertex_data.hpp"  
 
 
 namespace KP {
 namespace ENGINE {
 
-extern VkPipelineCache                      PipelineCache; 
-extern VkPipelineLayout                     pipelineLayout; 
-extern VkPipeline                           graphicsPipeline;
-extern std::string                          directoryProject; 
+extern VkPipelineCache  PipelineCache; 
+extern std::string      directoryProject; 
+extern VkPipelineLayout pipelineLayout; 
+extern VkPipeline       graphicsPipeline;
 
 extern VkRenderPass VK_renderPass;
 
+std::vector<char> readFile(const std::string& filename);
+VkShaderModule createShaderModule(const std::vector<char>& code);
 
 struct shaderModule {
     VkPipelineShaderStageCreateInfo shaderStages[2];
@@ -36,8 +33,6 @@ public:
     VkVertexInputBindingDescription bindingDescription = KP::ENGINE::VertexVulkan::getBindingDescription();
     std::array<VkVertexInputAttributeDescription, 4> attributeDescriptions = KP::ENGINE::VertexVulkan::getAttributeDescriptions();
 
-    static std::vector<char> readFile(const std::string& filename);
-    static VkShaderModule createShaderModule(const std::vector<char>& code);
     static shaderModule UseShaders(const std::string& directoryPath, const std::string& vertShaderPath, const std::string& fragShaderPath);
 
 

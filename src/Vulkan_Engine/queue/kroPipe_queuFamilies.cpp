@@ -7,7 +7,7 @@ namespace KP {
 namespace ENGINE {
 
 bool QueueFamilyIndices::isComplete() {
-    return graphicsFamily.has_value() && presentFamily.has_value();
+    return graphicsAndComputeFamily.has_value() && presentFamily.has_value();
 }
 
 KP::ENGINE::QueuFamilies OBJECT_queuFamilies;
@@ -23,9 +23,9 @@ QueueFamilyIndices QueuFamilies::findQueuFamilies(VkPhysicalDevice device){
     
     int i = 0;
     
-    for (const auto& queueFamily : queueFamilies){
-        if(queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT){
-            indices.graphicsFamily = i;
+    for (const auto& queueFamily : queueFamilies) {
+        if ((queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) && (queueFamily.queueFlags & VK_QUEUE_COMPUTE_BIT)) {
+            indices.graphicsAndComputeFamily = i;
         }
         
         VkBool32 presentSupport = false;
@@ -46,7 +46,7 @@ QueueFamilyIndices QueuFamilies::findQueuFamilies(VkPhysicalDevice device){
     throw std::runtime_error(fatalMessage("failed to find a queue family!"));
 }
 
-graphicsIndex = indices.graphicsFamily.value();
+graphicsIndex = indices.graphicsAndComputeFamily.value();
 
 
 return indices;

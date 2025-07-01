@@ -7,12 +7,12 @@ namespace UTILS {
 
 
 
-KP::UTILS::playerInfo* player::getData(){
+KP::UTILS::createInfo_player* player::getData(){
     return &data;
 }
 
 
-player::player(KP::UTILS::playerInfo& info) {
+player::player(KP::UTILS::createInfo_player& info) {
     KP::UTILS::OBJECT_objectsManager.callObject(*data.ObjectID)->getData().is_player = true; // necessary
 }
 

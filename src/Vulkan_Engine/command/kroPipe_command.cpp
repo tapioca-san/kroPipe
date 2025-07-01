@@ -12,7 +12,7 @@
     VkCommandPoolCreateInfo poolInfo{};
     poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-    poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
+    poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsAndComputeFamily.value();
 
     err = vkCreateCommandPool(KP::ENGINE::OBJECT_device.getDevice(), &poolInfo, KP::ENGINE::VK_Allocator, &commandPool);
     check_vk_result(err, "failed to create command pool!");

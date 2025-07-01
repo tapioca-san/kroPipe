@@ -1,6 +1,7 @@
 #include "../../Vulkan_Engine/pipeline/kroPipe_pipeline.hpp"
 #include "../../Vulkan_Engine/device/kroPipe_device.hpp"
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
+#include "kroPipe_player.hpp"
 #include "kroPipe_object.hpp"
 
 namespace KP {
@@ -145,7 +146,9 @@ Object::Object(createInfo_object &Info) {
     data.vao = &model->vao;
 
     if(data.is_player){
-
+        createInfo_player playerInfo;
+        playerInfo.ObjectID = &data.ID;
+        KP::UTILS::player* model = new KP::UTILS::player(playerInfo);
     }
     // (Opcional) Calcular bounding box e raio, se quiser:
     // data.raio = calculateRaio(data);
@@ -164,17 +167,17 @@ ObjectData& Object::getData(){
 
 void Object::DrawTransformUI(std::string &headerName){
     if(ImGui::CollapsingHeader(headerName.c_str())){
-        ImGui::DragFloat("float Position X", &data.Position.x, 0.1f);
-        ImGui::DragFloat("float Position Y", &data.Position.y, 0.1f);
-        ImGui::DragFloat("float Position Z", &data.Position.z, 0.1f);
+        ImGui::DragFloat("float Position X", &data.Position.x, 0.01f);
+        ImGui::DragFloat("float Position Y", &data.Position.y, 0.01f);
+        ImGui::DragFloat("float Position Z", &data.Position.z, 0.01f);
         
-        ImGui::DragFloat("float Rotate X", &data.Rotation.x, 0.1f);
-        ImGui::DragFloat("float Rotate Y", &data.Rotation.y, 0.1f);
-        ImGui::DragFloat("float Rotate Z", &data.Rotation.z, 0.1f);
+        ImGui::DragFloat("float Rotate X", &data.Rotation.x, 0.01f);
+        ImGui::DragFloat("float Rotate Y", &data.Rotation.y, 0.01f);
+        ImGui::DragFloat("float Rotate Z", &data.Rotation.z, 0.01f);
         
-        ImGui::DragFloat("float Scale X", &data.Scale.x, 0.1f);
-        ImGui::DragFloat("float Scale Y", &data.Scale.y, 0.1f);
-        ImGui::DragFloat("float Scale Z", &data.Scale.z, 0.1f);
+        ImGui::DragFloat("float Scale X", &data.Scale.x, 0.01f);
+        ImGui::DragFloat("float Scale Y", &data.Scale.y, 0.01f);
+        ImGui::DragFloat("float Scale Z", &data.Scale.z, 0.01f);
     }
 }
 
@@ -210,7 +213,7 @@ void KP::UTILS::Model::loadModel() {
 }
 
 void KP::UTILS::Model::renderToBuffer(){
-    for(uint16_t i = 0; i < vao.meshes.size(); i++){
+    for(uint32_t i = 0; i < vao.meshes.size(); i++){
         createVertexBuffer(vao.meshes[i].vertices, vao);
         createIndexBuffer(vao.meshes[i].indices, vao);
     }
@@ -219,7 +222,7 @@ void KP::UTILS::Model::renderToBuffer(){
 void KP::UTILS::Model::draw(VkCommandBuffer &commandBuffer){
     
     VkDeviceSize offsets[] = {0};
-    for(uint16_t i = 0; i < vao.meshes.size(); i++){
+    for(uint32_t i = 0; i < vao.meshes.size(); i++){
         VkBuffer vertexBuffers[] = {vao.vertexBuffers[i]};
         
         //UboShader(currentFrame);
@@ -285,7 +288,7 @@ void KP::UTILS::Model::createVertexBuffer(const std::vector<KP::ENGINE::VertexVu
     vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), stagingBufferMemory, nullptr);
 }
 
-void KP::UTILS::Model::createIndexBuffer(const std::vector<uint16_t> &indices, VAO &vao) {
+void KP::UTILS::Model::createIndexBuffer(const std::vector<uint32_t> &indices, VAO &vao) {
     VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
 
     VkBuffer stagingBuffer;
@@ -318,7 +321,7 @@ void KP::UTILS::Model::createIndexBuffer(const std::vector<uint16_t> &indices, V
 
 KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh* mesh, const aiScene* scene) {
     std::vector<KP::ENGINE::VertexVulkan> vertices;
-    std::vector<uint16_t> indices;
+    std::vector<uint32_t> indices;
 
     KP::ENGINE::VertexVulkan vertex{};
     for(unsigned int i = 0; i < mesh->mNumVertices; i++)
@@ -361,7 +364,7 @@ KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh* mesh, const aiScene* scene
             if (mesh->HasVertexColors(0)){
                for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
                     aiColor4D color = mesh->mColors[0][i]; // Canal 0
-                    vertex.vertexColors = glm::vec4(color.r, color.g, color.b, color.a);
+                    vertex.vertexColors = glm::vec4(1, color.g, color.b, color.a);
                 }
             }
             
@@ -388,12 +391,8 @@ void KP::UTILS::Model::processNode(aiNode* node, const aiScene* scene) {
     }
 }
 
-
-
-
 namespace KP {
 namespace UTILS {
-
 
 ObjectsManager OBJECT_objectsManager;
 

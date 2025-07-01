@@ -13,13 +13,13 @@ struct ObjectsManager; // redefinition below
 
 struct Mesh {
     std::vector<KP::ENGINE::VertexVulkan> vertices;
-    std::vector<uint16_t> indices;
+    std::vector<uint32_t> indices;
     
     VkImage diffuseTextureImage = VK_NULL_HANDLE;
     VkDeviceMemory diffuseTextureMemory = VK_NULL_HANDLE;
     VkImageView diffuseTextureView = VK_NULL_HANDLE;
     
-    Mesh(std::vector<KP::ENGINE::VertexVulkan> v, std::vector<uint16_t> i) 
+    Mesh(std::vector<KP::ENGINE::VertexVulkan> v, std::vector<uint32_t> i) 
     : vertices(std::move(v)), indices(std::move(i)) {}
 };
 
@@ -38,7 +38,7 @@ struct VAO {
 struct createInfo_model{
 
     std::string modelPath;
-    uint16_t* ObjectID;
+    uint32_t* ObjectID;
 };
 
 class Model {
@@ -52,7 +52,7 @@ public:
     
     std::vector<Model*> *allModel; // it's a pointer that grab from somewhere
     
-    uint16_t* objectID;
+    uint32_t* objectID;
     
 //void renderModel(Vertex &InfoModel, VertexVulkan handle)
 
@@ -71,7 +71,7 @@ private:
     
 void UboShader(uint32_t currentImage);
 void createVertexBuffer(const std::vector<KP::ENGINE::VertexVulkan> &vertices, VAO &vao);
-void createIndexBuffer(const std::vector<uint16_t> &indices, VAO &vao);
+void createIndexBuffer(const std::vector<uint32_t> &indices, VAO &vao);
 Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 void processNode(aiNode* node, const aiScene* scene);
 
@@ -106,7 +106,7 @@ struct ObjectData {
     bool is_player = false;
     bool is_object = false;
     bool is_OnAir = true;
-    uint16_t ID = 0;
+    uint32_t ID = 0;
 };
 
 struct createInfo_object{
@@ -166,12 +166,12 @@ struct ObjectsManager{
 
     ~ObjectsManager();
 
-    std::vector<uint16_t> playersID;
-    std::vector<uint16_t> camerasID;
-    std::vector<uint16_t> objectsID;
-    std::vector<uint16_t> ID;
+    std::vector<uint32_t> playersID;
+    std::vector<uint32_t> camerasID;
+    std::vector<uint32_t> objectsID;
+    std::vector<uint32_t> ID;
     
-    uint16_t lastID = -1;
+    uint32_t lastID = -1;
     void addObject(Object* ObjectData);
     int getLastId();
     
@@ -179,7 +179,7 @@ struct ObjectsManager{
     Object* callObject(uint32_t ID);
     std::vector<Model*>* getAllModel();
     std::vector<Object*>* getAllObject();
-    std::vector<uint16_t*>* getAllPlayersID();
+    std::vector<uint32_t*>* getAllPlayersID();
 
 
 };
