@@ -32,9 +32,10 @@ class MSAA{
 
     VkSampleCountFlagBits getMaxUsableSampleCount(); // use to test KP::ENGINE::Device::pickPhysicalDevice()
 
-    ImageMSAA* getPointerDataImage();
     
     public:
+    
+    ImageMSAA* getPointerDataImage();
     
     VkSampleCountFlagBits* getPointerMsaaSamples();
 
