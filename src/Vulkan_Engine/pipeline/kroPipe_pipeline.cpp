@@ -2,6 +2,7 @@
 #include "../buffers/kroPipe_buffer.hpp"
 #include "../device/kroPipe_device.hpp" 
 #include "../device/kroPipe_device.hpp" 
+#include "../texture/kroPipe_MSAA.hpp"
 #include "../depth/kroPipe_depth.hpp" 
 #include "../debug/kroPipe_debug.hpp"   
 #include "kroPipe_pipeline.hpp"
@@ -195,6 +196,7 @@ void Pipeline::createRenderPass() {
     colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    colorAttachment.samples = *KP::ENGINE::OBJECT_msaa.getPointerMsaaSamples();
 
     VkAttachmentDescription depthAttachment{};
     depthAttachment.format = KP::ENGINE::OBJECT_depth.findDepthFormat();

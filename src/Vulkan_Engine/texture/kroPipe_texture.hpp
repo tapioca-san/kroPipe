@@ -1,5 +1,5 @@
-#ifndef TEXTURE_H
-#define TEXTURE_H
+#ifndef KROPIPE_TEXTURE_H
+#define KROPIPE_TEXTURE_H
 
 #include "../device/kroPipe_device.hpp"
 #include "../vertex/kroPipe_vertex.hpp"
@@ -16,7 +16,7 @@ extern VkSampler textureSampler;
 extern VkImage textureImage;
 
 
-void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
+void createImage(uint32_t width, uint32_t height, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
 
 void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
 
@@ -34,4 +34,4 @@ void createTextureSampler();
 }//KP
 
 
-#endif//TEXTURE_H
+#endif//KROPIPE_TEXTURE_H

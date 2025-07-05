@@ -22,6 +22,7 @@
 #include "window/kroPipe_window.hpp"
 #include "render/kroPipe_render.hpp"
 #include "device/kroPipe_device.hpp"
+#include "texture/kroPipe_MSAA.hpp"
 #include "depth/kroPipe_depth.hpp"
 #include "debug/kroPipe_debug.hpp" 
 
@@ -49,10 +50,11 @@ void Aplication::init(){
         KP::ENGINE::OBJECT_sceneUBO.createDescriptorLayout(); // scenes
 
     }
-    //KP::ENGINE::OBJECT_GPGPU              --GPGPU ain't including
+    //KP::ENGINE::OBJECT_GPGPU              -- GPGPU ain't including
     KP::ENGINE::OBJECT_depth.createDepthResources();
     KP::ENGINE::OBJECT_pipeline.createGraphicsPipeline();  
     KP::ENGINE::OBJECT_command.createCommandPool();
+    KP::ENGINE::OBJECT_msaa.createColorResources(); // MSAA Implementation
     KP::ENGINE::OBJECT_frameBuffer.createFrameBuffers();
     KP::ENGINE::createTextureImage();
     KP::ENGINE::createTextureImageView();
@@ -113,6 +115,7 @@ void Aplication::run(){
 void Aplication::clean() {
     vkDeviceWaitIdle(KP::ENGINE::OBJECT_device.getDevice());
     KP::UTILS::OBJECT_imguiInterface->cleanup();
+    KP::ENGINE::OBJECT_msaa.clean();
     vkDestroyImageView(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::depthImageView, KP::ENGINE::VK_Allocator);
     vkDestroyImage(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::depthImage, KP::ENGINE::VK_Allocator);
     vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::depthImageMemory, KP::ENGINE::VK_Allocator);
@@ -121,7 +124,6 @@ void Aplication::clean() {
     vkDestroyImage(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::textureImage, KP::ENGINE::VK_Allocator);
     vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::textureImageMemory, KP::ENGINE::VK_Allocator);
     
-
 
     KP::ENGINE::OBJECT_sceneUBO.cleanUp();
 

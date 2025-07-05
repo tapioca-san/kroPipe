@@ -1,6 +1,7 @@
 #include "../queue/kroPipe_queuFamilies.hpp" 
 #include "../swapchain/kroPipe_swapchain.hpp"
 #include "../pipeline/kroPipe_GPGPU.hpp"
+#include "../texture/kroPipe_MSAA.hpp"
 #include "../debug/kroPipe_debug.hpp" 
 #include "kroPipe_device.hpp"
 
@@ -74,7 +75,8 @@ void Device::pickPhysicalDevice(VkInstance& instance) {
 
     for (const auto& device : devices) {
         if (isDeviceSuitable(device)) { 
-            VK_PhysicalDevice = device; 
+            VK_PhysicalDevice = device;
+            //*OBJECT_msaa.getPointerMsaaSamples() = OBJECT_msaa.getMaxUsableSampleCount(); 
             break;
         }
     }

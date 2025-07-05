@@ -1,24 +1,21 @@
-#include "kroPipe_depth.hpp"
-#include "../device/kroPipe_device.hpp" // OBJECT_device
-#include "../debug/kroPipe_debug.hpp"   // fatalMessage, check_vk_result, err, VK_Allocator
-#include "../swapchain/kroPipe_swapchain.hpp" // swapChainExtent (já declarados no .hpp deste arquivo)
+#include "../swapchain/kroPipe_swapchain.hpp" 
 #include "../texture/kroPipe_texture.hpp"
+#include "../device/kroPipe_device.hpp" 
+#include "../texture/kroPipe_MSAA.hpp"
+#include "../debug/kroPipe_debug.hpp" 
+#include "kroPipe_depth.hpp"
 
 namespace KP {
 namespace ENGINE {
 
-// Definições das variáveis globais/namespace (sem extern)
-VkImage depthImage = VK_NULL_HANDLE; // Definição
-VkDeviceMemory depthImageMemory = VK_NULL_HANDLE; // Definição
-VkImageView depthImageView = VK_NULL_HANDLE; // Definição
+VkImage depthImage = VK_NULL_HANDLE; 
+VkDeviceMemory depthImageMemory = VK_NULL_HANDLE; 
+VkImageView depthImageView = VK_NULL_HANDLE; 
 
-// Definição do objeto Depth (sem extern)
 KP::ENGINE::Depth OBJECT_depth;
 
-// Definição dos métodos da classe Depth
 
 VkFormat Depth::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) {
-    // Usando OBJECT_device do namespace e fatalMessage do namespace
     for (VkFormat format : candidates) {
         VkFormatProperties props;
         vkGetPhysicalDeviceFormatProperties(KP::ENGINE::OBJECT_device.getPhysicalDevice(), format, &props);
@@ -49,7 +46,7 @@ VkFormat Depth::findDepthFormat() {
 void Depth::createDepthResources(){
         
         VkFormat depthFormat = findDepthFormat();
-        KP::ENGINE::createImage(swapChainExtent.width, swapChainExtent.height, depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, depthImage, depthImageMemory);
+        KP::ENGINE::createImage(swapChainExtent.width, swapChainExtent.height, *KP::ENGINE::OBJECT_msaa.getPointerMsaaSamples(),depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, depthImage, depthImageMemory);
         depthImageView = KP::ENGINE::createImageView(depthImage, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
         
     }

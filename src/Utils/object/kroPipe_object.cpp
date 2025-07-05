@@ -1,7 +1,6 @@
 #include "../../Vulkan_Engine/pipeline/kroPipe_pipeline.hpp"
 #include "../../Vulkan_Engine/device/kroPipe_device.hpp"
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
-#include <cstdint>
 #include "kroPipe_object.hpp"
 
 namespace KP {
