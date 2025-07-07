@@ -8,7 +8,7 @@ void KP::ENGINE::createImage(uint32_t width, uint32_t height, VkSampleCountFlagB
     imageInfo.extent.width = width;
     imageInfo.extent.height = height;
     imageInfo.extent.depth = 1;
-    imageInfo.samples = *KP::ENGINE::OBJECT_msaa.getPointerMsaaSamples();
+    imageInfo.samples = numSamples;
     imageInfo.mipLevels = 1;
     imageInfo.arrayLayers = 1;
     imageInfo.format = format;

@@ -1,6 +1,7 @@
 #include "kroPipe_frameBuffer.hpp"
 #include "../swapchain/kroPipe_swapchain.hpp" 
 #include "../pipeline/kroPipe_pipeline.hpp" 
+#include "../texture/kroPipe_MSAA.hpp"
 
 namespace KP {
 namespace ENGINE {
@@ -12,9 +13,10 @@ void FrameBuffer::createFrameBuffers() {
     swapChainFramebuffers.resize(swapChainImageViews.size());
 
     for (size_t i = 0; i < swapChainImageViews.size(); i++) {
-        std::array<VkImageView, 2> attachments = {
+        std::array<VkImageView, 3> attachments = {
+            *KP::ENGINE::OBJECT_msaa.getPointerDataImage()->getPointerImageColorView(),
+            depthImageView,
             swapChainImageViews[i],
-            depthImageView
         };
 
         VkFramebufferCreateInfo framebufferInfo{};

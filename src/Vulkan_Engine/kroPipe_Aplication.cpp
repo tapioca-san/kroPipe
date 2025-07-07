@@ -23,6 +23,7 @@
 #include "render/kroPipe_render.hpp"
 #include "device/kroPipe_device.hpp"
 #include "texture/kroPipe_MSAA.hpp"
+#include "texture/kroPipe_MSAA.hpp"
 #include "depth/kroPipe_depth.hpp"
 #include "debug/kroPipe_debug.hpp" 
 
@@ -53,6 +54,7 @@ void Aplication::init(){
 
     }
     //KP::ENGINE::OBJECT_GPGPU              -- GPGPU ain't including
+    KP::ENGINE::OBJECT_msaa.createColorResources();
     KP::ENGINE::OBJECT_depth.createDepthResources();
     KP::ENGINE::OBJECT_pipeline.createGraphicsPipeline();  
     KP::ENGINE::OBJECT_command.createCommandPool();
