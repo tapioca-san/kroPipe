@@ -11,14 +11,14 @@ struct ImageMSAA{
     private:
 
     VkImage colorImage;
-    VkDeviceMemory colorImageMemory;
-    VkImageView colorImageView;
+    VkDeviceMemory colorDeviceMemory;
+    VkImageView colorImageColorView;
     
     public:
     
-    VkDeviceMemory* getPointerColorImageMemory();
+    VkDeviceMemory* getPointerColorDeviceMemory();
     VkImage* getPointerColorImage();
-    VkImageView* colorPointerImageColorView();
+    VkImageView* getPointerImageColorView();
 
 };
 
@@ -32,11 +32,10 @@ class MSAA{
 
     VkSampleCountFlagBits getMaxUsableSampleCount(); // use to test KP::ENGINE::Device::pickPhysicalDevice()
 
-    
-    public:
-    
     ImageMSAA* getPointerDataImage();
     
+    public:
+
     VkSampleCountFlagBits* getPointerMsaaSamples();
 
     void createColorResources();

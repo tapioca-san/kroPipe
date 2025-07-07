@@ -27,10 +27,12 @@ void deviceMessage(const std::string& message);
 void validationLayersMessage(const std::string& message);
 void modelMessage(const std::string& message);
 
+
 // Classe Debugger
 class Debugger {
-public:
+    public:
     // A função de callback do Vulkan deve ser static. ela é a responsavel para mandar mensagem para nós
+    void setDebugName(VkDevice device, uint64_t objectHandle, VkObjectType objectType, const std::string& name);
     static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT messageType,

@@ -63,6 +63,21 @@ void modelMessage(const std::string& message) {
         defaultMessage("MODEL", message);
 }
 
+void Debugger::setDebugName(VkDevice device, uint64_t objectHandle, VkObjectType objectType, const std::string& name) {
+    if(KP::ENGINE::debug){
+        VkDebugUtilsObjectNameInfoEXT nameInfo{};
+        nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
+        nameInfo.objectType = objectType;
+        nameInfo.objectHandle = objectHandle;
+        nameInfo.pObjectName = name.c_str();
+
+        auto func = (PFN_vkSetDebugUtilsObjectNameEXT)vkGetDeviceProcAddr(device, "vkSetDebugUtilsObjectNameEXT");
+        if (func != nullptr) {
+            func(device, &nameInfo);
+        }
+    }
+}
+
 VKAPI_ATTR VkBool32 VKAPI_CALL Debugger::debugCallback(
     VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
     VkDebugUtilsMessageTypeFlagsEXT messageType,
@@ -101,10 +116,12 @@ VkResult Debugger::CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDeb
 }
 
 void Debugger::setupDebugMessenger(VkInstance& instance, VkDebugUtilsMessengerEXT& debugMessenger) {
-    VkDebugUtilsMessengerCreateInfoEXT createInfo;
-    populateDebugMessengerCreateInfo(createInfo);
-    if (CreateDebugUtilsMessengerEXT(instance, &createInfo, VK_Allocator, &debugMessenger) != VK_SUCCESS) {
-        throw std::runtime_error(fatalMessage("Failed to set up debug messenger!")); 
+    if(KP::ENGINE::debug){
+        VkDebugUtilsMessengerCreateInfoEXT createInfo;
+        populateDebugMessengerCreateInfo(createInfo);
+        if (CreateDebugUtilsMessengerEXT(instance, &createInfo, VK_Allocator, &debugMessenger) != VK_SUCCESS) {
+            throw std::runtime_error(fatalMessage("Failed to set up debug messenger!")); 
+        }
     }
 }
 

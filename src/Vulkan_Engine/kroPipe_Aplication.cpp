@@ -37,7 +37,9 @@ float lastTime = glfwGetTime();
 void Aplication::init(){
 
     KP::ENGINE::OBJECT_instance.createInstance();
-    KP::ENGINE::OBJECT_debugger.setupDebugMessenger(KP::ENGINE::VK_instance, debugMessenger);
+    if(KP::ENGINE::debug){
+        KP::ENGINE::OBJECT_debugger.setupDebugMessenger(KP::ENGINE::VK_instance, debugMessenger);
+    }
     KP::ENGINE::OBJECT_windowSurface.createSurface(KP::ENGINE::VK_instance, KP::ENGINE::OBJECT_window.GLFW_window, KP::ENGINE::OBJECT_windowSurface.VK_surface);
     KP::ENGINE::OBJECT_device.pickPhysicalDevice(KP::ENGINE::VK_instance);
     KP::ENGINE::OBJECT_device.createLogicalDevice();
@@ -54,7 +56,6 @@ void Aplication::init(){
     KP::ENGINE::OBJECT_depth.createDepthResources();
     KP::ENGINE::OBJECT_pipeline.createGraphicsPipeline();  
     KP::ENGINE::OBJECT_command.createCommandPool();
-    KP::ENGINE::OBJECT_msaa.createColorResources(); // MSAA Implementation
     KP::ENGINE::OBJECT_frameBuffer.createFrameBuffers();
     KP::ENGINE::createTextureImage();
     KP::ENGINE::createTextureImageView();
