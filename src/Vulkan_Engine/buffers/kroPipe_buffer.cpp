@@ -112,24 +112,14 @@ void KP::ENGINE::UboStorage::updateUniformBuffer(KP::ENGINE::UniformBuffers &uni
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
     
-    if(KP::UTILS::OBJECT_objectsManager.getAllObject()->data() != nullptr){
-
-        ubo.model = glm::mat4(1.0f);
-        ubo.model = glm::translate(ubo.model, glm::vec3(11, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.z));
-        ubo.model = glm::rotate(ubo.model, glm::radians(KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)); // rotation for X
-        ubo.model = glm::rotate(ubo.model, glm::radians(KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f)); // rotation for Y
-        ubo.model = glm::rotate(ubo.model, glm::radians(KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f)); // rotation for Z
-        ubo.model = glm::scale(ubo.model, glm::vec3(KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Scale));
-    }
-    if (false) {
-        ubo.view = KP::UTILS::cameraPlayer.GetViewMatrix();
-    }
-    else {
-        ubo.view = glm::lookAt(glm::vec3(KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.x, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.z), glm::vec3(KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.x, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.z) + KP::UTILS::cameraPlayer.Front, KP::UTILS::cameraPlayer.Up);
-    }
-
+    ubo.model = glm::mat4(1.0f);
+    ubo.model = glm::translate(ubo.model, glm::vec3(11, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.z));
+    ubo.model = glm::rotate(ubo.model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(-0.5f, 1.0f, 0.0f));
+    ubo.view = glm::lookAt(glm::vec3(KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.x, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.z), glm::vec3(KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.x, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.callObject(objectId)->getData().Position.z) + KP::UTILS::cameraPlayer.Front, KP::UTILS::cameraPlayer.Up);
     ubo.proj = glm::perspective(glm::radians(KP::UTILS::cameraPlayer.Zoom), (float)KP::ENGINE::swapChainExtent.width / (float)KP::ENGINE::swapChainExtent.height, 0.1f, 100.0f);
     ubo.proj[1][1] *= -1;
+        
+
     
     memcpy(uniformBuffers.uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 }

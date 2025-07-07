@@ -5,6 +5,7 @@
 #include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
 #include "../camera/kroPipe_camera.hpp"
 #include <cstdint>
+#include <vector>
 
 #define MAX_BONE_INFLUENCE 4
 
@@ -105,9 +106,9 @@ struct ObjectData {
     bool is_touchingZ = false;
     bool is_onCollition = false;
     bool is_onObject = false;
-    bool is_camera = false;
-    bool is_player = false;
-    bool is_object = false;
+
+    std::vector<std::string> object_type;
+
     bool is_OnAir = true;
     uint32_t ID = 0;
 };
@@ -116,9 +117,7 @@ struct createInfo_object{
 
     glm::vec3 position;
     float floorPos;
-    bool is_camera;
-    bool is_player;
-    bool is_object; 
+    std::vector<std::string> object_type;
     std::string modelPath; 
     ObjectsManager* ptr_ObjectsManager;
 };

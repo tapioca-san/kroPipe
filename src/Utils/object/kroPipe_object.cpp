@@ -1,6 +1,7 @@
 #include "../../Vulkan_Engine/pipeline/kroPipe_pipeline.hpp"
 #include "../../Vulkan_Engine/device/kroPipe_device.hpp"
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
+#include <cstdint>
 #include "kroPipe_object.hpp"
 
 namespace KP {
@@ -10,22 +11,23 @@ void ObjectsManager::addObject(Object* Object){
     lastID++;
     ID.push_back(lastID);
     allObject.push_back(Object);
-
-    if(Object->getData().is_player == true){
-        std::cerr << "player ID:" << lastID << "\n" ;
-        playersID.push_back(&lastID);
-    }
-    else if(Object->getData().is_camera == true){
-        std::cerr << "camera ID:" << lastID << "\n" ;
-        camerasID.push_back(&lastID);
-    }
-    else if(Object->getData().is_object == true){
-        std::cerr << "object ID:" << lastID << "\n" ;
-        objectsID.push_back(&lastID);
-    }
-    else {
-        std::cerr << "null ID:" << lastID << "\n" ;
-        nullID.push_back(&lastID);
+    for(uint32_t i = 0; i < Object->getData().object_type.size(); i++){
+        if(Object->getData().object_type[i] == "Player"){
+            std::cerr << "player ID:" << lastID << "\n" ;
+            playersID.push_back(&lastID);
+        }
+        else if(Object->getData().object_type[i] == "Camera"){
+            std::cerr << "camera ID:" << lastID << "\n" ;
+            camerasID.push_back(&lastID);
+        }
+        else if(Object->getData().object_type[i] == "Object"){
+            std::cerr << "object ID:" << lastID << "\n" ;
+            objectsID.push_back(&lastID);
+        }
+        else {
+            std::cerr << "null ID:" << lastID << "\n" ;
+            nullID.push_back(&lastID);
+        }
     }
 }
 
@@ -150,9 +152,7 @@ Object::Object(createInfo_object &Info) {
     data.Position = Info.position;
     data.floorPos = Info.floorPos;
     data.floorPoslowest = Info.floorPos;
-    data.is_camera = Info.is_camera;
-    data.is_player = Info.is_player;
-    data.is_object = Info.is_object;
+    data.object_type = Info.object_type;
     data.velocity = glm::vec3(0.0f);
     data.Scale = glm::vec3(1.0f);
 
@@ -174,11 +174,12 @@ Object::Object(createInfo_object &Info) {
 
     data.model = model;
     data.vao = &model->vao;
-
-    if(data.is_player){
-        createInfo_player playerInfo;
-        playerInfo.ObjectID = &data.ID;
-        KP::UTILS::player* model = new KP::UTILS::player(playerInfo);
+    for(uint32_t i = 0; i < data.object_type.size(); i++){
+        if(data.object_type[i] == "Player"){
+            createInfo_player playerInfo;
+            playerInfo.ObjectID = &data.ID;
+            KP::UTILS::player* model = new KP::UTILS::player(playerInfo);
+        }
     }
     // (Opcional) Calcular bounding box e raio, se quiser:
     // data.raio = calculateRaio(data);
@@ -430,8 +431,7 @@ KP::UTILS::createInfo_player* KP::UTILS::player::getData(){
 
 
 KP::UTILS::player::player(KP::UTILS::createInfo_player& info) {
-    
-    KP::UTILS::OBJECT_objectsManager.callObject(*info.ObjectID)->getData().is_player = true; // necessary to turn the objet to the player
+    KP::UTILS::OBJECT_objectsManager.callObject(*info.ObjectID)->getData().object_type.push_back("Player"); // necessary to turn the objet to the player
 }
 
 namespace KP {
