@@ -38,7 +38,7 @@ namespace UTILS {
         for(uint32_t i = 0; i < KP::UTILS::OBJECT_objectsManager.getAllObject()->size(); i++){
             ImGui::PushID(i);
             std::string headerName = "Object " + std::to_string(i);
-            KP::UTILS::OBJECT_objectsManager.callObject(i)->DrawTransformUI(headerName);
+            KP::UTILS::OBJECT_objectsManager.getObjectByID(i)->DrawTransformUI(headerName);
             ImGui::PopID();
         }
         ImGui::End(); 

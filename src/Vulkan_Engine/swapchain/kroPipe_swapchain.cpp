@@ -26,7 +26,7 @@ KP::ENGINE::SwapChain OBJECT_swapChain;
 SwapChainSupportDetails SwapChain::querySwapChainSupport(VkPhysicalDevice device) {
     SwapChainSupportDetails details;
 
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, KP::ENGINE::OBJECT_windowSurface.VK_surface, &details.capabilities);
+    check_vk_result(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, KP::ENGINE::OBJECT_windowSurface.VK_surface, &details.capabilities));
 
     uint32_t formatCount;
     vkGetPhysicalDeviceSurfaceFormatsKHR(device, KP::ENGINE::OBJECT_windowSurface.VK_surface, &formatCount, nullptr);
@@ -121,7 +121,7 @@ void SwapChain::createSwapChain() {
         createInfo.presentMode = VK_PRESENT_MODE_FIFO_KHR; // VSYNC
     }
     else{
-        createInfo.presentMode = VK_PRESENT_MODE_IMMEDIATE_KHR; // NO VSYNC
+        createInfo.presentMode = VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR; // NO VSYNC
     }
     createInfo.clipped = VK_TRUE;
 

@@ -8,10 +8,6 @@
 namespace KP {
 namespace ENGINE {
 
-
-
-// Definição dos métodos da classe ImageView
-
 void ImageView::createImageViews() {
     swapChainImageViews.resize(swapChainImages.size());
 
@@ -21,14 +17,12 @@ void ImageView::createImageViews() {
 }
 
 void ImageView::DestroyImageview(){
-    // Usando swapChainImageViews e OBJECT_device, VK_Allocator do namespace
     for (auto imageView : KP::ENGINE::swapChainImageViews) {
         vkDestroyImageView(KP::ENGINE::OBJECT_device.getDevice(), imageView, KP::ENGINE::VK_Allocator);
     }
-    KP::ENGINE::swapChainImageViews.clear(); // Limpar o vector após destruir
+    KP::ENGINE::swapChainImageViews.clear();
 }
 
-// Definição do objeto ImageView (sem extern)
 KP::ENGINE::ImageView OBJECT_imageView;
 
 } // namespace ENGINE

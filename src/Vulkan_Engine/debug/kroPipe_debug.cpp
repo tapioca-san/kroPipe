@@ -1,4 +1,6 @@
 #include "kroPipe_debug.hpp"
+#include <stdexcept>
+#include <vulkan/vulkan_core.h>
 
 namespace KP {
 namespace ENGINE {

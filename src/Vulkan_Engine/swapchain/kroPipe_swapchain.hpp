@@ -15,49 +15,36 @@
 
 namespace KP {
 namespace ENGINE {
-
-// Variáveis globais/namespace relacionadas ao Swap Chain (declaradas extern)
 extern std::vector<VkImage> swapChainImages; 
 extern std::vector<VkImageView> swapChainImageViews; 
 
 extern VkFormat swapChainImageFormat;
 extern VkExtent2D swapChainExtent;
-extern VkSwapchainKHR swapChain; // Assinando como extern
-extern std::vector<VkFramebuffer> swapChainFramebuffers; // Assinando como extern
-extern bool vsync; // Assinando como extern
+extern VkSwapchainKHR swapChain; 
+extern std::vector<VkFramebuffer> swapChainFramebuffers; 
+extern bool vsync; 
 
-// Struct para detalhes de suporte do Swap Chain
 struct SwapChainSupportDetails{
     VkSurfaceCapabilitiesKHR capabilities;
     std::vector<VkSurfaceFormatKHR> formats;
     std::vector<VkPresentModeKHR> presentModes;
 };
 
-// Classe SwapChain
 class SwapChain{
 
 public:
-    // Handles do Swap Chain (agora temos apenas um, 'swapChain', declarado extern)
-    // uint32_t formatCount; // Não é mais necessário como membro
-    // uint32_t presentModeCount; // Não é mais necessário como membro
-    // bool swapChainAdequate = false; // Não é mais necessário como membro
-
-    // Método para obter detalhes de suporte do Swap Chain
     SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
 
-    // Funções auxiliares (agora estáticas membros da classe)
     static VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     static VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
     static VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 
-    // Métodos de criação e limpeza do Swap Chain
     void createSwapChain();
     void cleanupSwapChain();
     void recreateSwapChain();
 
-}; //CLASS SWAPCHAIN
+};
 
-// Objeto SwapChain (declarado extern)
 extern KP::ENGINE::SwapChain OBJECT_swapChain;
 
 } // namespace SWAPCHAIN

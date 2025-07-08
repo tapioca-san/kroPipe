@@ -183,8 +183,8 @@ struct ObjectsManager{
     int getLastId();
     void logID();
     
-    Model* callModel(uint32_t ID);
-    Object* callObject(uint32_t ID);
+    Model* getModelByID(uint32_t ID);
+    Object* getObjectByID(uint32_t ID);
     std::vector<Model*>* getAllModel();
     std::vector<Object*>* getAllObject();
     std::vector<uint32_t*>* getAllPlayersID();

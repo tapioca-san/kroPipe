@@ -54,7 +54,7 @@ void MSAA::createColorResources() {
 }
 
 void MSAA::setPointMsaaSamples(VkSampleCountFlagBits MsaaSample){
-    this->msaaSamples = MsaaSample;
+    this->msaaSamples = VK_SAMPLE_COUNT_1_BIT;
 }
 
 bool* MSAA::getAbleMsaa(){

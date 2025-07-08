@@ -1,7 +1,6 @@
 #include "../../Vulkan_Engine/pipeline/kroPipe_pipeline.hpp"
 #include "../../Vulkan_Engine/device/kroPipe_device.hpp"
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
-#include <cstdint>
 #include "kroPipe_object.hpp"
 
 namespace KP {
@@ -55,14 +54,14 @@ int ObjectsManager::getLastId(){
     return lastID;
 }
 
-Model* ObjectsManager::callModel(uint32_t ID){ 
+Model* ObjectsManager::getModelByID(uint32_t ID){ 
     if (ID >= allModel.size()) {
         throw std::runtime_error("allModel ID out of range");
     }
     return allModel[ID];
 }
 
-Object* ObjectsManager::callObject(uint32_t ID){
+Object* ObjectsManager::getObjectByID(uint32_t ID){
     if (ID >= allObject.size()) {
         throw std::runtime_error("allObject ID out of range");
     }
@@ -84,7 +83,7 @@ if (ImGui::CollapsingHeader("IDs")) {
     for (uint32_t i = 0; i < KP::UTILS::OBJECT_objectsManager.getAllObject()->size(); i++) {
         std::string text = "ID: " + std::to_string(i);
         ImGui::Text(text.c_str());  
-        text = "Path: " + KP::UTILS::OBJECT_objectsManager.callObject(i)->getData().modelPath;
+        text = "Path: " + KP::UTILS::OBJECT_objectsManager.getObjectByID(i)->getData().modelPath;
         ImGui::Text(text.c_str());  
     }
 }
@@ -399,8 +398,6 @@ KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh* mesh, const aiScene* scene
                 vertex.TexCoords = glm::vec2(0.0f, 0.0f);
             }
             if (mesh->HasVertexColors(0)) {
-                aiColor4D color = mesh->mColors[0][i];
-                vertex.vertexColors = glm::vec4(color.r, color.g, color.b, color.a);
             }
             vertices.push_back(vertex);
         }
@@ -431,7 +428,7 @@ KP::UTILS::createInfo_player* KP::UTILS::player::getData(){
 
 
 KP::UTILS::player::player(KP::UTILS::createInfo_player& info) {
-    KP::UTILS::OBJECT_objectsManager.callObject(*info.ObjectID)->getData().object_type.push_back("Player"); // necessary to turn the objet to the player
+    KP::UTILS::OBJECT_objectsManager.getObjectByID(*info.ObjectID)->getData().object_type.push_back("Player"); // necessary to turn the objet to the player
 }
 
 namespace KP {

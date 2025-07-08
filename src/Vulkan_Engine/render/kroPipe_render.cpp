@@ -8,7 +8,8 @@
 namespace KP {
 namespace ENGINE {
 
-const int MAX_FRAMES_IN_FLIGHT = 2; // quando crescer, adiiconar 3 aqui e gerenciar isso
+// max frames reclama quando está mais de 2 quando estiver no hyprland. no X11, o MAX_FRAMES_IN_FLIGHT maior que 2 funciona perfeitamente
+const int MAX_FRAMES_IN_FLIGHT = 3; // quando crescer, adiiconar 3 aqui e gerenciar isso.
 
 std::vector<VkSemaphore> imageAvailableSemaphores;
 std::vector<VkSemaphore> renderFinishedSemaphores;
@@ -113,7 +114,7 @@ void KP::ENGINE::Render::drawFrame() {
     check_vk_result(err);
 
     for(uint16_t i = 0; i < KP::UTILS::OBJECT_objectsManager.getAllObject()->size(); i++){
-        KP::UTILS::OBJECT_objectsManager.callModel(i)->UBO.update();
+        KP::UTILS::OBJECT_objectsManager.getModelByID(i)->UBO.update();
     }
     /*
 

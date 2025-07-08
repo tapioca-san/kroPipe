@@ -32,7 +32,7 @@ class MSAA{
 
     VkSampleCountFlagBits getMaxUsableSampleCount(); // use to test KP::ENGINE::Device::pickPhysicalDevice()
 
-    bool enableMsaa = true;
+    bool enableMsaa = false;
     
     public:
     
