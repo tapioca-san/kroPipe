@@ -26,7 +26,7 @@ void GPGPU::createComputeDescriptorSetLayout() {
     layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     layoutInfo.bindingCount = 3;
     layoutInfo.pBindings = layoutBindings.data();
-    if (vkCreateDescriptorSetLayout(KP::ENGINE::OBJECT_device.getDevice(), &layoutInfo, nullptr, &computeDescriptorSetLayout) != VK_SUCCESS) {
+    if (vkCreateDescriptorSetLayout(*KP::ENGINE::OBJECT_device.getPointerDevice(), &layoutInfo, nullptr, &computeDescriptorSetLayout) != VK_SUCCESS) {
         throw std::runtime_error("failed to create compute descriptor set layout!");
     }
 }
@@ -46,17 +46,17 @@ void GPGPU::createComputePipeline(const std::string& directoryPath, const std::s
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.setLayoutCount = 1;
     pipelineLayoutInfo.pSetLayouts = &computeDescriptorSetLayout;
-    if (vkCreatePipelineLayout(KP::ENGINE::OBJECT_device.getDevice(), &pipelineLayoutInfo, nullptr, &computePipelineLayout) != VK_SUCCESS) {
+    if (vkCreatePipelineLayout(*KP::ENGINE::OBJECT_device.getPointerDevice(), &pipelineLayoutInfo, nullptr, &computePipelineLayout) != VK_SUCCESS) {
         throw std::runtime_error("failed to create compute pipeline layout!");
     }
     VkComputePipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
     pipelineInfo.layout = computePipelineLayout;
     pipelineInfo.stage = computeShaderStageInfo;
-    if (vkCreateComputePipelines(KP::ENGINE::OBJECT_device.getDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &computePipeline) != VK_SUCCESS) {
+    if (vkCreateComputePipelines(*KP::ENGINE::OBJECT_device.getPointerDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &computePipeline) != VK_SUCCESS) {
         throw std::runtime_error("failed to create compute pipeline!");
     }
-    vkDestroyShaderModule(KP::ENGINE::OBJECT_device.getDevice(), computeShaderModule, nullptr);
+    vkDestroyShaderModule(*KP::ENGINE::OBJECT_device.getPointerDevice(), computeShaderModule, nullptr);
 }
 
 void GPGPU::createCompute(){

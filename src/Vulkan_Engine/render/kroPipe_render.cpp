@@ -98,7 +98,7 @@ void KP::ENGINE::Render::recordCommandBuffer(VkCommandBuffer commandBuffer, uint
 }
 
 VkResult KP::ENGINE::Render::acquireNextImage(){
-    VkResult result = vkAcquireNextImageKHR(KP::ENGINE::OBJECT_device.getDevice(), swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    VkResult result = vkAcquireNextImageKHR(*KP::ENGINE::OBJECT_device.getPointerDevice(), swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR) {
         KP::ENGINE::OBJECT_swapChain.recreateSwapChain();
@@ -109,7 +109,7 @@ VkResult KP::ENGINE::Render::acquireNextImage(){
 }
 
 void KP::ENGINE::Render::drawFrame() {
-    vkWaitForFences(KP::ENGINE::OBJECT_device.getDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+    vkWaitForFences(*KP::ENGINE::OBJECT_device.getPointerDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
     err = acquireNextImage();
     check_vk_result(err);
 
@@ -123,7 +123,7 @@ void KP::ENGINE::Render::drawFrame() {
     }  
     */
     
-    vkResetFences(KP::ENGINE::OBJECT_device.getDevice(), 1, &inFlightFences[currentFrame]);
+    vkResetFences(*KP::ENGINE::OBJECT_device.getPointerDevice(), 1, &inFlightFences[currentFrame]);
 
     vkResetCommandBuffer(KP::ENGINE::commandBuffers[currentFrame], /*VkCommandBufferResetFlagBits*/ 0);
    
@@ -180,9 +180,9 @@ void KP::ENGINE::Render::createSyncObjects() {
 
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        if (vkCreateSemaphore(KP::ENGINE::OBJECT_device.getDevice(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
-            vkCreateSemaphore(KP::ENGINE::OBJECT_device.getDevice(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
-            vkCreateFence(KP::ENGINE::OBJECT_device.getDevice(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
+        if (vkCreateSemaphore(*KP::ENGINE::OBJECT_device.getPointerDevice(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
+            vkCreateSemaphore(*KP::ENGINE::OBJECT_device.getPointerDevice(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
+            vkCreateFence(*KP::ENGINE::OBJECT_device.getPointerDevice(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
             throw std::runtime_error(fatalMessage("failed to create synchronization objects for a frame!"));
         }
     }
@@ -191,9 +191,9 @@ void KP::ENGINE::Render::createSyncObjects() {
 void KP::ENGINE::Render::destroyRender(){
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        vkDestroySemaphore(KP::ENGINE::OBJECT_device.getDevice(), renderFinishedSemaphores[i], KP::ENGINE::VK_Allocator);
-        vkDestroySemaphore(KP::ENGINE::OBJECT_device.getDevice(), imageAvailableSemaphores[i], KP::ENGINE::VK_Allocator);
-        vkDestroyFence(KP::ENGINE::OBJECT_device.getDevice(), inFlightFences[i], KP::ENGINE::VK_Allocator);
+        vkDestroySemaphore(*KP::ENGINE::OBJECT_device.getPointerDevice(), renderFinishedSemaphores[i], KP::ENGINE::VK_Allocator);
+        vkDestroySemaphore(*KP::ENGINE::OBJECT_device.getPointerDevice(), imageAvailableSemaphores[i], KP::ENGINE::VK_Allocator);
+        vkDestroyFence(*KP::ENGINE::OBJECT_device.getPointerDevice(), inFlightFences[i], KP::ENGINE::VK_Allocator);
     }
 }
 

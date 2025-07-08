@@ -267,16 +267,16 @@ void KP::UTILS::Model::draw(VkCommandBuffer &commandBuffer){
 void KP::UTILS::Model::cleanupVao(){
     
     for(VkBuffer indexBuffer : vao.indexBuffers){
-        vkDestroyBuffer(KP::ENGINE::OBJECT_device.getDevice(),indexBuffer, KP::ENGINE::VK_Allocator);
+        vkDestroyBuffer(*KP::ENGINE::OBJECT_device.getPointerDevice(),indexBuffer, KP::ENGINE::VK_Allocator);
     }
     for(VkBuffer vertexBuffer : vao.vertexBuffers){
-        vkDestroyBuffer(KP::ENGINE::OBJECT_device.getDevice(), vertexBuffer, KP::ENGINE::VK_Allocator);
+        vkDestroyBuffer(*KP::ENGINE::OBJECT_device.getPointerDevice(), vertexBuffer, KP::ENGINE::VK_Allocator);
     }
     for(VkDeviceMemory indexBufferMemory : vao.indexBufferMemorys){
-        vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), indexBufferMemory, KP::ENGINE::VK_Allocator);
+        vkFreeMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), indexBufferMemory, KP::ENGINE::VK_Allocator);
     }
     for(VkDeviceMemory vertexBufferMemory : vao.vertexBufferMemorys){
-        vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), vertexBufferMemory, KP::ENGINE::VK_Allocator);
+        vkFreeMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), vertexBufferMemory, KP::ENGINE::VK_Allocator);
     }
 }
 
@@ -299,9 +299,9 @@ void KP::UTILS::Model::createVertexBuffer(const std::vector<KP::ENGINE::VertexVu
                  stagingBuffer, stagingBufferMemory);
 
     void* data;
-    vkMapMemory(KP::ENGINE::OBJECT_device.getDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
+    vkMapMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
     memcpy(data, vertices.data(), (size_t) bufferSize);
-    vkUnmapMemory(KP::ENGINE::OBJECT_device.getDevice(), stagingBufferMemory);
+    vkUnmapMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), stagingBufferMemory);
 
     VkBuffer vertexBuffer;
     VkDeviceMemory vertexBufferMemory;
@@ -314,8 +314,8 @@ void KP::UTILS::Model::createVertexBuffer(const std::vector<KP::ENGINE::VertexVu
     vao.vertexBuffers.push_back(vertexBuffer);
     vao.vertexBufferMemorys.push_back(vertexBufferMemory);
 
-    vkDestroyBuffer(KP::ENGINE::OBJECT_device.getDevice(), stagingBuffer, nullptr);
-    vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), stagingBufferMemory, nullptr);
+    vkDestroyBuffer(*KP::ENGINE::OBJECT_device.getPointerDevice(), stagingBuffer, nullptr);
+    vkFreeMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), stagingBufferMemory, nullptr);
 }
 
 void KP::UTILS::Model::createIndexBuffer(const std::vector<uint32_t> &indices, VAO &vao) {
@@ -328,11 +328,11 @@ void KP::UTILS::Model::createIndexBuffer(const std::vector<uint32_t> &indices, V
                  stagingBuffer, stagingBufferMemory);
 
     void* data;
-    KP::ENGINE::err = vkMapMemory(KP::ENGINE::OBJECT_device.getDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
+    KP::ENGINE::err = vkMapMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
     KP::ENGINE::check_vk_result(KP::ENGINE::err);
     
     memcpy(data, indices.data(), (size_t) bufferSize);
-    vkUnmapMemory(KP::ENGINE::OBJECT_device.getDevice(), stagingBufferMemory);
+    vkUnmapMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), stagingBufferMemory);
 
     VkBuffer indexBuffer;
     VkDeviceMemory indexBufferMemory;
@@ -345,8 +345,8 @@ void KP::UTILS::Model::createIndexBuffer(const std::vector<uint32_t> &indices, V
     vao.indexBuffers.push_back(indexBuffer);
     vao.indexBufferMemorys.push_back(indexBufferMemory);
 
-    vkDestroyBuffer(KP::ENGINE::OBJECT_device.getDevice(), stagingBuffer, nullptr);
-    vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), stagingBufferMemory, nullptr);
+    vkDestroyBuffer(*KP::ENGINE::OBJECT_device.getPointerDevice(), stagingBuffer, nullptr);
+    vkFreeMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), stagingBufferMemory, nullptr);
 }
 
 KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh* mesh, const aiScene* scene) {

@@ -37,7 +37,7 @@ void createDescriptorSetLayout(KP::ENGINE::UniformBuffers &uniformBuffers) {
     layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
     layoutInfo.pBindings = bindings.data();
-    err = vkCreateDescriptorSetLayout(KP::ENGINE::OBJECT_device.getDevice(), &layoutInfo, KP::ENGINE::VK_Allocator, &uniformBuffers.descriptorSetLayout);
+    err = vkCreateDescriptorSetLayout(*KP::ENGINE::OBJECT_device.getPointerDevice(), &layoutInfo, KP::ENGINE::VK_Allocator, &uniformBuffers.descriptorSetLayout);
     check_vk_result(err, "failed to create descriptor set layout!");
     setLayout.push_back(uniformBuffers.descriptorSetLayout);
 }
@@ -49,21 +49,21 @@ void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyF
     bufferInfo.usage = usage;
     bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-    err = vkCreateBuffer(KP::ENGINE::OBJECT_device.getDevice(), &bufferInfo, nullptr, &buffer);
+    err = vkCreateBuffer(*KP::ENGINE::OBJECT_device.getPointerDevice(), &bufferInfo, nullptr, &buffer);
     check_vk_result(err, "failed to create buffer!");
 
     VkMemoryRequirements memRequirements;
-    vkGetBufferMemoryRequirements(KP::ENGINE::OBJECT_device.getDevice(), buffer, &memRequirements);
+    vkGetBufferMemoryRequirements(*KP::ENGINE::OBJECT_device.getPointerDevice(), buffer, &memRequirements);
 
     VkMemoryAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocInfo.allocationSize = memRequirements.size;
     allocInfo.memoryTypeIndex = KP::ENGINE::OBJECT_vertex.findMemoryType(memRequirements.memoryTypeBits, properties);
 
-    err = vkAllocateMemory(KP::ENGINE::OBJECT_device.getDevice(), &allocInfo, KP::ENGINE::VK_Allocator, &bufferMemory);
+    err = vkAllocateMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), &allocInfo, KP::ENGINE::VK_Allocator, &bufferMemory);
     check_vk_result(err, "failed to allocate buffer memory!");
 
-    err = vkBindBufferMemory(KP::ENGINE::OBJECT_device.getDevice(), buffer, bufferMemory, 0);
+    err = vkBindBufferMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), buffer, bufferMemory, 0);
     check_vk_result(err);
 }
     
@@ -102,7 +102,7 @@ void KP::ENGINE::UboStorage::createUniformBuffers(KP::ENGINE::UniformBuffers &un
     uniformBuffers.uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers.uniformBuffers[i], uniformBuffers.uniformBuffersMemory[i]);
-        err = vkMapMemory(KP::ENGINE::OBJECT_device.getDevice(), uniformBuffers.uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffers.uniformBuffersMapped[i]);
+        err = vkMapMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), uniformBuffers.uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffers.uniformBuffersMapped[i]);
         check_vk_result(err);
     }
 }
@@ -132,7 +132,7 @@ void KP::ENGINE::UboStorage::createDescriptorSets(KP::ENGINE::UniformBuffers &un
     allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
     allocInfo.pSetLayouts = layouts.data();
     uniformBuffers. descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
-    err = vkAllocateDescriptorSets(KP::ENGINE::OBJECT_device.getDevice(), &allocInfo, uniformBuffers.descriptorSets.data());
+    err = vkAllocateDescriptorSets(*KP::ENGINE::OBJECT_device.getPointerDevice(), &allocInfo, uniformBuffers.descriptorSets.data());
     check_vk_result(err, "failed to allocate descriptor sets!");
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         VkDescriptorBufferInfo bufferInfo{};
@@ -159,17 +159,17 @@ void KP::ENGINE::UboStorage::createDescriptorSets(KP::ENGINE::UniformBuffers &un
         descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         descriptorWrites[1].descriptorCount = 1;
         descriptorWrites[1].pImageInfo = &imageInfo;
-        vkUpdateDescriptorSets(KP::ENGINE::OBJECT_device.getDevice(), static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
+        vkUpdateDescriptorSets(*KP::ENGINE::OBJECT_device.getPointerDevice(), static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
     }
 }
 
 void KP::ENGINE::UboStorage::cleanupBuffer(KP::ENGINE::UniformBuffers &uniformBuffers){
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        vkDestroyBuffer(KP::ENGINE::OBJECT_device.getDevice(), uniformBuffers.uniformBuffers[i], KP::ENGINE::VK_Allocator);
-        vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), uniformBuffers.uniformBuffersMemory[i], KP::ENGINE::VK_Allocator);
+        vkDestroyBuffer(*KP::ENGINE::OBJECT_device.getPointerDevice(), uniformBuffers.uniformBuffers[i], KP::ENGINE::VK_Allocator);
+        vkFreeMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), uniformBuffers.uniformBuffersMemory[i], KP::ENGINE::VK_Allocator);
     }
-    vkDestroyDescriptorPool(KP::ENGINE::OBJECT_device.getDevice(), uniformBuffers.descriptorPool, KP::ENGINE::VK_Allocator);
-    vkDestroyDescriptorSetLayout(KP::ENGINE::OBJECT_device.getDevice(), uniformBuffers.descriptorSetLayout, KP::ENGINE::VK_Allocator);
+    vkDestroyDescriptorPool(*KP::ENGINE::OBJECT_device.getPointerDevice(), uniformBuffers.descriptorPool, KP::ENGINE::VK_Allocator);
+    vkDestroyDescriptorSetLayout(*KP::ENGINE::OBJECT_device.getPointerDevice(), uniformBuffers.descriptorSetLayout, KP::ENGINE::VK_Allocator);
 }
 
 uint32_t aa = 0;

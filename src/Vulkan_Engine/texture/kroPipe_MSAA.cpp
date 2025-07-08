@@ -23,7 +23,7 @@ ImageMSAA* MSAA::getPointerDataImage(){
 
 VkSampleCountFlagBits MSAA::getMaxUsableSampleCount() {
         VkPhysicalDeviceProperties physicalDeviceProperties;
-        vkGetPhysicalDeviceProperties(KP::ENGINE::OBJECT_device.getPhysicalDevice(), &physicalDeviceProperties);
+        vkGetPhysicalDeviceProperties(*KP::ENGINE::OBJECT_device.getPointerPhysicalDevice(), &physicalDeviceProperties);
         
     VkSampleCountFlags counts = physicalDeviceProperties.limits.framebufferColorSampleCounts & physicalDeviceProperties.limits.framebufferDepthSampleCounts;
     
@@ -43,7 +43,7 @@ void MSAA::createColorResources() {
     KP::ENGINE::createImage(swapChainExtent.width, swapChainExtent.height, msaaSamples, colorFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, *getPointerDataImage()->getPointerColorImage(), *getPointerDataImage()->getPointerColorDeviceMemory());
     
     *dataImage.getPointerImageColorView() = KP::ENGINE::createImageView(*getPointerDataImage()->getPointerColorImage(), colorFormat, VK_IMAGE_ASPECT_COLOR_BIT);
-    KP::ENGINE::OBJECT_debugger.setDebugName(KP::ENGINE::OBJECT_device.getDevice(), (uint64_t)(*dataImage.getPointerColorDeviceMemory()), VK_OBJECT_TYPE_DEVICE_MEMORY, "anjinho");
+    KP::ENGINE::OBJECT_debugger.setDebugName(*KP::ENGINE::OBJECT_device.getPointerDevice(), (uint64_t)*dataImage.getPointerColorDeviceMemory(), VK_OBJECT_TYPE_DEVICE_MEMORY, "anjinho");
     
     if(*getAbleMsaa() == true){
         OBJECT_msaa.setPointMsaaSamples(OBJECT_msaa.getMaxUsableSampleCount());
@@ -63,9 +63,9 @@ bool* MSAA::getAbleMsaa(){
 
 void MSAA::clean(){
 
-    vkDestroyImageView(KP::ENGINE::OBJECT_device.getDevice(), *getPointerDataImage()->getPointerImageColorView(), KP::ENGINE::VK_Allocator);
-    vkDestroyImage(KP::ENGINE::OBJECT_device.getDevice(), *getPointerDataImage()->getPointerColorImage(), KP::ENGINE::VK_Allocator);
-    vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), *getPointerDataImage()->getPointerColorDeviceMemory(), KP::ENGINE::VK_Allocator);
+    vkDestroyImageView(*KP::ENGINE::OBJECT_device.getPointerDevice(), *getPointerDataImage()->getPointerImageColorView(), KP::ENGINE::VK_Allocator);
+    vkDestroyImage(*KP::ENGINE::OBJECT_device.getPointerDevice(), *getPointerDataImage()->getPointerColorImage(), KP::ENGINE::VK_Allocator);
+    vkFreeMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), *getPointerDataImage()->getPointerColorDeviceMemory(), KP::ENGINE::VK_Allocator);
 }
 
 VkSampleCountFlagBits* MSAA::getPointerMsaaSamples(){

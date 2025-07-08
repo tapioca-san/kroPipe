@@ -72,7 +72,7 @@ void Aplication::init(){
 
     
     KP::UTILS::OBJECT_imguiInterface = new KP::UTILS::Imgui(
-        KP::ENGINE::OBJECT_window.GLFW_window, KP::ENGINE::VK_instance, KP::ENGINE::OBJECT_device.getPhysicalDevice(), KP::ENGINE::OBJECT_device.getDevice(),
+        KP::ENGINE::OBJECT_window.GLFW_window, KP::ENGINE::VK_instance, *KP::ENGINE::OBJECT_device.getPointerPhysicalDevice(), *KP::ENGINE::OBJECT_device.getPointerDevice(),
         KP::ENGINE::OBJECT_queuFamilies.presentQueue, KP::ENGINE::OBJECT_queuFamilies.graphicsIndex, KP::ENGINE::PipelineCache,
         KP::ENGINE::VK_renderPass
     );
@@ -116,16 +116,16 @@ void Aplication::run(){
 }
 
 void Aplication::clean() {
-    vkDeviceWaitIdle(KP::ENGINE::OBJECT_device.getDevice());
+    vkDeviceWaitIdle(*KP::ENGINE::OBJECT_device.getPointerDevice());
     KP::UTILS::OBJECT_imguiInterface->cleanup();
     KP::ENGINE::OBJECT_msaa.clean();
-    vkDestroyImageView(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::depthImageView, KP::ENGINE::VK_Allocator);
-    vkDestroyImage(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::depthImage, KP::ENGINE::VK_Allocator);
-    vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::depthImageMemory, KP::ENGINE::VK_Allocator);
-    vkDestroySampler(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::textureSampler, KP::ENGINE::VK_Allocator);
-    vkDestroyImageView(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::textureImageView, KP::ENGINE::VK_Allocator);
-    vkDestroyImage(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::textureImage, KP::ENGINE::VK_Allocator);
-    vkFreeMemory(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::textureImageMemory, KP::ENGINE::VK_Allocator);
+    vkDestroyImageView(*KP::ENGINE::OBJECT_device.getPointerDevice(), KP::ENGINE::depthImageView, KP::ENGINE::VK_Allocator);
+    vkDestroyImage(*KP::ENGINE::OBJECT_device.getPointerDevice(), KP::ENGINE::depthImage, KP::ENGINE::VK_Allocator);
+    vkFreeMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), KP::ENGINE::depthImageMemory, KP::ENGINE::VK_Allocator);
+    vkDestroySampler(*KP::ENGINE::OBJECT_device.getPointerDevice(), KP::ENGINE::textureSampler, KP::ENGINE::VK_Allocator);
+    vkDestroyImageView(*KP::ENGINE::OBJECT_device.getPointerDevice(), KP::ENGINE::textureImageView, KP::ENGINE::VK_Allocator);
+    vkDestroyImage(*KP::ENGINE::OBJECT_device.getPointerDevice(), KP::ENGINE::textureImage, KP::ENGINE::VK_Allocator);
+    vkFreeMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), KP::ENGINE::textureImageMemory, KP::ENGINE::VK_Allocator);
     
 
     KP::ENGINE::OBJECT_sceneUBO.cleanUp();
@@ -142,12 +142,12 @@ void Aplication::clean() {
     KP::ENGINE::OBJECT_frameBuffer.CleanUpFramerBuffer();
     KP::ENGINE::OBJECT_pipeline.CleanUpPipeline();
     KP::ENGINE::OBJECT_imageView.DestroyImageview();
-    vkDestroySwapchainKHR(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::swapChain, KP::ENGINE::VK_Allocator);
+    vkDestroySwapchainKHR(*KP::ENGINE::OBJECT_device.getPointerDevice(), KP::ENGINE::swapChain, KP::ENGINE::VK_Allocator);
     if(KP::ENGINE::debug){
         KP::ENGINE::OBJECT_debugger.DestroyDebugUtilsMessengerEXT(KP::ENGINE::VK_instance, debugMessenger, KP::ENGINE::VK_Allocator);
     }
     vkDestroySurfaceKHR(KP::ENGINE::VK_instance, KP::ENGINE::OBJECT_windowSurface.VK_surface, KP::ENGINE::VK_Allocator);
-    vkDestroyDevice(KP::ENGINE::OBJECT_device.getDevice(), KP::ENGINE::VK_Allocator);
+    vkDestroyDevice(*KP::ENGINE::OBJECT_device.getPointerDevice(), KP::ENGINE::VK_Allocator);
     vkDestroyInstance(KP::ENGINE::VK_instance, KP::ENGINE::VK_Allocator);
     //cleanPointers();
 }

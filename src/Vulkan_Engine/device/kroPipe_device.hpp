@@ -36,11 +36,11 @@ VkDevice                    VK_Device;
 
 public:
 
-VkPhysicalDeviceProperties getDeviceProperties();
-VkPhysicalDeviceFeatures getPhysicalDeviceFeatures();
-VkPhysicalDeviceFeatures getSupportedFeatures();
-VkPhysicalDevice getPhysicalDevice();
-VkDevice getDevice();
+VkPhysicalDeviceProperties* getPointerDeviceProperties();
+VkPhysicalDeviceFeatures* getPointerPhysicalDeviceFeatures();
+VkPhysicalDeviceFeatures* getPointerSupportedFeatures();
+VkPhysicalDevice* getPointerPhysicalDevice();
+VkDevice* getPointerDevice();
 
 bool checkDeviceExtensionSupport(VkPhysicalDevice &device);
 bool isDeviceSuitable(VkPhysicalDevice device);

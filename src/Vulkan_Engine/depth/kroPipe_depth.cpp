@@ -18,7 +18,7 @@ KP::ENGINE::Depth OBJECT_depth;
 VkFormat Depth::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) {
     for (VkFormat format : candidates) {
         VkFormatProperties props;
-        vkGetPhysicalDeviceFormatProperties(KP::ENGINE::OBJECT_device.getPhysicalDevice(), format, &props);
+        vkGetPhysicalDeviceFormatProperties(*KP::ENGINE::OBJECT_device.getPointerPhysicalDevice(), format, &props);
 
         if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) {
             return format;

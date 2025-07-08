@@ -3,6 +3,7 @@
 #include "../pipeline/kroPipe_GPGPU.hpp"
 #include "../texture/kroPipe_MSAA.hpp"
 #include "../debug/kroPipe_debug.hpp" 
+#include <vulkan/vulkan_core.h>
 #include "kroPipe_device.hpp"
 
 
@@ -11,20 +12,20 @@ namespace ENGINE {
 
 std::vector<const char*> extensionAvailable;
 
-VkPhysicalDeviceProperties Device::getDeviceProperties(){
-    return deviceProperties;
+VkPhysicalDeviceProperties* Device::getPointerDeviceProperties(){
+    return &deviceProperties;
 }
-VkPhysicalDeviceFeatures Device::getPhysicalDeviceFeatures(){
-    return deviceFeatures;
+VkPhysicalDeviceFeatures* Device::getPointerPhysicalDeviceFeatures(){
+    return &deviceFeatures;
 }
-VkPhysicalDeviceFeatures Device::getSupportedFeatures(){
-    return supportedFeatures;
+VkPhysicalDeviceFeatures* Device::getPointerSupportedFeatures(){
+    return &supportedFeatures;
 }
-VkPhysicalDevice Device::getPhysicalDevice(){
-    return VK_PhysicalDevice;
+VkPhysicalDevice* Device::getPointerPhysicalDevice(){
+    return &VK_PhysicalDevice;
 }
-VkDevice Device::getDevice(){
-    return VK_Device;
+VkDevice* Device::getPointerDevice(){
+    return &VK_Device;
 }
 
 
@@ -125,11 +126,14 @@ void Device::createLogicalDevice() {
     if (vkCreateDevice(VK_PhysicalDevice, &createInfo, KP::ENGINE::VK_Allocator, &KP::ENGINE::OBJECT_device.VK_Device) != VK_SUCCESS) {
         throw std::runtime_error(fatalMessage("failed to create logical device!")); 
     }
-
+    
+    KP::ENGINE::OBJECT_debugger.setDebugName(*KP::ENGINE::OBJECT_device.getPointerDevice(), (uint64_t)*KP::ENGINE::OBJECT_device.getPointerDevice(), VK_OBJECT_TYPE_DEVICE, "KP: main device from Vulkan_Engine/device");
+    KP::ENGINE::OBJECT_debugger.setDebugName(*KP::ENGINE::OBJECT_device.getPointerDevice(), (uint64_t)*KP::ENGINE::OBJECT_device.getPointerPhysicalDevice(), VK_OBJECT_TYPE_PHYSICAL_DEVICE, "KP: main Physical Device from Vulkan_Engine/device");
+    
     // queue gráfica guardada na queue families
-    vkGetDeviceQueue(KP::ENGINE::OBJECT_device.getDevice(), indices.graphicsAndComputeFamily.value(), 0, OBJECT_GPGPU.getComputeQueue());
-    vkGetDeviceQueue(KP::ENGINE::OBJECT_device.getDevice(), indices.graphicsAndComputeFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.graphicsQueue);
-    vkGetDeviceQueue(KP::ENGINE::OBJECT_device.getDevice(), indices.presentFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.presentQueue);
+    vkGetDeviceQueue(*KP::ENGINE::OBJECT_device.getPointerDevice(), indices.graphicsAndComputeFamily.value(), 0, OBJECT_GPGPU.getComputeQueue());
+    vkGetDeviceQueue(*KP::ENGINE::OBJECT_device.getPointerDevice(), indices.graphicsAndComputeFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.graphicsQueue);
+    vkGetDeviceQueue(*KP::ENGINE::OBJECT_device.getPointerDevice(), indices.presentFamily.value(), 0, &KP::ENGINE::OBJECT_queuFamilies.presentQueue);
 }
 
 KP::ENGINE::Device OBJECT_device;

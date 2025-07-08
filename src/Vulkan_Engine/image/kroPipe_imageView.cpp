@@ -18,7 +18,7 @@ void ImageView::createImageViews() {
 
 void ImageView::DestroyImageview(){
     for (auto imageView : KP::ENGINE::swapChainImageViews) {
-        vkDestroyImageView(KP::ENGINE::OBJECT_device.getDevice(), imageView, KP::ENGINE::VK_Allocator);
+        vkDestroyImageView(*KP::ENGINE::OBJECT_device.getPointerDevice(), imageView, KP::ENGINE::VK_Allocator);
     }
     KP::ENGINE::swapChainImageViews.clear();
 }
