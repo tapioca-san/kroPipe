@@ -7,7 +7,7 @@
 namespace KP {
 namespace ENGINE {
         
-extern const int MAX_FRAMES_IN_FLIGHT;
+extern int MAX_FRAMES_IN_FLIGHT;
 extern std::vector<VkSemaphore> imageAvailableSemaphores;
 extern std::vector<VkSemaphore> renderFinishedSemaphores;
 extern std::vector<VkFence> inFlightFences;
@@ -19,6 +19,8 @@ class Render{
 private:
 
 public:
+
+Render();
 
 void destroyRender();
 void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
@@ -32,6 +34,7 @@ VkResult acquireNextImage();
 void drawFrame();
 
 void createSyncObjects();
+
 };//CLASS RENDER
 
 extern KP::ENGINE::Render OBJECT_render;

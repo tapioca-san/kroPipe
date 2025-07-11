@@ -85,7 +85,7 @@ void Terminal::handleAnsiSequences(const std::string& rawLine) {
     }
 }
 
-void Terminal::Terminalsystem(std::string &command) {
+void Terminal::Terminalsystem(std::string command) {
     if (master_fd < 0) return;
 
     std::string cmd = command + "\n";
@@ -186,6 +186,12 @@ void Terminal::restartTerminal() {
         }
     });
     readerThread.detach();
+}
+
+std::vector<std::string> Terminal::getCommandHistory(){
+    
+    
+    return commandHistory;
 }
 
 void Terminal::showTerminal() {

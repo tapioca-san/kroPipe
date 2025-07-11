@@ -14,10 +14,14 @@ struct AnsiFragment {
 
 class Terminal {
 public:
-    void Terminalsystem(std::string &command);
+
+    void Terminalsystem(std::string command);
     void showTerminal();
     void restartTerminal();
+    std::vector<std::string> getCommandHistory();
+
 private:
+
     ImVec4 ansiColor(int code);
     std::vector<AnsiFragment> parseAnsiLine(const std::string& line);
     void handleAnsiSequences(const std::string& rawLine);

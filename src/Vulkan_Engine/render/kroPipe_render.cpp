@@ -3,13 +3,25 @@
 #include "../../Utils/input/kroPipe_input.hpp"
 #include "../swapchain/kroPipe_swapchain.hpp"
 #include "../pipeline/kroPipe_pipeline.hpp"
+#include "../OS/kroPipe_os.hpp"
 #include "kroPipe_render.hpp"
 
 namespace KP {
 namespace ENGINE {
 
 // max frames reclama quando está mais de 2 quando estiver no hyprland. no X11, o MAX_FRAMES_IN_FLIGHT maior que 2 funciona perfeitamente
-const int MAX_FRAMES_IN_FLIGHT = 3; // quando crescer, adiiconar 3 aqui e gerenciar isso.
+int MAX_FRAMES_IN_FLIGHT; // quando crescer, adiiconar 3 aqui e gerenciar isso.
+
+Render::Render(){
+    
+    if (KP::ENGINE::Object_operationSystem.isWayland()) {
+        MAX_FRAMES_IN_FLIGHT = 2;
+    }
+    
+    if (KP::ENGINE::Object_operationSystem.isX11()) {
+        MAX_FRAMES_IN_FLIGHT = 3;
+    }
+}
 
 std::vector<VkSemaphore> imageAvailableSemaphores;
 std::vector<VkSemaphore> renderFinishedSemaphores;

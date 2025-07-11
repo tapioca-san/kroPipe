@@ -5,8 +5,6 @@
 #include "../texture/kroPipe_MSAA.hpp"
 #include "../depth/kroPipe_depth.hpp" 
 #include "../debug/kroPipe_debug.hpp"   
-#include <stdexcept>
-#include <vulkan/vulkan_core.h>
 #include "kroPipe_pipeline.hpp"
 
 
@@ -226,7 +224,6 @@ void Pipeline::createRenderPass() {
     depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
     VkAttachmentDescription colorAttachmentResolve{};
     colorAttachmentResolve.format = swapChainImageFormat;
-    std::cerr << *KP::ENGINE::OBJECT_msaa.getPointerMsaaSamples() << std::endl;
     colorAttachmentResolve.samples = VK_SAMPLE_COUNT_1_BIT;
     colorAttachmentResolve.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     colorAttachmentResolve.storeOp = VK_ATTACHMENT_STORE_OP_STORE;

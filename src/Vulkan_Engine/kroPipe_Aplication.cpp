@@ -81,7 +81,7 @@ void Aplication::init(){
     obj1.position = glm::vec3(0.0f, 0.0f, 0.0f);
     obj1.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
     obj1.object_type.push_back("Camera");
-    obj1.modelPath = "/home/pipebomb/Downloads/Untitled.obj";
+    obj1.modelPath = "/home/pipebomb/Downloads/organizado/model3D/Untitled.obj";
     KP::UTILS::Object* a = new KP::UTILS::Object(obj1);
     //create
     
