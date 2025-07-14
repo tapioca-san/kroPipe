@@ -1,5 +1,7 @@
 
 #include <glm/ext/vector_float3.hpp>
+#include <string>
+#include <vector>
 #define STB_IMAGE_IMPLEMENTATION
 #include "kroPipe_Aplication.hpp"
 
@@ -78,11 +80,17 @@ void Aplication::init(){
     );
     
     KP::UTILS::createInfo_object obj1;
-    obj1.position = glm::vec3(0.0f, 0.0f, 0.0f);
+    obj1.position = glm::vec3(111.0f, 11.0f, 11.0f);
     obj1.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
-    obj1.object_type.push_back("Camera");
+    obj1.object_type.push_back("Object");
     obj1.modelPath = "/home/pipebomb/Downloads/organizado/model3D/bocchi_the_rock.glb";
     KP::UTILS::Object* a = new KP::UTILS::Object(obj1);
+
+    KP::UTILS::createInfo_object obj2;
+    obj2.position = glm::vec3(0.0f, 0.0f, 0.0f);
+    obj2.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
+    obj2.object_type.push_back("Camera");
+    KP::UTILS::Object* a2 = new KP::UTILS::Object(obj2);
     //create
     
 
@@ -96,8 +104,8 @@ void Aplication::run(){
         lastTime = currentTime;
         
         glfwPollEvents();
-        KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), *KP::UTILS::OBJECT_objectsManager.getObjectByID(0), deltaTime); // ??????????????
-        
+        KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0)), deltaTime); // ??????????????
+        std::cerr << "position:\nx: " + std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.x) + "\ny: " + std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.y) + "\nz: "+ std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.z) + "\n"; 
         KP::UTILS::OBJECT_imguiInterface->newFrame(); 
         KP::UTILS::OBJECT_imguiInterface->drawWindows();         
         ImGui::Render(); 

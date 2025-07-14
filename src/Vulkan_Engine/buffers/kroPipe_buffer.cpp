@@ -8,6 +8,7 @@
 #include "../render/kroPipe_render.hpp"
 #include "../debug/kroPipe_debug.hpp"
 #include "kroPipe_buffer.hpp"
+
 namespace KP {
 namespace ENGINE {
     
@@ -114,13 +115,13 @@ void KP::ENGINE::UboStorage::updateUniformBuffer(KP::ENGINE::UniformBuffers &uni
     
     ubo.model = glm::mat4(1.0f);
     ubo.model = glm::translate(ubo.model, glm::vec3(11, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.z));
-    ubo.model = glm::rotate(ubo.model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(-0.5f, 1.0f, 0.0f));
-    ubo.view = glm::lookAt(glm::vec3(KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.x, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.z), glm::vec3(KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.x, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.z) + KP::UTILS::cameraPlayer.Front, KP::UTILS::cameraPlayer.Up);
+    ubo.model = glm::rotate(ubo.model, glm::radians(KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)); // rotation for X
+    ubo.model = glm::rotate(ubo.model, glm::radians(KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f)); // rotation for Y
+    ubo.model = glm::rotate(ubo.model, glm::radians(KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f)); // rotation for Z
+    ubo.view = glm::lookAt(glm::vec3(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.x, KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.y, KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.z), glm::vec3(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.x, KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.y, KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.z) + KP::UTILS::cameraPlayer.Front, KP::UTILS::cameraPlayer.Up);
     ubo.proj = glm::perspective(glm::radians(KP::UTILS::cameraPlayer.Zoom), (float)KP::ENGINE::swapChainExtent.width / (float)KP::ENGINE::swapChainExtent.height, 0.1f, 100.0f);
     ubo.proj[1][1] *= -1;
         
-
-    
     memcpy(uniformBuffers.uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 }
 

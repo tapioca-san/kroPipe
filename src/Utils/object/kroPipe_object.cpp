@@ -1,6 +1,8 @@
 #include "../../Vulkan_Engine/pipeline/kroPipe_pipeline.hpp"
 #include "../../Vulkan_Engine/device/kroPipe_device.hpp"
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
+#include <cstdint>
+#include <string>
 #include "kroPipe_object.hpp"
 
 namespace KP {
@@ -148,6 +150,7 @@ void Object::calculateAABB(ObjectData& object) {
 }
 
 Object::Object(createInfo_object &Info) {
+    
     data.Position = Info.position;
     data.floorPos = Info.floorPos;
     data.floorPoslowest = Info.floorPos;
@@ -159,6 +162,12 @@ Object::Object(createInfo_object &Info) {
 
     data.ID = Info.ptr_ObjectsManager->getLastId();
 
+    for(uint32_t i = 0; i < Info.object_type.size(); i++){
+        if(Info.object_type[i] == "Camera" && Info.modelPath != ""){
+            KP::ENGINE::warnMessage("Tried to load a 3d model on a camera object. Object ID:" + std::to_string(data.ID));
+        }
+    }
+    
     createInfo_model modelInfo;
     modelInfo.modelPath = Info.modelPath;
     modelInfo.ObjectID = &data.ID;
@@ -227,10 +236,15 @@ void Object::draw(VkCommandBuffer& commandBuffer) {
 
 void KP::UTILS::Model::loadModel() {
     Assimp::Importer importer;
+    
+    if(modelPath == ""){
+        return;
+    }
+
     const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        std::cerr << "failed to load model: " << modelPath << "\nErro Assimp: " << importer.GetErrorString() << std::endl;
+        KP::ENGINE::warnMessage("failed to load model: " + modelPath + "\nErro Assimp: " + importer.GetErrorString() + "\n");
         return;
     }
 

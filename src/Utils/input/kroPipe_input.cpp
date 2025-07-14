@@ -6,7 +6,7 @@
 namespace KP {
 namespace UTILS {
 
-void processInput(GLFWwindow *window, KP::UTILS::Object& obj, float deltaTime, float baseSpeed, float sprintSpeed, float walkSpeed, float acceleration, float friction) {
+void processInput(GLFWwindow *window, KP::UTILS::Object* obj, float deltaTime, float baseSpeed, float sprintSpeed, float walkSpeed, float acceleration, float friction) {
     float targetSpeed = baseSpeed;
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
@@ -17,7 +17,7 @@ void processInput(GLFWwindow *window, KP::UTILS::Object& obj, float deltaTime, f
 
     glm::vec3 inputDir(0.0f);
 
-    if (!obj.getData().is_OnAir) {
+    if (!obj->getData().is_OnAir) {
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) inputDir.z += 1.0f;
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) inputDir.z -= 1.0f;
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) inputDir.x -= 1.0f;
@@ -33,29 +33,29 @@ void processInput(GLFWwindow *window, KP::UTILS::Object& obj, float deltaTime, f
 
             glm::vec3 moveDir = inputDir.z * forward + inputDir.x * right;
 
-            obj.getData().velocity += moveDir * acceleration * deltaTime;
+            obj->getData().velocity += moveDir * acceleration * deltaTime;
         } else {
-            obj.getData().velocity.x = glm::mix(obj.getData().velocity.x, 0.0f, friction * deltaTime);
-            obj.getData().velocity.z = glm::mix(obj.getData().velocity.z, 0.0f, friction * deltaTime);
+            obj->getData().velocity.x = glm::mix(obj->getData().velocity.x, 0.0f, friction * deltaTime);
+            obj->getData().velocity.z = glm::mix(obj->getData().velocity.z, 0.0f, friction * deltaTime);
         }
-        glm::vec2 horizontalVel(obj.getData().velocity.x, obj.getData().velocity.z);
+        glm::vec2 horizontalVel(obj->getData().velocity.x, obj->getData().velocity.z);
         float speed = glm::length(horizontalVel);
         if (speed > targetSpeed) {
             horizontalVel = glm::normalize(horizontalVel) * targetSpeed;
-            obj.getData().velocity.x = horizontalVel.x;
-            obj.getData().velocity.z = horizontalVel.y;
+            obj->getData().velocity.x = horizontalVel.x;
+            obj->getData().velocity.z = horizontalVel.y;
         }
     }
 
-    obj.getData().Position += glm::vec3(obj.getData().velocity.x, 0.0f, obj.getData().velocity.z) * deltaTime;
+    obj->getData().Position += glm::vec3(obj->getData().velocity.x, 0.0f, obj->getData().velocity.z) * deltaTime;
 
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !obj.getData().is_OnAir) {
-        obj.getData().velocity.y = 5.0f;
-        obj.getData().is_OnAir = true;
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !obj->getData().is_OnAir) {
+        obj->getData().velocity.y = 5.0f;
+        obj->getData().is_OnAir = true;
     }
 
     if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS){
-        obj.getData().Position = glm::vec3(10.0f, 10.0f, 0.0f);
+        obj->getData().Position = glm::vec3(10.0f, 10.0f, 0.0f);
     }
 
      if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
