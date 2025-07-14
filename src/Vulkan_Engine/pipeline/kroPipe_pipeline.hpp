@@ -1,8 +1,9 @@
 #ifndef KROPIPE_PIPELINE_HPP
 #define KROPIPE_PIPELINE_HPP
 
-#include "../../kroPipe_depedence.hpp"
+#include "../fileEditor/kroPipe_file.hpp"
 #include "../buffers/kroPipe_buffer.hpp"
+#include "../../kroPipe_depedence.hpp"
 #include "kroPipe_vertex_data.hpp"  
 
 
@@ -16,7 +17,6 @@ extern VkPipeline       graphicsPipeline;
 
 extern VkRenderPass VK_renderPass;
 
-std::vector<char> readFile(const std::string& filename);
 VkShaderModule createShaderModule(const std::vector<char>& code);
 
 struct shaderModule {

@@ -115,8 +115,8 @@ void KP::ENGINE::UboStorage::updateUniformBuffer(KP::ENGINE::UniformBuffers &uni
     ubo.model = glm::mat4(1.0f);
     ubo.model = glm::translate(ubo.model, glm::vec3(11, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.z));
     ubo.model = glm::rotate(ubo.model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(-0.5f, 1.0f, 0.0f));
-    //ubo.view = glm::lookAt(glm::vec3(KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.x, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.z), glm::vec3(KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.x, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.z) + KP::UTILS::cameraPlayer.Front, KP::UTILS::cameraPlayer.Up);
-    //ubo.proj = glm::perspective(glm::radians(KP::UTILS::cameraPlayer.Zoom), (float)KP::ENGINE::swapChainExtent.width / (float)KP::ENGINE::swapChainExtent.height, 0.1f, 100.0f);
+    ubo.view = glm::lookAt(glm::vec3(KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.x, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.z), glm::vec3(KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.x, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.y, KP::UTILS::OBJECT_objectsManager.getObjectByID(objectId)->getData().Position.z) + KP::UTILS::cameraPlayer.Front, KP::UTILS::cameraPlayer.Up);
+    ubo.proj = glm::perspective(glm::radians(KP::UTILS::cameraPlayer.Zoom), (float)KP::ENGINE::swapChainExtent.width / (float)KP::ENGINE::swapChainExtent.height, 0.1f, 100.0f);
     ubo.proj[1][1] *= -1;
         
 

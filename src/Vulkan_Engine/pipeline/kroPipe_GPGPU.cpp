@@ -1,3 +1,4 @@
+#include "../fileEditor/kroPipe_file.hpp"
 #include "../device/kroPipe_device.hpp"
 #include "kroPipe_GPGPU.hpp"
 
@@ -33,7 +34,7 @@ void GPGPU::createComputeDescriptorSetLayout() {
 
 void GPGPU::createComputePipeline(const std::string& directoryPath, const std::string& computeShader){
 
-    auto computeShaderCode = readFile(directoryPath);
+    auto computeShaderCode = OBJECT_fileEditor.readFile<std::vector<char>>(directoryPath);
 
     VkShaderModule computeShaderModule = createShaderModule(computeShaderCode);
 

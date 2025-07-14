@@ -81,7 +81,7 @@ void Aplication::init(){
     obj1.position = glm::vec3(0.0f, 0.0f, 0.0f);
     obj1.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
     obj1.object_type.push_back("Camera");
-    obj1.modelPath = "/home/pipebomb/Downloads/organizado/model3D/Untitled.obj";
+    obj1.modelPath = "/home/pipebomb/Downloads/organizado/model3D/bocchi_the_rock.glb";
     KP::UTILS::Object* a = new KP::UTILS::Object(obj1);
     //create
     
@@ -94,14 +94,13 @@ void Aplication::run(){
         float currentTime = glfwGetTime();
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
-
+        
         glfwPollEvents();
         KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), *KP::UTILS::OBJECT_objectsManager.getObjectByID(0), deltaTime); // ??????????????
         
         KP::UTILS::OBJECT_imguiInterface->newFrame(); 
         KP::UTILS::OBJECT_imguiInterface->drawWindows();         
         ImGui::Render(); 
-
 
         //for(uint16_t i = 0; i < allObjects.size(); i++){
         //    kroPipe::gravityForce(allObjects[sortedID[i]], deltaTime); gravity force

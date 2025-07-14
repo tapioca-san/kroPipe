@@ -6,6 +6,7 @@
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
 #include "../terminal/kroPipe_terminal.hpp"
 #include "../object/kroPipe_object.hpp"
+#include "../ollama/kroPipe_LLM.hpp"
 
 namespace KP {
 namespace UTILS {
@@ -43,8 +44,8 @@ namespace UTILS {
         }
         ImGui::End(); 
         KP::UTILS::OBJECT_objectsManager.logID();
+        KP::UTILS::OBJECT_LLM.DrawTransformUI();
         /*
-        
         ImGui::Begin("Debug Window");
         if(ImGui::CollapsingHeader("object")){
             ImGui::Checkbox("FreeView", &flyMode);

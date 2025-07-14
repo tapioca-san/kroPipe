@@ -1,5 +1,5 @@
-#ifndef INPUT_H
-#define INPUT_H
+#ifndef KROPIPE_INPUT_HPP
+#define KROPIPE_INPUT_HPP
 
 #include "../object/kroPipe_object.hpp"
 #include "../../kroPipe_depedence.hpp"
@@ -16,4 +16,4 @@ extern bool mouseMode;
 }// namespace UTILS
 }// namespsace KP
 
-#endif // INPUT_H
+#endif // KROPIPE_INPUT_HPP
