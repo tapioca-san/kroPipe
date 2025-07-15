@@ -4,6 +4,7 @@
 #include "../swapchain/kroPipe_swapchain.hpp"
 #include "../pipeline/kroPipe_pipeline.hpp"
 #include "../OS/kroPipe_os.hpp"
+#include <memory>
 #include "kroPipe_render.hpp"
 
 namespace KP {
@@ -91,7 +92,7 @@ void KP::ENGINE::Render::recordCommandBuffer(VkCommandBuffer commandBuffer, uint
 
     vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-    for(KP::UTILS::Object* obj : *KP::UTILS::OBJECT_objectsManager.getAllObject()){
+    for(std::shared_ptr<KP::UTILS::Object> obj : *KP::UTILS::OBJECT_objectsManager.getAllObject()){
         obj->getData().model->draw(commandBuffer);
     }
 

@@ -1,12 +1,13 @@
 #include "../../Vulkan_Engine/window/kroPipe_window.hpp"
 #include "../../Utils/camera/kroPipe_camera.hpp"
+#include <memory>
 #include "kroPipe_input.hpp"
 
 
 namespace KP {
 namespace UTILS {
 
-void processInput(GLFWwindow *window, KP::UTILS::Object* obj, float deltaTime, float baseSpeed, float sprintSpeed, float walkSpeed, float acceleration, float friction) {
+void processInput(GLFWwindow *window, std::shared_ptr<KP::UTILS::Object> obj, float deltaTime, float baseSpeed, float sprintSpeed, float walkSpeed, float acceleration, float friction) {
     float targetSpeed = baseSpeed;
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {

@@ -1,5 +1,6 @@
 
 #include <glm/ext/vector_float3.hpp>
+#include <memory>
 #include <string>
 #include <vector>
 #define STB_IMAGE_IMPLEMENTATION
@@ -64,7 +65,7 @@ void Aplication::init(){
     KP::ENGINE::createTextureImage();
     KP::ENGINE::createTextureImageView();
     KP::ENGINE::createTextureSampler();
-    for(KP::UTILS::Model *model : *KP::UTILS::OBJECT_objectsManager.getAllModel()){
+    for(std::shared_ptr<KP::UTILS::Model> model : *KP::UTILS::OBJECT_objectsManager.getAllModel()){
         model->loadModel();
     }
     
