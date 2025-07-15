@@ -81,7 +81,7 @@ void Aplication::init(){
     );
     
     KP::UTILS::createInfo_object obj1;
-    obj1.position = glm::vec3(111.0f, 11.0f, 11.0f);
+    obj1.position = glm::vec3(11.0f, 11.0f, 11.0f);
     obj1.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
     obj1.object_type.push_back("Object");
     obj1.modelPath = "/home/pipebomb/Downloads/organizado/model3D/bocchi_the_rock.glb";
@@ -106,7 +106,7 @@ void Aplication::run(){
         
         glfwPollEvents();
         KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0)), deltaTime); // ??????????????
-        std::cerr << "position:\nx: " + std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.x) + "\ny: " + std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.y) + "\nz: "+ std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.z) + "\n"; 
+        //std::cerr << "position:\nx: " + std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.x) + "\ny: " + std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.y) + "\nz: "+ std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.z) + "\n"; 
         KP::UTILS::OBJECT_imguiInterface->newFrame(); 
         KP::UTILS::OBJECT_imguiInterface->drawWindows();         
         ImGui::Render(); 

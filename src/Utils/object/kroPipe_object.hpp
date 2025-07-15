@@ -69,8 +69,7 @@ public:
 
 private:
   void UboShader(uint32_t currentImage);
-  void createVertexBuffer(const std::vector<KP::ENGINE::VertexVulkan> &vertices,
-                          VAO &vao);
+  void createVertexBuffer(const std::vector<KP::ENGINE::VertexVulkan> &vertices,VAO &vao);
   void createIndexBuffer(const std::vector<uint32_t> &indices, VAO &vao);
   Mesh processMesh(aiMesh *mesh, const aiScene *scene);
   void processNode(aiNode *node, const aiScene *scene);

@@ -378,8 +378,8 @@ KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh *mesh,
   std::vector<KP::ENGINE::VertexVulkan> vertices;
   std::vector<uint32_t> indices;
 
-  KP::ENGINE::VertexVulkan vertex{};
   for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+    KP::ENGINE::VertexVulkan vertex{};
     glm::vec3 vector;
 
     vector.x = mesh->mVertices[i].x;
@@ -417,8 +417,24 @@ KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh *mesh,
     } else {
       vertex.TexCoords = glm::vec2(0.0f, 0.0f);
     }
+    
+    // colors
     if (mesh->HasVertexColors(0)) {
+        glm::vec3 color = {
+            mesh->mColors[0][i].r,
+            mesh->mColors[0][i].g,
+            mesh->mColors[0][i].b
+        };
+        vertex.color = color;
     }
+    aiColor4D color;
+    unsigned int materialIndex = mesh->mMaterialIndex;
+    aiMaterial* material = scene->mMaterials[materialIndex];
+    if (aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS) {
+        glm::vec3 baseColor = glm::vec3(color.r, color.g, color.b);
+        vertex.color = baseColor;
+    }
+
     vertices.push_back(vertex);
   }
   for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
