@@ -4,7 +4,6 @@
 #include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
 #include "../../Vulkan_Engine/pipeline/kroPipe_vertex_data.hpp"
 #include "../camera/kroPipe_camera.hpp"
-#include <memory>
 
 #define MAX_BONE_INFLUENCE 4
 
@@ -13,6 +12,7 @@ namespace UTILS {
 
 struct ObjectsManager; // redefinition below
 class player;          // redefinition below
+class light;
 
 struct Mesh {
   std::vector<KP::ENGINE::VertexVulkan> vertices;
@@ -51,7 +51,8 @@ public:
   KP::UTILS::VAO vao;
   KP::ENGINE::UboStorage UBO;
 
-  std::shared_ptr<std::vector<std::shared_ptr<Model>>> allModel; // it's a pointer that grab from somewhere
+  std::shared_ptr<std::vector<std::shared_ptr<Model>>>
+      allModel; // it's a pointer that grab from somewhere
 
   uint32_t objectID;
 
@@ -69,7 +70,8 @@ public:
 
 private:
   void UboShader(uint32_t currentImage);
-  void createVertexBuffer(const std::vector<KP::ENGINE::VertexVulkan> &vertices,VAO &vao);
+  void createVertexBuffer(const std::vector<KP::ENGINE::VertexVulkan> &vertices,
+                          VAO &vao);
   void createIndexBuffer(const std::vector<uint32_t> &indices, VAO &vao);
   Mesh processMesh(aiMesh *mesh, const aiScene *scene);
   void processNode(aiNode *node, const aiScene *scene);
@@ -100,8 +102,10 @@ struct ObjectData {
   bool is_onObject = false;
 
   std::vector<std::string> object_type;
+  
+  std::shared_ptr<KP::UTILS::light> light;
 
-  bool is_OnAir = true;
+  bool is_OnAir = false;
   uint32_t ID = 0;
 };
 
@@ -155,10 +159,10 @@ private:
   std::vector<std::shared_ptr<Object>> allObject;
 
 public:
-
   std::vector<uint32_t *> playersID;
   std::vector<uint32_t *> camerasID;
   std::vector<uint32_t *> objectsID;
+  std::vector<uint32_t *> lightsID;
   std::vector<uint32_t *> nullID;
   std::vector<uint32_t> ID;
 
@@ -176,6 +180,7 @@ public:
   uint32_t *getPlayersID(uint32_t index);
   uint32_t *getCamerasID(uint32_t index);
   uint32_t *getObjectsID(uint32_t index);
+  uint32_t *getLightsID(uint32_t index);
   uint32_t *getnullID(uint32_t index);
 };
 
@@ -189,7 +194,6 @@ class player {
 
 public:
   player(KP::UTILS::createInfo_player &info);
-  ~player();
 
   KP::UTILS::createInfo_player *getData();
 
@@ -197,8 +201,10 @@ private:
   createInfo_player data;
 };
 
-extern KP::UTILS::ObjectsManager OBJECT_objectsManager;
 
+
+
+extern KP::UTILS::ObjectsManager OBJECT_objectsManager;
 } // namespace UTILS
 } // namespace KP
 

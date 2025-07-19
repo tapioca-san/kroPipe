@@ -1,7 +1,8 @@
-#include "kroPipe_object.hpp"
-#include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
-#include "../../Vulkan_Engine/device/kroPipe_device.hpp"
 #include "../../Vulkan_Engine/pipeline/kroPipe_pipeline.hpp"
+#include "../../Vulkan_Engine/device/kroPipe_device.hpp"
+#include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
+#include "kroPipe_object.hpp"
+#include "kroPipe_light.hpp"
 
 namespace KP {
 namespace UTILS {
@@ -20,7 +21,11 @@ void ObjectsManager::addObject(std::shared_ptr<Object> Object) {
     } else if (Object->getData().object_type[i] == "Object") {
       std::cerr << "object ID:" << lastID << "\n";
       objectsID.push_back(&lastID);
-    } else {
+    } 
+    else if (Object->getData().object_type[i] == "Light") {
+      std::cerr << "light ID:" << lastID << "\n";
+      lightsID.push_back(&lastID);
+    }else {
       std::cerr << "null ID:" << lastID << "\n";
       nullID.push_back(&lastID);
     }
@@ -36,6 +41,10 @@ uint32_t *ObjectsManager::getCamerasID(uint32_t index) {
 uint32_t *ObjectsManager::getObjectsID(uint32_t index) {
   return objectsID[index];
 }
+uint32_t *ObjectsManager::getLightsID(uint32_t index) {
+  return lightsID[index];
+}
+
 uint32_t *ObjectsManager::getnullID(uint32_t index) { return nullID[index]; }
 
 int ObjectsManager::getLastId() { return lastID; }
@@ -66,13 +75,10 @@ void ObjectsManager::logID() {
 
   ImGui::Begin("LOG ID");
   if (ImGui::CollapsingHeader("IDs")) {
-    for (uint32_t i = 0;
-         i < KP::UTILS::OBJECT_objectsManager.getAllObject()->size(); i++) {
+    for (uint32_t i = 0; i < KP::UTILS::OBJECT_objectsManager.getAllObject()->size(); i++) {
       std::string text = "ID: " + std::to_string(i);
       ImGui::Text(text.c_str());
-      text = "Path: " + KP::UTILS::OBJECT_objectsManager.getObjectByID(i)
-                            ->getData()
-                            .modelPath;
+      text = "Path: " + KP::UTILS::OBJECT_objectsManager.getObjectByID(i)->getData().modelPath;
       ImGui::Text(text.c_str());
     }
   }
@@ -162,7 +168,11 @@ Object::Object(createInfo_object &Info) {
   modelInfo.modelPath = Info.modelPath;
   modelInfo.ObjectID = &data.ID;
 
-  std::shared_ptr<KP::UTILS::Model> model = std::make_shared<KP::UTILS::Model>(modelInfo, *KP::UTILS::OBJECT_objectsManager.getAllModel());//std::shared_ptr<std::shared_ptr<KP::UTILS::Model>>(modelInfo, *KP::UTILS::OBJECT_objectsManager.getAllModel());
+  std::shared_ptr<KP::UTILS::Model> model = std::make_shared<KP::UTILS::Model>(
+      modelInfo,
+      *KP::UTILS::OBJECT_objectsManager
+           .getAllModel()); // std::shared_ptr<std::shared_ptr<KP::UTILS::Model>>(modelInfo,
+                            // *KP::UTILS::OBJECT_objectsManager.getAllModel());
 
   model->UBO.createDescriptorLayout();
   model->UBO.create();
@@ -177,7 +187,13 @@ Object::Object(createInfo_object &Info) {
     if (data.object_type[i] == "Player") {
       createInfo_player playerInfo;
       playerInfo.ObjectID = &data.ID;
-      KP::UTILS::player *model = new KP::UTILS::player(playerInfo);
+      std::shared_ptr<KP::UTILS::player> model =
+          std::make_shared<KP::UTILS::player>(playerInfo);
+    }
+    if (data.object_type[i] == "Light") {
+      KP::UTILS::createInfo_light dataLight;
+      dataLight.intensity = 1.0f;
+
     }
   }
   // (Opcional) Calcular bounding box e raio, se quiser:
@@ -225,14 +241,11 @@ void KP::UTILS::Model::loadModel() {
   }
 
   const aiScene *scene =
-      importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs |
-                                       aiProcess_CalcTangentSpace);
+      importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
   if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||
       !scene->mRootNode) {
-    KP::ENGINE::warnMessage("failed to load model: " + modelPath +
-                            "\nErro Assimp: " + importer.GetErrorString() +
-                            "\n");
+    KP::ENGINE::warnMessage("failed to load model: " + modelPath + "\nErro Assimp: " + importer.GetErrorString() + "\n");
     return;
   }
 
@@ -259,16 +272,9 @@ void KP::UTILS::Model::draw(VkCommandBuffer &commandBuffer) {
     // UboShader(currentFrame);
 
     vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
-    vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0,
-                         VK_INDEX_TYPE_UINT16);
-    vkCmdBindDescriptorSets(
-        commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
-        KP::ENGINE::pipelineLayout, 0, 1,
-        &UBO.uniformBuffers.descriptorSets[KP::ENGINE::currentFrame], 0,
-        nullptr);
-    vkCmdDrawIndexed(commandBuffer,
-                     static_cast<uint32_t>(vao.meshes[i].indices.size()), 1, 0,
-                     0, 0);
+    vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0,VK_INDEX_TYPE_UINT16);
+    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,KP::ENGINE::pipelineLayout, 0, 1,&UBO.uniformBuffers.descriptorSets[KP::ENGINE::currentFrame], 0,nullptr);
+    vkCmdDrawIndexed(commandBuffer,static_cast<uint32_t>(vao.meshes[i].indices.size()), 1, 0,0, 0);
   }
 }
 
@@ -292,11 +298,13 @@ void KP::UTILS::Model::cleanupVao() {
   }
 }
 
-KP::UTILS::Model::Model(createInfo_model &info, std::vector<std::shared_ptr<Model>> allModel)
+KP::UTILS::Model::Model(createInfo_model &info,
+                        std::vector<std::shared_ptr<Model>> allModel)
     : objectID(*info.ObjectID), UBO(*info.ObjectID) {
 
   this->modelPath = info.modelPath;
-  this->allModel = std::make_shared<std::vector<std::shared_ptr<Model>>>(allModel);
+  this->allModel =
+      std::make_shared<std::vector<std::shared_ptr<Model>>>(allModel);
 }
 
 void KP::UTILS::Model::createVertexBuffer(
@@ -373,78 +381,100 @@ void KP::UTILS::Model::createIndexBuffer(const std::vector<uint32_t> &indices,
                stagingBufferMemory, nullptr);
 }
 
-KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh *mesh,
-                                              const aiScene *scene) {
+KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh *mesh, const aiScene *scene) {
   std::vector<KP::ENGINE::VertexVulkan> vertices;
   std::vector<uint32_t> indices;
 
   for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
     KP::ENGINE::VertexVulkan vertex{};
-    glm::vec3 vector;
 
-    vector.x = mesh->mVertices[i].x;
-    vector.y = mesh->mVertices[i].y;
-    vector.z = mesh->mVertices[i].z;
-    vertex.Position = vector;
-    // normals
+    // posição
+    vertex.Position = {
+      mesh->mVertices[i].x,
+      mesh->mVertices[i].y,
+      mesh->mVertices[i].z
+    };
+
+    // normal
     if (mesh->HasNormals()) {
-      vector.x = mesh->mNormals[i].x;
-      vector.y = mesh->mNormals[i].y;
-      vector.z = mesh->mNormals[i].z;
-      vertex.Normal = vector;
+      vertex.Normal = {
+        mesh->mNormals[i].x,
+        mesh->mNormals[i].y,
+        mesh->mNormals[i].z
+      };
     }
+
+    // coordenadas de textura
     if (mesh->mTextureCoords[0]) {
-      // text Coords
-      glm::vec2 vec;
-      vec.x = mesh->mTextureCoords[0][i].x;
-      vec.y = mesh->mTextureCoords[0][i].y;
-      vertex.TexCoords = vec;
+      vertex.TexCoords = {
+        mesh->mTextureCoords[0][i].x,
+        mesh->mTextureCoords[0][i].y
+      };
+
       if (mesh->HasTangentsAndBitangents()) {
-        // tangent
-        vector.x = mesh->mTangents[i].x;
-        vector.y = mesh->mTangents[i].y;
-        vector.z = mesh->mTangents[i].z;
-        vertex.Tangent = vector;
-        // bitangent
-        vector.x = mesh->mBitangents[i].x;
-        vector.y = mesh->mBitangents[i].y;
-        vector.z = mesh->mBitangents[i].z;
-        vertex.Bitangent = vector;
+        vertex.Tangent = {
+          mesh->mTangents[i].x,
+          mesh->mTangents[i].y,
+          mesh->mTangents[i].z
+        };
+        vertex.Bitangent = {
+          mesh->mBitangents[i].x,
+          mesh->mBitangents[i].y,
+          mesh->mBitangents[i].z
+        };
       } else {
-        vertex.Tangent = glm::vec3(0, 0, 0);
-        vertex.Bitangent = glm::vec3(0, 0, 0);
+        vertex.Tangent = glm::vec3(0.0f);
+        vertex.Bitangent = glm::vec3(0.0f);
       }
     } else {
-      vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+      vertex.TexCoords = glm::vec2(0.0f);
     }
-    
-    // colors
+
+    bool colorSet = false;
+
     if (mesh->HasVertexColors(0)) {
-        glm::vec3 color = {
-            mesh->mColors[0][i].r,
-            mesh->mColors[0][i].g,
-            mesh->mColors[0][i].b
-        };
-        vertex.color = color;
+      vertex.color = {
+        mesh->mColors[0][i].r,
+        mesh->mColors[0][i].g,
+        mesh->mColors[0][i].b
+      };
+      colorSet = true;
     }
-    aiColor4D color;
+
     unsigned int materialIndex = mesh->mMaterialIndex;
-    aiMaterial* material = scene->mMaterials[materialIndex];
-    if (aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS) {
-        glm::vec3 baseColor = glm::vec3(color.r, color.g, color.b);
-        vertex.color = baseColor;
+    if (!colorSet && materialIndex < scene->mNumMaterials) {
+      aiMaterial *material = scene->mMaterials[materialIndex];
+      aiColor4D color;
+
+      if (aiGetMaterialColor(material, AI_MATKEY_BASE_COLOR, &color) == AI_SUCCESS) {
+        vertex.color = {color.r, color.g, color.b};
+        colorSet = true;
+      }
+
+      if (!colorSet && aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS) {
+        vertex.color = {color.r, color.g, color.b};
+        colorSet = true;
+      }
+    }
+
+    if (!colorSet) {
+      vertex.color = glm::vec3(1.0f);
     }
 
     vertices.push_back(vertex);
   }
+
+  // Índices
   for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
-    aiFace face = mesh->mFaces[i];
-    for (unsigned int j = 0; j < face.mNumIndices; j++)
+    const aiFace &face = mesh->mFaces[i];
+    for (unsigned int j = 0; j < face.mNumIndices; j++) {
       indices.push_back(face.mIndices[j]);
+    }
   }
 
   return Mesh(vertices, indices);
 }
+
 
 void KP::UTILS::Model::processNode(aiNode *node, const aiScene *scene) {
   for (uint16_t i = 0; i < node->mNumMeshes; i++) {
@@ -459,17 +489,11 @@ void KP::UTILS::Model::processNode(aiNode *node, const aiScene *scene) {
 
 KP::UTILS::createInfo_player *KP::UTILS::player::getData() { return &data; }
 
-KP::UTILS::player::player(KP::UTILS::createInfo_player &info) {
-  KP::UTILS::OBJECT_objectsManager.getObjectByID(*info.ObjectID)
-      ->getData()
-      .object_type.push_back(
-          "Player"); // necessary to turn the objet to the player
-}
+KP::UTILS::player::player(KP::UTILS::createInfo_player &info) {}
 
 namespace KP {
 namespace UTILS {
 
 ObjectsManager OBJECT_objectsManager;
-
 } // namespace UTILS
 } // namespace KP

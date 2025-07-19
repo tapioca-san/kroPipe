@@ -1,5 +1,6 @@
 #include "../../Utils/object/kroPipe_object.hpp"
 #include "../../Utils/camera/kroPipe_camera.hpp"
+#include "../../Utils/object/kroPipe_light.hpp"
 #include "../swapchain/kroPipe_swapchain.hpp"
 #include "../texture/kroPipe_texture.hpp"
 #include "../command/kroPipe_command.hpp"
@@ -33,7 +34,14 @@ void createDescriptorSetLayout(KP::ENGINE::UniformBuffers &uniformBuffers) {
     samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
     samplerLayoutBinding.pImmutableSamplers = nullptr;
     samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-    std::array<VkDescriptorSetLayoutBinding, 2> bindings = {uboLayoutBinding, samplerLayoutBinding};
+    VkDescriptorSetLayoutBinding lightLayoutBinding{};
+    lightLayoutBinding.binding = 2;
+    lightLayoutBinding.descriptorCount = 1;
+    lightLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    lightLayoutBinding.pImmutableSamplers = nullptr;
+    lightLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+    
+    std::array<VkDescriptorSetLayoutBinding, 3> bindings = {uboLayoutBinding, samplerLayoutBinding, lightLayoutBinding};
     VkDescriptorSetLayoutCreateInfo layoutInfo{};
     layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
@@ -146,7 +154,13 @@ void KP::ENGINE::UboStorage::createDescriptorSets(KP::ENGINE::UniformBuffers &un
         imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         imageInfo.imageView = textureImageView;
         imageInfo.sampler = textureSampler;
-        std::array<VkWriteDescriptorSet, 2> descriptorWrites{};
+
+        VkDescriptorBufferInfo lightBufferInfo{};
+        lightBufferInfo.buffer = KP::UTILS::lightTest.uniformBuffer; // seu buffer da luz
+        lightBufferInfo.offset = 0;
+        lightBufferInfo.range = sizeof(KP::UTILS::lightData);
+
+        std::array<VkWriteDescriptorSet, 3> descriptorWrites{};
         descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         descriptorWrites[0].dstSet = uniformBuffers.descriptorSets[i];
         descriptorWrites[0].dstBinding = 0;
@@ -154,6 +168,7 @@ void KP::ENGINE::UboStorage::createDescriptorSets(KP::ENGINE::UniformBuffers &un
         descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         descriptorWrites[0].descriptorCount = 1;
         descriptorWrites[0].pBufferInfo = &bufferInfo;
+        
         descriptorWrites[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         descriptorWrites[1].dstSet = uniformBuffers.descriptorSets[i];
         descriptorWrites[1].dstBinding = 1;
@@ -161,6 +176,15 @@ void KP::ENGINE::UboStorage::createDescriptorSets(KP::ENGINE::UniformBuffers &un
         descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         descriptorWrites[1].descriptorCount = 1;
         descriptorWrites[1].pImageInfo = &imageInfo;
+
+        descriptorWrites[2].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        descriptorWrites[2].dstSet = uniformBuffers.descriptorSets[i];
+        descriptorWrites[2].dstBinding = 2;
+        descriptorWrites[2].dstArrayElement = 0;
+        descriptorWrites[2].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        descriptorWrites[2].descriptorCount = 1;
+        descriptorWrites[2].pBufferInfo = &lightBufferInfo;
+        
         vkUpdateDescriptorSets(*KP::ENGINE::OBJECT_device.getPointerDevice(), static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
     }
 }

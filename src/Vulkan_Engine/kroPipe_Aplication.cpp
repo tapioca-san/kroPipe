@@ -7,7 +7,9 @@
 #include "kroPipe_Aplication.hpp"
 
 #include "../Utils/terminal/kroPipe_terminal.hpp"
+#include "../Utils/gravity/kroPipe_gravity.hpp"
 #include "../Utils/object/kroPipe_object.hpp"
+#include "../Utils/object/kroPipe_light.hpp"
 #include "window/kroPipe_windowSurface.hpp"
 #include "../Utils/input/kroPipe_input.hpp"
 #include "../Utils/imgui/kroPipe_imgui.hpp"
@@ -69,6 +71,8 @@ void Aplication::init(){
         model->loadModel();
     }
     
+    KP::UTILS::lightTest.createUniformBuffers();
+    
     KP::ENGINE::OBJECT_sceneUBO.create();
     KP::ENGINE::OBJECT_command.createCommandBuffers();
     KP::ENGINE::OBJECT_render.createSyncObjects();
@@ -80,11 +84,12 @@ void Aplication::init(){
         KP::ENGINE::VK_renderPass
     );
     
+        
     KP::UTILS::createInfo_object obj1;
     obj1.position = glm::vec3(11.0f, 11.0f, 11.0f);
     obj1.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
     obj1.object_type.push_back("Object");
-    obj1.modelPath = "/home/pipebomb/Downloads/organizado/model3D/bocchi_the_rock.glb";
+    obj1.modelPath = "/home/pipebomb/Downloads/organizado/model3D/jane_doe_blender_release.glb";
     KP::UTILS::Object* a = new KP::UTILS::Object(obj1);
 
     KP::UTILS::createInfo_object obj2;
@@ -92,8 +97,8 @@ void Aplication::init(){
     obj2.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
     obj2.object_type.push_back("Camera");
     KP::UTILS::Object* a2 = new KP::UTILS::Object(obj2);
-    //create
     
+    KP::UTILS::lightTest.definition();
 
 }
 
@@ -103,6 +108,10 @@ void Aplication::run(){
         float currentTime = glfwGetTime();
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
+
+        KP::UTILS::useGravity(*KP::UTILS::OBJECT_objectsManager.getAllObject(), deltaTime);
+        
+        KP::UTILS::lightTest.updateLightToShaders();
         
         glfwPollEvents();
         KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0)), deltaTime); // ??????????????
@@ -125,6 +134,7 @@ void Aplication::run(){
 
 void Aplication::clean() {
     vkDeviceWaitIdle(*KP::ENGINE::OBJECT_device.getPointerDevice());
+     KP::UTILS::lightTest.clean();
     KP::UTILS::OBJECT_imguiInterface->cleanup();
     KP::ENGINE::OBJECT_msaa.clean();
     vkDestroyImageView(*KP::ENGINE::OBJECT_device.getPointerDevice(), KP::ENGINE::depthImageView, KP::ENGINE::VK_Allocator);
