@@ -14,6 +14,7 @@ struct createInfo_player {
 
   uint32_t *ObjectID;
   KP::UTILS::Camera camera;
+  
 };
 
 class player {

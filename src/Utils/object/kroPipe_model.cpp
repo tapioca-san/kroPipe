@@ -48,7 +48,7 @@ void KP::UTILS::Model::draw(VkCommandBuffer &commandBuffer) {
     // UboShader(currentFrame);
 
     vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
-    vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0,VK_INDEX_TYPE_UINT16);
+    vkCmdBindIndexBuffer(commandBuffer, vao.indexBuffers[i], 0,VK_INDEX_TYPE_UINT32);
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,KP::ENGINE::pipelineLayout, 0, 1,&UBO.uniformBuffers.descriptorSets[KP::ENGINE::currentFrame], 0,nullptr);
     vkCmdDrawIndexed(commandBuffer,static_cast<uint32_t>(vao.meshes[i].indices.size()), 1, 0,0, 0);
   }
@@ -236,6 +236,8 @@ KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh *mesh, const aiScene *scene
     if (!colorSet) {
       vertex.color = glm::vec3(1.0f);
     }
+
+    animation.loadAnimation(mesh, vertices);
 
     vertices.push_back(vertex);
   }

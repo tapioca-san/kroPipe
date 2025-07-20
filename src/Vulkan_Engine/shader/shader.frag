@@ -2,41 +2,39 @@
 
 layout(binding = 1) uniform sampler2D texSampler;
 
-layout(binding = 2) uniform Light {
+struct Light {
     vec3 position;
     vec3 direction;
     vec3 color;
     float intensity;
-} light;
+};
 
-layout(location = 0) in vec3 fragColor;
-layout(location = 1) in vec2 fragTexCoord;
-layout(location = 2) in vec3 fragNormal;
-layout(location = 3) in vec3 fragPos;
+layout(binding = 2) uniform LightUBO {
+    Light light;
+};
+
+// entradas do vertex shader com `location`
+layout(location = 0) in vec3 FragPos;
+layout(location = 1) in vec3 Normal;
+layout(location = 2) in vec2 TexCoords;
+layout(location = 3) in vec3 Color;
 
 layout(location = 0) out vec4 outColor;
 
 void main() {
-    vec4 texColor = texture(texSampler, fragTexCoord);
+    vec3 baseColor = texture(texSampler, TexCoords).rgb * Color;
 
-    // Luz ambiente base
     float ambientStrength = 0.1;
     vec3 ambient = ambientStrength * light.color;
 
-    // Direção e distância até a luz
-    vec3 lightDir = normalize(light.position - fragPos);
-    float distance = length(light.position - fragPos);
+    vec3 norm = normalize(Normal);
+    vec3 lightDir = normalize(light.position - FragPos);
+    float distance = length(light.position - FragPos);
+    float attenuation = 1.0 / (distance * distance);
 
-    // Atenuação forte pela distância
-    float attenuation = 1.0 / (distance * distance); // quanto mais longe, mais escuro
-
-    // Luz difusa básica (se quiser)
-    float diff = max(dot(normalize(fragNormal), lightDir), 0.0);
+    float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diff * light.color * attenuation * light.intensity;
 
-    // Combina tudo
-    vec3 finalLighting = ambient + diffuse;
-    vec3 resultColor = fragColor * texColor.rgb * finalLighting;
-
-    outColor = vec4(resultColor, texColor.a);
+    vec3 result = (ambient + diffuse) * baseColor;
+    outColor = vec4(result, 1.0);
 }

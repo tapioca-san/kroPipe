@@ -6,8 +6,6 @@
 #include "../camera/kroPipe_camera.hpp"
 #include "kroPipe_model.hpp"
 
-#define MAX_BONE_INFLUENCE 4
-
 namespace KP {
 namespace UTILS {
 

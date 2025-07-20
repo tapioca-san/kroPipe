@@ -1,8 +1,3 @@
-
-#include <glm/ext/vector_float3.hpp>
-#include <memory>
-#include <string>
-#include <vector>
 #define STB_IMAGE_IMPLEMENTATION
 #include "kroPipe_Aplication.hpp"
 
@@ -89,7 +84,7 @@ void Aplication::init(){
     obj1.position = glm::vec3(11.0f, 11.0f, 11.0f);
     obj1.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
     obj1.object_type.push_back("Object");
-    obj1.modelPath = "/home/pipebomb/Downloads/jvnko.glb";
+    obj1.modelPath = "/home/pipebomb/Downloads/jvnko/jvnko.glb";
     KP::UTILS::Object* a = new KP::UTILS::Object(obj1);
 
     KP::UTILS::createInfo_object obj2;

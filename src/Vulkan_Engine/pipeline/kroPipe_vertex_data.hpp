@@ -11,6 +11,10 @@ struct VertexVulkan {
     glm::vec3 Normal;
     glm::vec3 color;
     glm::vec4 vertexColors;
+
+    glm::vec4 boneIds = glm::vec4(0);
+    
+	glm::vec4 boneWeights = glm::vec4(0.0f);
     
     glm::vec2 TexCoords;
     glm::vec3 Tangent;
@@ -25,8 +29,8 @@ struct VertexVulkan {
         return bindingDescription;
     }
 
-    static std::array<VkVertexInputAttributeDescription, 5> getAttributeDescriptions() {
-        std::array<VkVertexInputAttributeDescription, 5> attributeDescriptions{};
+    static std::array<VkVertexInputAttributeDescription, 7> getAttributeDescriptions() {
+        std::array<VkVertexInputAttributeDescription, 7> attributeDescriptions{};
 
         attributeDescriptions[0].binding = 0;
         attributeDescriptions[0].location = 0;
@@ -53,6 +57,15 @@ struct VertexVulkan {
         attributeDescriptions[4].format = VK_FORMAT_R32G32B32_SFLOAT;
         attributeDescriptions[4].offset = offsetof(VertexVulkan, Normal);
         
+        attributeDescriptions[5].binding = 0;
+        attributeDescriptions[5].location = 5;
+        attributeDescriptions[5].format = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[5].offset = offsetof(VertexVulkan, Tangent);
+
+        attributeDescriptions[6].binding = 0;
+        attributeDescriptions[6].location = 6;
+        attributeDescriptions[6].format = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[6].offset = offsetof(VertexVulkan, Bitangent);
         return attributeDescriptions;
     }
     

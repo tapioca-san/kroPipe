@@ -31,7 +31,7 @@ class Pipeline{
 
 public:
     VkVertexInputBindingDescription bindingDescription = KP::ENGINE::VertexVulkan::getBindingDescription();
-    std::array<VkVertexInputAttributeDescription, 5> attributeDescriptions = KP::ENGINE::VertexVulkan::getAttributeDescriptions();
+    std::array<VkVertexInputAttributeDescription, 7> attributeDescriptions = KP::ENGINE::VertexVulkan::getAttributeDescriptions();
 
     static shaderModule UseShaders(const std::string& directoryPath, const std::string& vertShaderPath, const std::string& fragShaderPath);
 

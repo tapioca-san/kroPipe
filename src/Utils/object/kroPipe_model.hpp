@@ -3,6 +3,7 @@
 
 #include "../../Vulkan_Engine/pipeline/kroPipe_vertex_data.hpp"
 #include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
+#include "../animation/kroPipe_animation.hpp"
 #include "../../kroPipe_depedence.hpp"
 
 
@@ -47,8 +48,9 @@ public:
   KP::UTILS::VAO vao;
   KP::ENGINE::UboStorage UBO;
 
-  std::shared_ptr<std::vector<std::shared_ptr<Model>>>
-      allModel; // it's a pointer that grab from somewhere
+  std::shared_ptr<std::vector<std::shared_ptr<Model>>> allModel; 
+
+  KP::UTILS::Animation animation;
 
   uint32_t objectID;
 
