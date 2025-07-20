@@ -89,7 +89,7 @@ void Aplication::init(){
     obj1.position = glm::vec3(11.0f, 11.0f, 11.0f);
     obj1.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
     obj1.object_type.push_back("Object");
-    obj1.modelPath = "/home/pipebomb/Downloads/organizado/model3D/jane_doe_blender_release.glb";
+    obj1.modelPath = "/home/pipebomb/Downloads/jvnko.glb";
     KP::UTILS::Object* a = new KP::UTILS::Object(obj1);
 
     KP::UTILS::createInfo_object obj2;
@@ -110,9 +110,7 @@ void Aplication::run(){
         lastTime = currentTime;
 
         KP::UTILS::useGravity(*KP::UTILS::OBJECT_objectsManager.getAllObject(), deltaTime);
-        
         KP::UTILS::lightTest.updateLightToShaders();
-        
         glfwPollEvents();
         KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0)), deltaTime); // ??????????????
         //std::cerr << "position:\nx: " + std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.x) + "\ny: " + std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.y) + "\nz: "+ std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.z) + "\n"; 

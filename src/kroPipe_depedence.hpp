@@ -23,6 +23,7 @@
 #include "assimp/postprocess.h"
 #include "assimp/Importer.hpp"
 
+#include <unordered_map>
 #include <filesystem>
 #include <iostream>
 #include <stdexcept>

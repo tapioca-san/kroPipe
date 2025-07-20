@@ -28,7 +28,12 @@ void gravityForce(std::shared_ptr<KP::UTILS::Object> object, float deltaTime){
 void useGravity(std::vector<std::shared_ptr<KP::UTILS::Object>> objects, float deltaTime){
 
     for(std::shared_ptr<KP::UTILS::Object> object : objects){
-        gravityForce(object, deltaTime);
+        if(object->getData().gravityMode){
+            gravityForce(object, deltaTime);
+        }
+        else {
+            // não sei
+        }
     }
 }
 

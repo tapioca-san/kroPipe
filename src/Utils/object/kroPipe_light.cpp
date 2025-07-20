@@ -16,9 +16,10 @@ void KP::UTILS::light::updateLightToShaders() {
 
 
   KP::UTILS::lightData lightUbo;
-  lightUbo.position = glm::vec3(0.0);
-  lightUbo.color = glm::vec3(1.0, 0.0, 0.0);
-  lightUbo.intensity = 1.0f;
+  lightUbo.position = glm::vec3(10.0, 0.0, 1.0);
+
+  lightUbo.color = glm::vec3(0.0, 0.0, 1.0);
+  data.intensity = 11.0f;
   memcpy(uniformBufferMapped, &lightUbo, sizeof(lightUbo));
 }
 

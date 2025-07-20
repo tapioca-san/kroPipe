@@ -14,7 +14,7 @@ struct createInfo_light {
 
 struct lightData {
 
-  alignas(16) glm::vec3 position = glm::vec3(0); 
+  alignas(16) glm::vec3 position; 
   alignas(16) glm::vec3 direction = glm::vec3(0); 
   alignas(16) glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
   float intensity;
@@ -23,16 +23,17 @@ struct lightData {
 class light {
 
 private:
-  lightData data;
-  VkDeviceMemory         uniformBufferMemory;
-  void*                  uniformBufferMapped;  
-  
-  public:
-  light();
-  
-  VkBuffer               uniformBuffer;
-  
-  void updateLightToShaders();
+VkDeviceMemory uniformBufferMemory;
+void* uniformBufferMapped;  
+
+public:
+light();
+
+VkBuffer uniformBuffer;
+
+lightData data;
+ 
+void updateLightToShaders();
 
   void createUniformBuffers();
   

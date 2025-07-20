@@ -1,10 +1,7 @@
 #ifndef KROPIPE_VERTEX_DATA_HPP
 #define KROPIPE_VERTEX_DATA_HPP
 
-#include "../../kroPipe_depedence.hpp" // Necessário para glm, Vk structs
-
-#include <array> // std::array
-#include <glm/glm.hpp> // glm::vec3, glm::vec2
+#include "../../kroPipe_depedence.hpp" 
 
 namespace KP {
 namespace ENGINE {
@@ -48,7 +45,7 @@ struct VertexVulkan {
         
         attributeDescriptions[3].binding = 0;
         attributeDescriptions[3].location = 3;
-        attributeDescriptions[3].format = VK_FORMAT_R32G32B32_SFLOAT;;
+        attributeDescriptions[3].format = VK_FORMAT_R32G32B32A32_SFLOAT;;
         attributeDescriptions[3].offset = offsetof(VertexVulkan, vertexColors);
         
         attributeDescriptions[4].binding = 0;
