@@ -168,9 +168,9 @@ Object::Object(createInfo_object &Info) {
 
   for (uint32_t i = 0; i < Info.object_type.size(); i++) {
     if (Info.object_type[i] == "Camera" && Info.modelPath != "") {
-      KP::ENGINE::warnMessage(
-          "Tried to load a 3d model on a camera object. Object ID:" +
-          std::to_string(data.ID));
+        KP::ENGINE::warnMessage(
+        "Tried to load a 3d model on a camera object. Object ID:" +
+        std::to_string(data.ID));
     }
   }
 
@@ -178,15 +178,16 @@ Object::Object(createInfo_object &Info) {
   modelInfo.modelPath = Info.modelPath;
   modelInfo.ObjectID = &data.ID;
 
-  std::shared_ptr<KP::UTILS::Model> model = std::make_shared<KP::UTILS::Model>(
-      modelInfo,
-      *KP::UTILS::OBJECT_objectsManager
-           .getAllModel()); // std::shared_ptr<std::shared_ptr<KP::UTILS::Model>>(modelInfo,
+  std::shared_ptr<KP::UTILS::Model> model = std::make_shared<KP::UTILS::Model>(modelInfo, *KP::UTILS::OBJECT_objectsManager.getAllModel()); // std::shared_ptr<std::shared_ptr<KP::UTILS::Model>>(modelInfo,
                             // *KP::UTILS::OBJECT_objectsManager.getAllModel());
 
   model->UBO.createDescriptorLayout();
   model->UBO.create();
   model->loadModel();
+
+  //if(data.object_type[0] == "Object"){
+  //  data.model->bone.createUniformBuffers();
+  //}
 
   KP::UTILS::OBJECT_objectsManager.getAllModel()->push_back(model);
 

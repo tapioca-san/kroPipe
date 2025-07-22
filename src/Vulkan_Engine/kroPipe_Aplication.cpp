@@ -9,6 +9,8 @@
 #include "../Utils/input/kroPipe_input.hpp"
 #include "../Utils/imgui/kroPipe_imgui.hpp"
 #include "window/kroPipe_windowSurface.hpp"
+#include "../Utils/audio/kroPipe_audio.hpp"
+#include "../Utils/object/kroPipe_bone.hpp"
 #include "buffers/kroPipe_frameBuffer.hpp"
 #include "swapchain/kroPipe_swapchain.hpp"
 #include "queue/kroPipe_queuFamilies.hpp"
@@ -84,7 +86,7 @@ void Aplication::init(){
     obj1.position = glm::vec3(11.0f, 11.0f, 11.0f);
     obj1.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
     obj1.object_type.push_back("Object");
-    obj1.modelPath = "/home/pipebomb/Downloads/jvnko/jvnko.glb";
+    obj1.modelPath = "/home/pipebomb/dev/cpp/vulkan/teste/model/blood_yunoGasai.glb";
     KP::UTILS::Object* a = new KP::UTILS::Object(obj1);
 
     KP::UTILS::createInfo_object obj2;
@@ -92,9 +94,7 @@ void Aplication::init(){
     obj2.ptr_ObjectsManager = &KP::UTILS::OBJECT_objectsManager;
     obj2.object_type.push_back("Camera");
     KP::UTILS::Object* a2 = new KP::UTILS::Object(obj2);
-    
-    KP::UTILS::lightTest.definition();
-
+   
 }
 
 
@@ -105,17 +105,17 @@ void Aplication::run(){
         lastTime = currentTime;
 
         KP::UTILS::useGravity(*KP::UTILS::OBJECT_objectsManager.getAllObject(), deltaTime);
+        
         KP::UTILS::lightTest.updateLightToShaders();
+        
+        
+
         glfwPollEvents();
         KP::UTILS::processInput(KP::ENGINE::OBJECT_window.getGlfwWindow(), KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0)), deltaTime); // ??????????????
         //std::cerr << "position:\nx: " + std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.x) + "\ny: " + std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.y) + "\nz: "+ std::to_string(KP::UTILS::OBJECT_objectsManager.getObjectByID(*KP::UTILS::OBJECT_objectsManager.getCamerasID(0))->getData().Position.z) + "\n"; 
         KP::UTILS::OBJECT_imguiInterface->newFrame(); 
         KP::UTILS::OBJECT_imguiInterface->drawWindows();         
         ImGui::Render(); 
-
-        //for(uint16_t i = 0; i < allObjects.size(); i++){
-        //    kroPipe::gravityForce(allObjects[sortedID[i]], deltaTime); gravity force
-        //}
 
         KP::ENGINE::OBJECT_render.drawFrame();
         if (glfwGetKey(KP::ENGINE::OBJECT_window.getGlfwWindow(), GLFW_KEY_Z) == GLFW_PRESS){

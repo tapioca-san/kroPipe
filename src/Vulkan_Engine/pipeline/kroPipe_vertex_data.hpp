@@ -3,6 +3,8 @@
 
 #include "../../kroPipe_depedence.hpp" 
 
+#define MAX_BONE_INFLUENCE 4
+
 namespace KP {
 namespace ENGINE {
 
@@ -12,9 +14,8 @@ struct VertexVulkan {
     glm::vec3 color;
     glm::vec4 vertexColors;
 
-    glm::vec4 boneIds = glm::vec4(0);
-    
-	glm::vec4 boneWeights = glm::vec4(0.0f);
+    int boneIDs[MAX_BONE_INFLUENCE];
+    float weights[MAX_BONE_INFLUENCE];
     
     glm::vec2 TexCoords;
     glm::vec3 Tangent;
@@ -29,8 +30,8 @@ struct VertexVulkan {
         return bindingDescription;
     }
 
-    static std::array<VkVertexInputAttributeDescription, 7> getAttributeDescriptions() {
-        std::array<VkVertexInputAttributeDescription, 7> attributeDescriptions{};
+    static std::array<VkVertexInputAttributeDescription, 9> getAttributeDescriptions() {
+        std::array<VkVertexInputAttributeDescription, 9> attributeDescriptions{};
 
         attributeDescriptions[0].binding = 0;
         attributeDescriptions[0].location = 0;
@@ -66,6 +67,17 @@ struct VertexVulkan {
         attributeDescriptions[6].location = 6;
         attributeDescriptions[6].format = VK_FORMAT_R32G32B32_SFLOAT;
         attributeDescriptions[6].offset = offsetof(VertexVulkan, Bitangent);
+
+        attributeDescriptions[7].binding = 0;
+        attributeDescriptions[7].location = 7;
+        attributeDescriptions[7].format = VK_FORMAT_R32G32B32A32_SFLOAT;;
+        attributeDescriptions[7].offset = offsetof(VertexVulkan, boneIDs);
+
+        attributeDescriptions[8].binding = 0;
+        attributeDescriptions[8].location = 8;
+        attributeDescriptions[8].format = VK_FORMAT_R32G32B32A32_SFLOAT;;
+        attributeDescriptions[8].offset = offsetof(VertexVulkan, weights);
+
         return attributeDescriptions;
     }
     

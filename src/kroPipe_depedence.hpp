@@ -18,6 +18,10 @@
 #include "include/imgui-master/backends/imgui_impl_glfw.h"
 #include "include/imgui-master/imgui.h"
 
+// audio dependencias
+#include <AL/al.h>
+#include <AL/alc.h>
+
 // Inclua apenas o header se o cpp for compilado separadamente
 #include "include/imageSupport/stb_image.h"
 
@@ -26,26 +30,27 @@
 #include "assimp/Importer.hpp"
 
 #include <unordered_map>
+#include <sys/wait.h>
 #include <filesystem>
-#include <iostream>
 #include <stdexcept>
-#include <vector>
-#include <cstring>
-#include <cstdlib>
-#include <optional>
-#include <set>
-#include <limits>
 #include <algorithm>
+#include <endian.h>
+#include <iostream>
+#include <optional>
+#include <cstring>
 #include <fstream>
-#include <array>
+#include <vector>
+#include <limits>
 #include <chrono>
 #include <memory>
-#include <pty.h>
-#include <sys/wait.h>
-#include <poll.h>
 #include <thread>
 #include <atomic>
+#include <poll.h>
 #include <mutex>
+#include <pty.h>
+#include <array>
 #include <pwd.h>
+#include <set>
+#include <bit>
 
 #endif//KROPIPE_DEPEDENCE_HPP

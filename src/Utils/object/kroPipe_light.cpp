@@ -32,9 +32,9 @@ void KP::UTILS::light::createUniformBuffers(){
 
 void KP::UTILS::light::definition(){
   data.intensity = 11.0f;
-    data.position = KP::UTILS::OBJECT_objectsManager.getObjectByID(1)->getData().Position; 
-    data.direction = glm::vec3(0.0f); 
-    data.color = glm::vec3(1.0f); 
+  data.position = KP::UTILS::OBJECT_objectsManager.getObjectByID(1)->getData().Position; 
+  data.direction = glm::vec3(0.0f); 
+  data.color = glm::vec3(1.0f); 
 }
 
 void KP::UTILS::light::clean(){

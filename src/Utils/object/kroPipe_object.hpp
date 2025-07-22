@@ -65,7 +65,7 @@ private:
 
   ObjectData data;
 
-  KP::UTILS::player *model;
+  //KP::UTILS::player *player;
 
 public:
   ObjectData &getData();

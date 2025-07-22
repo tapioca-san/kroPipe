@@ -3,8 +3,8 @@
 
 #include "../../Vulkan_Engine/pipeline/kroPipe_vertex_data.hpp"
 #include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
-#include "../animation/kroPipe_animation.hpp"
 #include "../../kroPipe_depedence.hpp"
+#include "kroPipe_bone.hpp"
 
 
 namespace KP {
@@ -50,7 +50,9 @@ public:
 
   std::shared_ptr<std::vector<std::shared_ptr<Model>>> allModel; 
 
-  KP::UTILS::Animation animation;
+  //KP::UTILS::Animation animation;
+
+  KP::UTILS::Bone bone;
 
   uint32_t objectID;
 

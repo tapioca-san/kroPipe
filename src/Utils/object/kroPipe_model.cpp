@@ -4,7 +4,7 @@
 #include "../../Vulkan_Engine/device/kroPipe_device.hpp"
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
 #include "kroPipe_model.hpp"
-
+#include "kroPipe_bone.hpp"
 
 namespace KP {
 namespace UTILS {
@@ -28,6 +28,8 @@ void KP::UTILS::Model::loadModel() {
   directory = modelPath.substr(0, modelPath.find_last_of('/'));
 
   processNode(scene->mRootNode, scene);
+
+  bone.ProcessBones(scene->mRootNode, glm::mat4(1.0f));
 
   renderToBuffer();
 }
@@ -74,13 +76,10 @@ void KP::UTILS::Model::cleanupVao() {
   }
 }
 
-KP::UTILS::Model::Model(createInfo_model &info,
-                        std::vector<std::shared_ptr<Model>> allModel)
-    : objectID(*info.ObjectID), UBO(*info.ObjectID) {
+KP::UTILS::Model::Model(createInfo_model &info, std::vector<std::shared_ptr<Model>> allModel) : objectID(*info.ObjectID), UBO(*info.ObjectID) {
 
   this->modelPath = info.modelPath;
-  this->allModel =
-      std::make_shared<std::vector<std::shared_ptr<Model>>>(allModel);
+  this->allModel = std::make_shared<std::vector<std::shared_ptr<Model>>>(allModel);
 }
 
 void KP::UTILS::Model::createVertexBuffer(
@@ -222,12 +221,12 @@ KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh *mesh, const aiScene *scene
       aiMaterial *material = scene->mMaterials[materialIndex];
       aiColor4D color;
 
-      if (aiGetMaterialColor(material, AI_MATKEY_BASE_COLOR, &color) == AI_SUCCESS) {
+    if (aiGetMaterialColor(material, AI_MATKEY_BASE_COLOR, &color) == AI_SUCCESS) {
         vertex.color = {color.r, color.g, color.b};
         colorSet = true;
       }
 
-      if (!colorSet && aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS) {
+    if (!colorSet && aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS) {
         vertex.color = {color.r, color.g, color.b};
         colorSet = true;
       }
@@ -236,13 +235,13 @@ KP::UTILS::Mesh KP::UTILS::Model::processMesh(aiMesh *mesh, const aiScene *scene
     if (!colorSet) {
       vertex.color = glm::vec3(1.0f);
     }
-
-    animation.loadAnimation(mesh, vertices);
-
+    
+    
     vertices.push_back(vertex);
   }
 
-  // Índices
+  bone.ExtractBonesFromMesh(mesh);
+  
   for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
     const aiFace &face = mesh->mFaces[i];
     for (unsigned int j = 0; j < face.mNumIndices; j++) {
