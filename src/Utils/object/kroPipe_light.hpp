@@ -2,8 +2,6 @@
 #define KROPIPE_LIGHT_H
 
 #include "../../kroPipe_depedence.hpp"
-#include <cstdint>
-
 
 namespace KP {
 namespace UTILS {

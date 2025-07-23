@@ -50,10 +50,6 @@ struct UboStorage{
 
         void updateUniformBuffer(KP::ENGINE::UniformBuffers &uniformBuffers, KP::ENGINE::UniformBufferObject &ubo, const uint32_t &currentImage);
 
-        
-
-        void createDescriptorSets(KP::ENGINE::UniformBuffers &uniformBuffers);
-
         void cleanupBuffer(KP::ENGINE::UniformBuffers &uniformBuffers);
 };
 

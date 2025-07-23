@@ -1,9 +1,10 @@
 #include "../../Utils/object/kroPipe_object.hpp"
 #include "../../Utils/object/kroPipe_light.hpp"
+#include "kroPipe_bufferManagerMacro.hpp"
 #include "../device/kroPipe_device.hpp"
 #include "../vertex/kroPipe_vertex.hpp"
 #include "../debug/kroPipe_debug.hpp"
-#include <cstdint>
+#include <string>
 #include "kroPipe_bufferManager.hpp"
 
 namespace KP {
@@ -76,7 +77,7 @@ uint32_t BufferManager::addBuffer(t classType) {
 template<class t>
 void BufferManager::sendBufferDataToGpu(uint32_t bufferID, t data) {
     if (bufferID >= buffers.uniformBuffersMapped.size()) {
-        throw std::runtime_error("buffer ID is not matching with the lists Buffers");
+        throw std::runtime_error("buffer ID is not matching with the lists Buffers. ID you tried: " + std::to_string(bufferID));
     }
 
     memcpy(buffers.uniformBuffersMapped[bufferID], &data, sizeof(t));
@@ -99,12 +100,9 @@ VkDeviceMemory BufferManager::getUniformBufferMemoryByID(uint32_t bufferID){
 
 BufferManager OBJECT_bufferManager;
 
-#define INSTANTIATE_BUFFER_TYPE(type) \
-    template uint32_t BufferManager::addBuffer<type>(type); \
-    template void BufferManager::sendBufferDataToGpu<type>(uint32_t, type);
 
-INSTANTIATE_BUFFER_TYPE(KP::ENGINE::UniformBufferObject)
-INSTANTIATE_BUFFER_TYPE(KP::UTILS::lightData)
+INSTANTIATE_BUFFER_TYPE(KP::ENGINE::UniformBufferObject);
+INSTANTIATE_BUFFER_TYPE(KP::UTILS::lightData);
 
 } // namespace ENGINE
 } // namespace KP

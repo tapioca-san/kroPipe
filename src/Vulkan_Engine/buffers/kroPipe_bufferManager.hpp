@@ -1,5 +1,5 @@
-#ifndef BUFFER_H
-#define BUFFER_H
+#ifndef KROPIPE_BUFFER_H
+#define KROPIPE_BUFFER_H
 
 #include "../../kroPipe_depedence.hpp"
 
@@ -40,6 +40,7 @@ public:
     void cleanUp();
 
     VkBuffer getUniformBufferByID(uint32_t bufferID);
+    
     VkDeviceMemory getUniformBufferMemoryByID(uint32_t bufferID);
     
 
@@ -50,4 +51,4 @@ extern BufferManager OBJECT_bufferManager;
 } // namespace ENGINE
 } // namespace KP
 
-#endif // BUFFER_H
+#endif // KROPIPE_BUFFER_H

@@ -1,3 +1,4 @@
+#include "../../Vulkan_Engine/buffers/kroPipe_bufferManagerMacro.hpp"
 #include "../../Vulkan_Engine/buffers/kroPipe_bufferManager.hpp"
 #include "../../Vulkan_Engine/device/kroPipe_device.hpp"
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
@@ -33,8 +34,6 @@ void light::definition(){
   data.direction = glm::vec3(0.0f); 
   data.color = glm::vec3(1.0f); 
 }
-
-
 
 uint32_t light::getBufferID(){
   return bufferID;

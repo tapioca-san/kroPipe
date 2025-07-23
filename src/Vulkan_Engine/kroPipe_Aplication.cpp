@@ -4,6 +4,7 @@
 #include "../Utils/terminal/kroPipe_terminal.hpp"
 #include "../Utils/gravity/kroPipe_gravity.hpp"
 #include "../Utils/object/kroPipe_object.hpp"
+#include "buffers/kroPipe_descriptorSet.hpp"
 #include "buffers/kroPipe_bufferManager.hpp"
 #include "../Utils/object/kroPipe_light.hpp"
 #include "window/kroPipe_windowSurface.hpp"
@@ -72,6 +73,7 @@ void Aplication::init(){
     KP::UTILS::lightTest.createUniformBuffers();
     
     KP::ENGINE::OBJECT_sceneUBO.create();
+    //KP::ENGINE::OBJECT_DescriptorSet.createDescriptorSets(KP::ENGINE::OBJECT_sceneUBO.uniformBuffers); todo
     KP::ENGINE::OBJECT_command.createCommandBuffers();
     KP::ENGINE::OBJECT_render.createSyncObjects();
 
