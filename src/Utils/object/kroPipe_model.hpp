@@ -1,8 +1,9 @@
 #ifndef KROPIPE_MODEL_H
 #define KROPIPE_MODEL_H
 
+#include "../../Vulkan_Engine/buffers/kroPipe_bufferManager.hpp"
 #include "../../Vulkan_Engine/pipeline/kroPipe_vertex_data.hpp"
-#include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
+#include "../../Vulkan_Engine/buffers/kroPipe_uboHandler.hpp"
 #include "../../kroPipe_depedence.hpp"
 #include "kroPipe_bone.hpp"
 

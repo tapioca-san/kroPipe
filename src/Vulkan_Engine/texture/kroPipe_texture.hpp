@@ -4,7 +4,7 @@
 #include "../device/kroPipe_device.hpp"
 #include "../vertex/kroPipe_vertex.hpp"
 #include "../../kroPipe_depedence.hpp"
-#include "../buffers/kroPipe_buffer.hpp"
+#include "../buffers/kroPipe_bufferManager.hpp"
 
 namespace KP {
 namespace ENGINE {

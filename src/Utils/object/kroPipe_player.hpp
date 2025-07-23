@@ -1,8 +1,8 @@
 #ifndef KROPIPE_PLAYER_H
 #define KROPIPE_PLAYER_H
 
+#include "../../Vulkan_Engine/buffers/kroPipe_bufferManager.hpp"
 #include "../../Vulkan_Engine/pipeline/kroPipe_vertex_data.hpp"
-#include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
 #include "../camera/kroPipe_camera.hpp"
 #include "../../kroPipe_depedence.hpp"
 

@@ -1,5 +1,4 @@
 #include "../swapchain/kroPipe_swapchain.hpp" 
-#include "../buffers/kroPipe_buffer.hpp"
 #include "../device/kroPipe_device.hpp" 
 #include "../device/kroPipe_device.hpp" 
 #include "../texture/kroPipe_MSAA.hpp"

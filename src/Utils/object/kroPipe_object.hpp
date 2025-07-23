@@ -1,7 +1,7 @@
 #ifndef KROPIPE_OBJECT_H
 #define KROPIPE_OBJECT_H
 
-#include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
+#include "../../Vulkan_Engine/buffers/kroPipe_bufferManager.hpp"
 #include "../../Vulkan_Engine/pipeline/kroPipe_vertex_data.hpp"
 #include "../camera/kroPipe_camera.hpp"
 #include "kroPipe_model.hpp"

@@ -1,10 +1,13 @@
-#ifndef BUFFER_H
-#define BUFFER_H
+
+#ifndef KROPIPE_UBOHANDLER_H
+#define KROPIPE_UBOHANDLER_H
 
 #include "../../kroPipe_depedence.hpp"
+#include "kroPipe_bufferManager.hpp"
 
 namespace KP {
 namespace ENGINE {
+
 
 extern std::vector<VkDescriptorSetLayout> setLayout; // uso para o pipeline 
 
@@ -15,24 +18,8 @@ struct UniformBufferObject {
     glm::mat4 view;
     glm::mat4 proj;
 };
-
-struct UniformBuffers{
-    std::vector<VkBuffer>               uniformBuffers;
-    std::vector<VkDeviceMemory>         uniformBuffersMemory;
-    std::vector<void*>                  uniformBuffersMapped;  
-    
-    std::vector<VkDescriptorSet>        descriptorSets;
-    VkDescriptorPool                    descriptorPool;
-    VkDescriptorSetLayout               descriptorSetLayout;
-
-};
-
-void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory); // enviar dados para a gpu atravez da CPU
-
     
 void createDescriptorSetLayout(KP::ENGINE::UniformBuffers &uniformBuffers);
-
-void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
 struct UboStorage{
 
@@ -41,13 +28,10 @@ struct UboStorage{
         UniformBuffers uniformBuffers;
         UniformBufferObject UBO;
 
-        
         uint32_t objectId;    
 
         size_t bufferSize = sizeof(UniformBufferObject);
-        
-        /*
-        */
+
         UboStorage(uint32_t &objectID);
 
         void create();
@@ -76,6 +60,8 @@ struct UboStorage{
 
 extern KP::ENGINE::UboStorage OBJECT_sceneUBO;
 
+
 } //BUFFER
 } //KP
-#endif//BUFFER_H
+
+#endif//KROPIPE_UBOHANDLER_H

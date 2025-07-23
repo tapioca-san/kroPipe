@@ -2,7 +2,7 @@
 #define KROPIPE_ANIMATION_H
 
 #include "../../Vulkan_Engine/pipeline/kroPipe_vertex_data.hpp"
-#include "../../Vulkan_Engine/buffers/kroPipe_buffer.hpp"
+#include "../../Vulkan_Engine/buffers/kroPipe_bufferManager.hpp"
 #include "../../Vulkan_Engine/device/kroPipe_device.hpp"
 #include "../../Vulkan_Engine/debug/kroPipe_debug.hpp"
 #include "../../kroPipe_depedence.hpp"

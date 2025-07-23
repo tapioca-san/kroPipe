@@ -1,8 +1,9 @@
 #ifndef KROPIPE_PIPELINE_HPP
 #define KROPIPE_PIPELINE_HPP
 
+#include "../../Vulkan_Engine/buffers/kroPipe_uboHandler.hpp"
 #include "../fileEditor/kroPipe_file.hpp"
-#include "../buffers/kroPipe_buffer.hpp"
+#include "../buffers/kroPipe_bufferManager.hpp"
 #include "../../kroPipe_depedence.hpp"
 #include "kroPipe_vertex_data.hpp"  
 

@@ -4,6 +4,7 @@
 #include "../Utils/terminal/kroPipe_terminal.hpp"
 #include "../Utils/gravity/kroPipe_gravity.hpp"
 #include "../Utils/object/kroPipe_object.hpp"
+#include "buffers/kroPipe_bufferManager.hpp"
 #include "../Utils/object/kroPipe_light.hpp"
 #include "window/kroPipe_windowSurface.hpp"
 #include "../Utils/input/kroPipe_input.hpp"
@@ -127,7 +128,6 @@ void Aplication::run(){
 
 void Aplication::clean() {
     vkDeviceWaitIdle(*KP::ENGINE::OBJECT_device.getPointerDevice());
-     KP::UTILS::lightTest.clean();
     KP::UTILS::OBJECT_imguiInterface->cleanup();
     KP::ENGINE::OBJECT_msaa.clean();
     vkDestroyImageView(*KP::ENGINE::OBJECT_device.getPointerDevice(), KP::ENGINE::depthImageView, KP::ENGINE::VK_Allocator);
@@ -140,6 +140,7 @@ void Aplication::clean() {
     
 
     KP::ENGINE::OBJECT_sceneUBO.cleanUp();
+    KP::ENGINE::OBJECT_bufferManager.cleanUp();
 
     for(auto object : *KP::UTILS::OBJECT_objectsManager.getAllObject()){
         object->clean();

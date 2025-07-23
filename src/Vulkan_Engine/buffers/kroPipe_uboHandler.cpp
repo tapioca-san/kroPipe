@@ -1,26 +1,21 @@
 #include "../../Utils/object/kroPipe_object.hpp"
-#include "../../Utils/camera/kroPipe_camera.hpp"
 #include "../../Utils/object/kroPipe_light.hpp"
 #include "../swapchain/kroPipe_swapchain.hpp"
 #include "../texture/kroPipe_texture.hpp"
-#include "../command/kroPipe_command.hpp"
 #include "../device/kroPipe_device.hpp"
-#include "../vertex/kroPipe_vertex.hpp"
 #include "../render/kroPipe_render.hpp"
-#include "../debug/kroPipe_debug.hpp"
-#include "kroPipe_buffer.hpp"
+#include "kroPipe_bufferManager.hpp"
+#include "kroPipe_uboHandler.hpp"
+
 
 namespace KP {
 namespace ENGINE {
-    
+
+
 std::vector<VkDescriptorSetLayout> setLayout;
 
 uint32_t currentFrame = 0;
-
-KP::ENGINE::UboStorage::UboStorage(uint32_t &objectID){
-    this->objectId = objectID;    
-}
-
+    
 void createDescriptorSetLayout(KP::ENGINE::UniformBuffers &uniformBuffers) {
     VkDescriptorSetLayoutBinding uboLayoutBinding{};
     uboLayoutBinding.binding = 0;
@@ -51,39 +46,8 @@ void createDescriptorSetLayout(KP::ENGINE::UniformBuffers &uniformBuffers) {
     setLayout.push_back(uniformBuffers.descriptorSetLayout);
 }
 
-void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory) { //to send variables to the GPU memory. we use this with VKBUFFER to send our information.
-    VkBufferCreateInfo bufferInfo{};
-    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    bufferInfo.size = size;
-    bufferInfo.usage = usage;
-    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-
-    err = vkCreateBuffer(*KP::ENGINE::OBJECT_device.getPointerDevice(), &bufferInfo, nullptr, &buffer);
-    check_vk_result(err, "failed to create buffer!");
-
-    VkMemoryRequirements memRequirements;
-    vkGetBufferMemoryRequirements(*KP::ENGINE::OBJECT_device.getPointerDevice(), buffer, &memRequirements);
-
-    VkMemoryAllocateInfo allocInfo{};
-    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    allocInfo.allocationSize = memRequirements.size;
-    allocInfo.memoryTypeIndex = KP::ENGINE::OBJECT_vertex.findMemoryType(memRequirements.memoryTypeBits, properties);
-
-    err = vkAllocateMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), &allocInfo, KP::ENGINE::VK_Allocator, &bufferMemory);
-    check_vk_result(err, "failed to allocate buffer memory!");
-
-    err = vkBindBufferMemory(*KP::ENGINE::OBJECT_device.getPointerDevice(), buffer, bufferMemory, 0);
-    check_vk_result(err);
-}
-    
-void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size) {
-    VkCommandBuffer commandBuffer = KP::ENGINE::OBJECT_vertex.beginSingleTimeCommands();
-
-    VkBufferCopy copyRegion{};
-    copyRegion.size = size;
-    vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
-
-    KP::ENGINE::OBJECT_vertex.endSingleTimeCommands(commandBuffer);
+KP::ENGINE::UboStorage::UboStorage(uint32_t &objectID){
+    this->objectId = objectID;    
 }
 
 void KP::ENGINE::UboStorage::create(){
@@ -156,7 +120,7 @@ void KP::ENGINE::UboStorage::createDescriptorSets(KP::ENGINE::UniformBuffers &un
         imageInfo.sampler = textureSampler;
 
         VkDescriptorBufferInfo lightBufferInfo{};
-        lightBufferInfo.buffer = KP::UTILS::lightTest.uniformBuffer; // seu buffer da luz
+        lightBufferInfo.buffer = KP::ENGINE::OBJECT_bufferManager.getUniformBufferByID(KP::UTILS::lightTest.getBufferID()); 
         lightBufferInfo.offset = 0;
         lightBufferInfo.range = sizeof(KP::UTILS::lightData);
 
@@ -201,5 +165,5 @@ void KP::ENGINE::UboStorage::cleanupBuffer(KP::ENGINE::UniformBuffers &uniformBu
 uint32_t aa = 0;
 KP::ENGINE::UboStorage OBJECT_sceneUBO(aa);
 
-}//ENGINE
-}//KP
+} //ENGINE
+} //KP
